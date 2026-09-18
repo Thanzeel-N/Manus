@@ -1,0 +1,12 @@
+.preview-browser*/
+preview*.png
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+public/assets/optimized/
+test-results/
+playwright-report/
+design-reference/result/
+*.log
