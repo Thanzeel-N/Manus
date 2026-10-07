@@ -19,7 +19,12 @@ showroom/
 │
 ├── backend/              # Python Django + Django REST Framework
 │   ├── config/           # Django project settings, URLs, WSGI/ASGI
-│   ├── showroom/         # Car models, bookings, test-drive slots, enquiries, staff API
+│   ├── inventory/        # Cars, CarImages, media validation, catalog API (/api/cars/)
+│   ├── bookings/         # Test drive slots, slot scheduling, booking workflow (/api/bookings/)
+│   ├── enquiries/        # Customer purchase/sale enquiry leads (/api/enquiries/)
+│   ├── verification/     # Email OTP challenge-response & throttling (/api/verification/send/)
+│   ├── workspace/        # Protected staff workspace, session auth, overview stats & CRUD
+│   ├── showroom/         # Backward-compatibility layer, admin site branding & test suite
 │   ├── manage.py         # Django management script
 │   ├── requirements.txt  # Python dependencies (Django 5, DRF, Pillow)
 │   └── db.sqlite3        # SQLite development database
