@@ -2,6 +2,12 @@
 const nextConfig = {
   poweredByHeader: false,
   skipTrailingSlashRedirect: true,
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
+    ],
+  },
   async rewrites() {
     return process.env.DJANGO_API_URL
       ? [

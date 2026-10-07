@@ -77,6 +77,35 @@ The Django REST API runs on [http://localhost:8000/api/](http://localhost:8000/a
 
 ---
 
+## ☁️ Cloudflare R2 Image & Media Storage
+
+The backend supports **Cloudflare R2** (S3-compatible object storage with zero egress fees) for all uploaded car photos, gallery images, and walkaround videos.
+
+### Setup Steps:
+1. Copy `backend/.env.example` to `backend/.env`:
+   ```powershell
+   copy backend\.env.example backend\.env
+   ```
+2. Fill in your Cloudflare R2 API credentials:
+   ```ini
+   CLOUDFLARE_R2_ENABLED=1
+   CLOUDFLARE_R2_ACCOUNT_ID=your_cloudflare_account_id
+   CLOUDFLARE_R2_ACCESS_KEY_ID=your_r2_access_key_id
+   CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_r2_secret_access_key
+   CLOUDFLARE_R2_BUCKET_NAME=your_r2_bucket_name
+   CLOUDFLARE_R2_CUSTOM_DOMAIN=pub-xxxxxxxxxxxxxxxx.r2.dev
+   CLOUDFLARE_R2_QUERYSTRING_AUTH=0
+   ```
+3. Test your R2 connectivity and verify public media URLs:
+   ```powershell
+   cd backend
+   python manage.py test_r2
+   ```
+
+*Note: If R2 credentials are omitted, the backend automatically defaults to local `media/` folder storage.*
+
+---
+
 ## 🛠️ Production Build
 
 ```powershell

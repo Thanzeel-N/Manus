@@ -2,3 +2,6 @@ Django>=5.2,<5.3
 djangorestframework>=3.16,<3.17
 Pillow>=11.3
 psycopg[binary]>=3.2,<4
+django-storages[s3]>=1.14
+boto3>=1.35
+python-dotenv>=1.0

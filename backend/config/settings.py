@@ -1,5 +1,18 @@
 import os
+import sys
 from pathlib import Path
+
+# Load environment variables from .env if present
+try:
+    from dotenv import load_dotenv
+    _backend_env = Path(__file__).resolve().parent.parent / '.env'
+    _root_env = Path(__file__).resolve().parent.parent.parent / '.env'
+    if _backend_env.exists():
+        load_dotenv(_backend_env)
+    elif _root_env.exists():
+        load_dotenv(_root_env)
+except ImportError:
+    pass
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
@@ -16,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'storages',
     'showroom',
     'inventory',
     'bookings',
@@ -46,6 +60,61 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Cloudflare R2 Object Storage (S3-compatible) Configuration
+CLOUDFLARE_R2_BUCKET_NAME = os.environ.get('CLOUDFLARE_R2_BUCKET_NAME') or os.environ.get('R2_BUCKET_NAME') or os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
+CLOUDFLARE_R2_ACCOUNT_ID = os.environ.get('CLOUDFLARE_R2_ACCOUNT_ID') or os.environ.get('R2_ACCOUNT_ID', '')
+CLOUDFLARE_R2_ACCESS_KEY_ID = os.environ.get('CLOUDFLARE_R2_ACCESS_KEY_ID') or os.environ.get('R2_ACCESS_KEY_ID') or os.environ.get('AWS_ACCESS_KEY_ID', '')
+CLOUDFLARE_R2_SECRET_ACCESS_KEY = os.environ.get('CLOUDFLARE_R2_SECRET_ACCESS_KEY') or os.environ.get('R2_SECRET_ACCESS_KEY') or os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+
+CLOUDFLARE_R2_ENDPOINT_URL = (
+    os.environ.get('CLOUDFLARE_R2_ENDPOINT_URL')
+    or os.environ.get('R2_ENDPOINT_URL')
+    or (f'https://{CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com' if CLOUDFLARE_R2_ACCOUNT_ID else '')
+    or os.environ.get('AWS_S3_ENDPOINT_URL', '')
+)
+
+_raw_domain = os.environ.get('CLOUDFLARE_R2_CUSTOM_DOMAIN') or os.environ.get('R2_CUSTOM_DOMAIN') or os.environ.get('R2_PUBLIC_URL') or os.environ.get('AWS_S3_CUSTOM_DOMAIN', '')
+CLOUDFLARE_R2_CUSTOM_DOMAIN = _raw_domain.replace('https://', '').replace('http://', '').rstrip('/') if _raw_domain else ''
+
+# Cloudflare R2 is activated when credentials exist and not running hermetic tests
+IS_RUNNING_TESTS = 'test' in sys.argv
+USE_CLOUDFLARE_R2 = not IS_RUNNING_TESTS and (
+    os.environ.get('CLOUDFLARE_R2_ENABLED', '1' if (CLOUDFLARE_R2_BUCKET_NAME and CLOUDFLARE_R2_ACCESS_KEY_ID) else '0') == '1'
+)
+
+if USE_CLOUDFLARE_R2:
+    AWS_ACCESS_KEY_ID = CLOUDFLARE_R2_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = CLOUDFLARE_R2_SECRET_ACCESS_KEY
+    AWS_STORAGE_BUCKET_NAME = CLOUDFLARE_R2_BUCKET_NAME
+    AWS_S3_ENDPOINT_URL = CLOUDFLARE_R2_ENDPOINT_URL
+    AWS_S3_REGION_NAME = os.environ.get('CLOUDFLARE_R2_REGION', 'auto')
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = os.environ.get('CLOUDFLARE_R2_QUERYSTRING_AUTH', '0' if CLOUDFLARE_R2_CUSTOM_DOMAIN else '1') == '1'
+    if CLOUDFLARE_R2_CUSTOM_DOMAIN:
+        AWS_S3_CUSTOM_DOMAIN = CLOUDFLARE_R2_CUSTOM_DOMAIN
+        MEDIA_URL = f'https://{CLOUDFLARE_R2_CUSTOM_DOMAIN}/'
+
+    STORAGES = {
+        'default': {
+            'BACKEND': 'config.storage.CloudflareR2MediaStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+    }
+else:
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+    }
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 110 * 1024 * 1024
 REST_FRAMEWORK = {'DEFAULT_THROTTLE_CLASSES': ['rest_framework.throttling.AnonRateThrottle'], 'DEFAULT_THROTTLE_RATES': {'anon': '120/hour', 'booking': '10/hour'}}
