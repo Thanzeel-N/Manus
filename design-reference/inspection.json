@@ -1,0 +1,364 @@
+{
+  "title": "Home V3 - Motorflow - Webflow Ecommerce website template",
+  "headings": [
+    {
+      "text": "The electric car era is upon us",
+      "class": "display-10",
+      "font": "500 72px / 80.28px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Unmatched range and efficiency benefits",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Advanced driver assistance",
+      "class": "display-6",
+      "font": "500 30px / 37.5px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Extended battery range",
+      "class": "display-6",
+      "font": "500 30px / 37.5px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Comprehensive safety features",
+      "class": "display-6",
+      "font": "500 30px / 37.5px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Fast charging and long battery",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Charge time",
+      "class": "display-3",
+      "font": "500 18px / 22.5px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Battery range",
+      "class": "display-3",
+      "font": "500 18px / 22.5px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Charge cycles",
+      "class": "display-3",
+      "font": "500 18px / 22.5px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Where technology meets design",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Meet the future of electric cars, today",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Seamless dual motor driving experience",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "All-new interior",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Our latest news",
+      "class": "display-8",
+      "font": "500 48px / 60px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "The ultimate guide to electric car charging: Everything you need to know",
+      "class": "card-title display-5",
+      "font": "500 24px / 30px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Electric cars 2025: The most exciting models and innovations to look out for",
+      "class": "card-title display-5",
+      "font": "500 24px / 30px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "Electric vs. gas cars: Discovering the benefits and cons of each technology",
+      "class": "card-title display-5",
+      "font": "500 24px / 30px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "text": "New update v1.3 for Edge R2 now enables 3 new apps in your car dashboard",
+      "class": "card-title display-5",
+      "font": "500 24px / 30px \"Inter Tight\", sans-serif",
+      "color": "rgb(255, 255, 255)"
+    }
+  ],
+  "body": {
+    "background": "rgb(5, 6, 7)",
+    "font": "16px / 24px \"Inter Tight\", sans-serif"
+  },
+  "sections": [
+    {
+      "class": "section hero pd-top-64px---bottom-0px",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 944,
+      "padding": "64px 0px 0px"
+    },
+    {
+      "class": "section pd-100px v2",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 260,
+      "padding": "100px 0px"
+    },
+    {
+      "class": "section pd-120px pd-top-40px",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 1018,
+      "padding": "40px 0px 120px"
+    },
+    {
+      "class": "section pd-bottom-0px---mbp position-relative",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 740,
+      "padding": "200px 0px"
+    },
+    {
+      "class": "section pd-120px pd-bottom-0px---mbl",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 1102,
+      "padding": "120px 0px"
+    },
+    {
+      "class": "section cta-wrapper v3",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 705,
+      "padding": "58px 0px"
+    },
+    {
+      "class": "section position-relative",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 1249,
+      "padding": "200px 0px"
+    },
+    {
+      "class": "section pd-0px overflow-hidden",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 796,
+      "padding": "0px"
+    },
+    {
+      "class": "section overflow-hidden",
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 1281,
+      "padding": "200px 0px"
+    }
+  ],
+  "images": [
+    {
+      "alt": "Logo Web Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f1892f914c8e371c1952cd_logo-web-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "Electric Car Image Back - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66fabeac4c0f3822b951cbfe_electric-car-image-back-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Efficiency Benefits Gearbox - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f2eba994b56ed61fd0cb9d_efficiency-benefits-gearbox-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Driver Assistance Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f2f1c5adb591529683c10f_driver-assistance-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "Extended Battery Image Large - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66ff4d018da10a4b42566a4f_extended-battery-image-large-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Battery Range Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66fc0fa24457fc58d4c8a9f3_battery-range-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "Comprehensive Safety Image Large - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66ff4d016f9b375fbc8c01e5_comprehensive-safety-image-large-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Safety Features Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66fc0f9893fd8fdfcbbcf011_safety-features-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "Fast Charging Electric Car - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f2f5e495a9bfa9a30a6f96_fast-chargin-electric-car-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Transparent Car Seen From Above - Motorflow - Webflow Template | BRIX Templates",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66fad44b5ec1c31f2a7767a4_transparent-car-seen-from-above-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "iPhone 17 Status App Car Edge R2 - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f31a588877da06fe1d0f60_iphone-17-status-app-car-edge-r2-cartech-x-webflow-template.png"
+    },
+    {
+      "alt": "Watch App Locked Car - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f31a5ad200a321be8a74c3_watch-app-locked-car-cartech-x-webflow-template.png"
+    },
+    {
+      "alt": "Play Button Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f2f0fc6675962fb1c636bb_play-button-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "Car Motor Transparent Image - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66fadae3dcedaa1046719011_car-motor-transparent-image-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Chairs Interior Car - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66fae0f6f73f5849261135d7_chairs-interior-car-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "The ultimate guide to electric car charging: Everything you need to know",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d244f/66fcb9c2568f426dd1f2e69d_the-ultimate-guide-thumbnail-image-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Electric cars 2025: The most exciting models and innovations to look out for",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d244f/66fcb9953e5f275d7de1ca00_electric-cars-2025-thumbnail-image-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Electric vs. gas cars: Discovering the benefits and cons of each technology",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d244f/66fcb91452ad4aa4e728b5ba_electric-vs-gas-cars-thumbnail-image-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "New update v1.3 for Edge R2 now enables 3 new apps in your car dashboard",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d244f/66fcb9041ae1da141d9a523b_new-update-v1.3-thumbnail-image-cartech-x-webflow-template.jpg"
+    },
+    {
+      "alt": "Logo Web - Motorflow - Webflow Template | BRIX Templates",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/679a8eef74b77a9f1bb9e8d7_logo-web-motorflow-webflow-template.svg"
+    },
+    {
+      "alt": "Email White Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f1d74dfcfaf2d245bf1c5e_email-white-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "Phone White Icon - Motorflow - Webflow Template | BRIX Templates\n",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/66f1d74b2130575c8ba3554e_phone-white-icon-cartech-x-webflow-template.svg"
+    },
+    {
+      "alt": "",
+      "src": "https://cdn.prod.website-files.com/608e162a9175d0346094038b/67463b7d46e9fffa59a5ab2b_webflow-logo.png"
+    },
+    {
+      "alt": "",
+      "src": "https://cdn.prod.website-files.com/608e162a9175d0346094038b/67463b7d46e9fffa59a5ab2b_webflow-logo.png"
+    },
+    {
+      "alt": "",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/67ab8a049407a3a9399ff61a_customize-your-webflow-template-brix-templates.png"
+    },
+    {
+      "alt": "",
+      "src": "https://cdn.prod.website-files.com/66edec51647acd90172d2445/67ab8a049407a3a9399ff61a_customize-your-webflow-template-brix-templates.png"
+    },
+    {
+      "alt": "",
+      "src": "https://d3e54v103j8qbb.cloudfront.net/img/webflow-badge-icon-d2.89e12c322e.svg"
+    },
+    {
+      "alt": "Made in Webflow",
+      "src": "https://d3e54v103j8qbb.cloudfront.net/img/webflow-badge-text-d2.c82cec3b78.svg"
+    }
+  ],
+  "links": [
+    {
+      "text": "",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Home",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "About",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Cart (0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Test drive",
+      "background": "rgb(255, 255, 255)",
+      "borderRadius": "200px"
+    },
+    {
+      "text": "Learn more",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Learn more",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Learn more",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Test drive",
+      "background": "rgb(255, 255, 255)",
+      "borderRadius": "200px"
+    },
+    {
+      "text": "Test drive",
+      "background": "rgb(255, 255, 255)",
+      "borderRadius": "200px"
+    },
+    {
+      "text": "Test drive",
+      "background": "rgb(255, 255, 255)",
+      "borderRadius": "200px"
+    },
+    {
+      "text": "{\n  \"items\": [\n    {\n      \"url\": \"https://www.youtube.com/watch?v=Ojiv9Smi4XE\",\n      \"originalUrl\": \"https://www.youtube.com/watch?v=Ojiv9Smi4XE\",\n      \"width\": 940,\n      \"height\": 528,\n      \"thumbnailUrl\": \"https://i.ytimg.com/vi/Ojiv9Smi4XE/hqdefault.jpg\",\n      \"html\": \"<iframe class=\\\"embedly-embed\\\" src=\\\"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FOjiv9Smi4XE%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DOjiv9Smi4XE&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FOjiv9Smi4XE%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube\\\" width=\\\"940\\\" height=\\\"528\\\" scrolling=\\\"no\\\" title=\\\"YouTube embed\\\" frameborder=\\\"0\\\" allow=\\\"autoplay; fullscreen; encrypted-media; picture-in-picture;\\\" allowfullscreen=\\\"true\\\"></iframe>\",\n      \"type\": \"video\"\n    }\n  ],\n  \"group\": \"\"\n}",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    },
+    {
+      "text": "Test drive",
+      "background": "rgb(255, 255, 255)",
+      "borderRadius": "200px"
+    },
+    {
+      "text": "Test drive",
+      "background": "rgb(255, 255, 255)",
+      "borderRadius": "200px"
+    },
+    {
+      "text": "ArticlesThe ultimate guide to electric car charging: Everything you need to knowJan 29, 2025",
+      "background": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "hero": {
+    "src": "/assets/optimized/hero-800-606f42907e1e.webp",
+    "width": 800,
+    "height": 450,
+    "bytes": 40338,
+    "srcSet": "/assets/optimized/hero-480-f534d6f45c0e.webp 480w, /assets/optimized/hero-800-606f42907e1e.webp 800w, /assets/optimized/hero-1200-1a930dd25c3f.webp 1200w, /assets/optimized/hero-1600-31649157ba65.webp 1600w"
+  },
+  "visit": {
+    "src": "/assets/optimized/visit-800-8fec3d7347d7.webp",
+    "width": 800,
+    "height": 450,
+    "bytes": 33730,
+    "srcSet": "/assets/optimized/visit-480-604814312efc.webp 480w, /assets/optimized/visit-800-8fec3d7347d7.webp 800w, /assets/optimized/visit-1200-b3e5312be830.webp 1200w, /assets/optimized/visit-1600-3fe0f5660f80.webp 1600w"
+  },
+  "choice": {
+    "src": "/assets/optimized/choice-800-e5fba252f772.webp",
+    "width": 800,
+    "height": 533,
+    "bytes": 37782,
+    "srcSet": "/assets/optimized/choice-480-af3eac46a6d0.webp 480w, /assets/optimized/choice-800-e5fba252f772.webp 800w, /assets/optimized/choice-1200-6b58747d2a27.webp 1200w, /assets/optimized/choice-1536-f6b6c11823f7.webp 1536w"
+  },
+  "advice": {
+    "src": "/assets/optimized/advice-800-120138e815c1.webp",
+    "width": 800,
+    "height": 533,
+    "bytes": 44186,
+    "srcSet": "/assets/optimized/advice-480-511f83f79575.webp 480w, /assets/optimized/advice-800-120138e815c1.webp 800w, /assets/optimized/advice-1200-6b78956fde77.webp 1200w, /assets/optimized/advice-1536-4da5ec4e5da1.webp 1536w"
+  },
+  "assessment": {
+    "src": "/assets/optimized/assessment-800-5da047ff8cef.webp",
+    "width": 800,
+    "height": 533,
+    "bytes": 44458,
+    "srcSet": "/assets/optimized/assessment-480-16981b1c7a49.webp 480w, /assets/optimized/assessment-800-5da047ff8cef.webp 800w, /assets/optimized/assessment-1200-b85dbf5384a7.webp 1200w, /assets/optimized/assessment-1536-02048e6e8ed1.webp 1536w"
+  },
+  "exchange": {
+    "src": "/assets/optimized/exchange-800-f44d6c019759.webp",
+    "width": 800,
+    "height": 533,
+    "bytes": 29646,
+    "srcSet": "/assets/optimized/exchange-480-d46b8ffab3ba.webp 480w, /assets/optimized/exchange-800-f44d6c019759.webp 800w, /assets/optimized/exchange-1200-4fc4c0ff51bb.webp 1200w, /assets/optimized/exchange-1536-3b32abbae05b.webp 1536w"
+  },
+  "bmw": {
+    "src": "/assets/optimized/bmw-800-6272e7e71078.webp",
+    "width": 800,
+    "height": 533,
+    "bytes": 33740,
+    "srcSet": "/assets/optimized/bmw-480-2d614a2d960e.webp 480w, /assets/optimized/bmw-800-6272e7e71078.webp 800w, /assets/optimized/bmw-900-24d7056e377e.webp 900w"
+  },
+  "mercedes": {
+    "src": "/assets/optimized/mercedes-800-b63a44ec1ff9.webp",
+    "width": 800,
+    "height": 533,
+    "bytes": 27496,
+    "srcSet": "/assets/optimized/mercedes-480-e6e563c11bb6.webp 480w, /assets/optimized/mercedes-800-b63a44ec1ff9.webp 800w, /assets/optimized/mercedes-900-e1b56b654183.webp 900w"
+  },
+  "audi": {
+    "src": "/assets/optimized/audi-800-3d34ab3b47ad.webp",
+    "width": 800,
+    "height": 1198,
+    "bytes": 25634,
+    "srcSet": "/assets/optimized/audi-480-c646f6cf4e93.webp 480w, /assets/optimized/audi-800-3d34ab3b47ad.webp 800w, /assets/optimized/audi-900-912aa85e8c36.webp 900w"
+  }
+}

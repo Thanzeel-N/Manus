@@ -1,0 +1,35 @@
+.workspace-app { color-scheme: light; }
+.workspace-app .ws-brand .brand-logo { border: 0; background: transparent; }
+[data-theme="dark"] .workspace-app {
+  color-scheme: dark;
+  --ws-ink: #eeeef2; --ws-muted: #aaaab4; --ws-line: #34343c;
+  --ws-dark: #101012; background: #151518; color: var(--ws-ink);
+}
+[data-theme="dark"] .workspace-app :is(.ws-topbar, .ws-panel, .ws-stat-card, .ws-dialog, .ws-mini-stats > button, .ws-row-action) { background: #202024; color: var(--ws-ink); border-color: var(--ws-line); }
+[data-theme="dark"] .workspace-app :is(.ws-panel-title, .ws-appointment-row, .ws-enquiry-row, .ws-filters, .ws-table th, .ws-table td, .ws-pagination, .ws-footer, .ws-editor-footer, .ws-detail-list > div, .ws-profile hr, .ws-editor-form fieldset > h3) { border-color: var(--ws-line); }
+[data-theme="dark"] .workspace-app :is(.ws-dialog-header, .ws-table th, .ws-table tbody tr:hover, .ws-appointment-row:hover, .ws-enquiry-row:hover, .ws-row-action:hover, .ws-icon-button:hover, .ws-pagination button:not(:disabled):hover) { background: #29292e; }
+[data-theme="dark"] .workspace-app :is(input, select, textarea, select option, input[type=file]) { background: #17171b; color: #eeeef2; border-color: #494952; }
+[data-theme="dark"] .workspace-app :is(input::placeholder, textarea::placeholder) { color: #9898a4; }
+[data-theme="dark"] .workspace-app .ws-search { border-color: #494952; }
+[data-theme="dark"] .workspace-app .ws-search input { background: transparent; }
+[data-theme="dark"] .workspace-app :is(.ws-breadcrumb strong, .ws-table td strong, .ws-empty h3, .ws-stock-legend strong, .ws-detail-list dd, .ws-editor-form fieldset > h3 > span, .ws-slot-summary h3, .ws-access-note strong) { color: #e4e4ea; }
+[data-theme="dark"] .workspace-app :is(.ws-breadcrumb, .ws-private, .ws-signout, .ws-icon-button, .ws-overline, .ws-stat-card > div, .ws-stat-card > small, .ws-panel-title p, .ws-empty p, .ws-table th, .ws-table td, .ws-table td small, .ws-field, .ws-field small, .ws-pagination, .ws-pagination button, .ws-footer, .ws-activity-copy small, .ws-stock-total > span, .ws-stock-legend button, .ws-date-tile small, .ws-role, .ws-live, .ws-checkbox, .ws-form-note, .ws-editor-footer > p, .ws-detail-list dt, .ws-customer-card > div > span, .ws-customer-message p, .ws-slot-summary p, .ws-access-note p) { color: #b1b1bd; }
+[data-theme="dark"] .workspace-app :is(.ws-stat-icon, .ws-empty > span, .ws-stock-total > button, .ws-date-tile, .ws-count, .ws-car-placeholder, .ws-slot-icon, .ws-customer-card, .ws-customer-message, .ws-slot-summary, .ws-access-note, .ws-photo-grid > div, input[type=file]::file-selector-button) { background: #2b2b32; border-color: #3d3d47; color: #bfc0cb; }
+[data-theme="dark"] .workspace-app .ws-stock-bar { background: #303036; }
+[data-theme="dark"] .workspace-app .ws-highlight { background: #352020; border-color: #6c302b; }
+[data-theme="dark"] .workspace-app :is(.ws-highlight .ws-stat-icon, .ws-avatar, .ws-customer-card .ws-avatar, .ws-login-symbol) { background: #492722; border-color: #6c302b; color: #ff968b; }
+[data-theme="dark"] .workspace-app .ws-mini-stats > button.selected { background: #352020; border-color: #d94035; }
+[data-theme="dark"] .workspace-app .ws-text-button { color: #ff968b; }
+[data-theme="dark"] .workspace-app :is(.ws-badge.ws-available, .ws-badge.ws-confirmed, .ws-badge.ws-active, .ws-badge.ws-open, .ws-badge.ws-closed, .ws-toast) { background: #20382b; color: #9dddaf; border-color: #355943; }
+[data-theme="dark"] .workspace-app :is(.ws-badge.ws-new, .ws-badge.ws-pending, .ws-badge.ws-reserved) { background: #3c3220; color: #e5c482; border-color: #5c4c31; }
+[data-theme="dark"] .workspace-app :is(.ws-badge.ws-contacted, .ws-badge.ws-booked) { background: #263248; color: #aecbf5; border-color: #3d5172; }
+[data-theme="dark"] .workspace-app :is(.ws-badge.ws-cancelled, .ws-badge.ws-blocked, .ws-badge.ws-inactive, .ws-error) { background: #432622; color: #f3b0a4; border-color: #6b3a32; }
+[data-theme="dark"] .workspace-app .ws-badge:is(.ws-draft, .ws-sold, .ws-unbooked) { background: #34343b; color: #d0d0d9; }
+[data-theme="dark"] .workspace-app.ws-login { background: #18181c; }
+[data-theme="dark"] .workspace-app :is(.ws-login-form > p:not(.ws-overline), .ws-login-form p.ws-login-help, .ws-login-security, .ws-back, .ws-password button) { color: #b1b1bd; }
+.workspace-app .ws-top-actions { gap: 14px; }
+.workspace-app .theme-toggle { width: 36px; height: 36px; flex-basis: 36px; }
+@media(max-width:650px) {
+  .workspace-app .ws-top-actions { gap: 8px; }
+  .workspace-app .ws-topbar { gap: 10px; }
+}

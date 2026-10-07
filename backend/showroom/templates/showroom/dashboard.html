@@ -1,0 +1,54 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Showroom dashboard · Manu’s Car World</title><link rel="stylesheet" href="{% static 'showroom/dashboard.css' %}"><link rel="stylesheet" href="{% static 'showroom/brand/dashboard.css' %}"><link rel="icon" href="{% static 'showroom/brand/icon.svg' %}" type="image/svg+xml"><script src="{% static 'showroom/brand/theme.js' %}"></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/dashboard/" aria-label="Manu’s Car World dashboard"><img src="{% static 'showroom/brand/logo-dark.svg' %}" alt="Manu’s Car World" width="210" height="58"></a>
+  <p class="nav-label">WORKSPACE</p>
+  <nav aria-label="Dashboard navigation">
+    <a href="/dashboard/" {% if section == 'overview' %}aria-current="page"{% endif %}><span>◫</span> Overview</a>
+    {% if can.inventory %}<a href="?section=inventory" {% if section == 'inventory' %}aria-current="page"{% endif %}><span>▤</span> Car inventory</a>{% endif %}
+    {% if can.enquiries %}<a href="?section=enquiries" {% if section == 'enquiries' %}aria-current="page"{% endif %}><span>✉</span> Contact enquiries</a>{% endif %}
+    {% if can_drives %}<a href="?section=test-drives" {% if section == 'test-drives' %}aria-current="page"{% endif %}><span>◷</span> Test drives</a>{% endif %}
+    {% if perms.showroom.view_testdriveslot %}<a href="/admin/showroom/testdriveslot/"><span>▦</span> Availability &amp; slots</a>{% endif %}
+    {% if perms.auth.view_user %}<a href="/admin/auth/user/"><span>♧</span> Staff &amp; access</a>{% endif %}
+  </nav>
+  <div class="sidebar-bottom"><a href="/">View public website ↗</a><p>One showroom. Everything in view.</p></div>
+</aside>
+<div class="workspace">
+  <header><span>Workspace <span class="slash">/</span> {% if section == 'overview' %}Overview{% elif section == 'inventory' %}Car inventory{% elif section == 'enquiries' %}Contact enquiries{% else %}Test drives{% endif %}</span><div class="account"><button type="button" data-theme-toggle aria-label="Dark mode" aria-pressed="false">? Dark mode</button><span class="avatar">{{ request.user.username|first|upper }}</span><span>{{ request.user.get_full_name|default:request.user.username }}<small>{% if request.user.is_superuser %}Administrator{% else %}Staff member{% endif %}</small></span><form action="/admin/logout/" method="post">{% csrf_token %}<button class="text-button">Sign out</button></form></div></header>
+  <main>
+    <div class="page-heading"><div><p class="eyebrow">MANU’S CAR WORLD / OPERATIONS</p><h1>{% if section == 'overview' %}Your showroom, at a glance.{% elif section == 'inventory' %}Car inventory{% elif section == 'enquiries' %}Contact enquiries{% else %}Test-drive requests{% endif %}</h1><p>{% if section == 'overview' %}Keep your stock, customers and upcoming visits moving.{% elif section == 'inventory' %}Manage your collection, update availability and keep listings current.{% elif section == 'enquiries' %}Every conversation starts here. Review requests and track follow-ups.{% else %}Review customer details and confirm the next visit. All times are in IST.{% endif %}</p></div>{% if perms.showroom.add_car %}<a class="button" href="/admin/showroom/car/add/">+ Add a car</a>{% endif %}</div>
+    {% for message in messages %}<p class="notice {{ message.tags }}" role="status">{{ message }}</p>{% endfor %}
+    <section class="stats" aria-label="Showroom summary">{% for stat in stats %}{% if stat %}<a class="stat" href="?section={{ stat.section }}"><span>{{ stat.label }}</span><strong>{{ stat.value }}</strong><small>View details ↗</small></a>{% endif %}{% endfor %}</section>
+    {% if section == 'overview' %}
+    <div class="overview-grid">
+      {% if can_drives %}<section class="panel"><div class="panel-heading"><h2>Upcoming test drives</h2><a href="?section=test-drives">View all ↗</a></div>{% for booking in upcoming %}<article class="activity"><div class="date-tile">{{ booking.slot.starts_at|date:'d' }}<small>{{ booking.slot.starts_at|date:'M' }}</small></div><div><strong>{{ booking.slot.car.name }}</strong><p>{{ booking.name }} · {{ booking.slot.starts_at|date:'h:i A' }} IST</p></div><span class="badge {{ booking.status }}">{{ booking.status|capfirst }}</span></article>{% empty %}<div class="empty"><h3>A clear schedule</h3><p>Upcoming requests will appear here when customers book a test drive.</p></div>{% endfor %}</section>{% endif %}
+      {% if can.enquiries %}<section class="panel"><div class="panel-heading"><h2>Latest enquiries</h2><a href="?section=enquiries">View all ↗</a></div>{% for item in recent_enquiries %}<article class="activity"><div class="avatar">{{ item.name|first|upper }}</div><div><strong>{{ item.name }}</strong><p>{{ item.interest }}</p></div><span class="badge {{ item.status }}">{{ item.status|capfirst }}</span></article>{% empty %}<div class="empty"><h3>Ready for the next conversation</h3><p>Contact forms from the website arrive here automatically.</p></div>{% endfor %}</section>{% endif %}
+    </div>
+    <section class="welcome"><div><p class="eyebrow">YOUR DAILY WORKFLOW</p><h2>A little attention. A better customer experience.</h2><p>Review new enquiries, confirm test drives and keep car availability up to date.</p></div><a class="button secondary" href="/admin/">Open management tools ↗</a></section>
+    {% else %}
+    <section class="panel">
+      <div class="panel-heading"><h2>{% if section == 'inventory' %}Your collection{% elif section == 'enquiries' %}Customer inbox{% else %}Booking register{% endif %} <span class="count">{{ page.paginator.count }}</span></h2><span class="muted">Live showroom records</span></div>
+      <form class="filters" method="get"><input type="hidden" name="section" value="{{ section }}"><label class="search">Search records<input type="search" name="q" value="{{ q }}" placeholder="{% if section == 'inventory' %}Search name, brand or variant…{% else %}Search customer, phone or car…{% endif %}"></label><label>Status<select name="status"><option value="">All statuses</option>{% for value,label in choices %}<option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label|capfirst }}</option>{% endfor %}</select></label><button class="button secondary">Apply filters</button><a href="?section={{ section }}">Reset</a></form>
+      <div class="table-wrap"><table><thead><tr>{% if section == 'inventory' %}<th>Vehicle</th><th>Specifications</th><th>Price</th><th>Status</th><th>Manage</th>{% elif section == 'enquiries' %}<th>Customer</th><th>Enquiry details</th><th>Received</th><th>Status</th><th>Follow-up</th>{% else %}<th>Customer</th><th>Vehicle & appointment</th><th>Reference</th><th>Status</th><th>Manage</th>{% endif %}</tr></thead><tbody>
+      {% for item in page %}<tr>
+        {% if section == 'inventory' %}
+        <td><div class="vehicle">{% with photo=item.images.first %}{% if photo %}<img src="{{ photo.image.url }}" alt="{{ item.name }}" width="84" height="62">{% else %}<span class="photo-placeholder">CAR</span>{% endif %}{% endwith %}<div><strong>{{ item.name }}</strong><small>{{ item.variant }}{% if item.is_sample %} · Sample{% endif %}</small></div></div></td><td>{{ item.year }} · {{ item.fuel }}<small>{{ item.mileage }} km · {{ item.transmission }}</small></td><td class="price">₹{{ item.price }} lakh</td>
+        {% elif section == 'enquiries' %}
+        <td><strong>{{ item.name }}</strong><small>{{ item.phone }}</small>{% if item.email %}<small>{{ item.email }}</small>{% endif %}</td><td class="details"><strong>{{ item.interest }}</strong><p>{{ item.message|default:'No additional message.'|linebreaksbr }}</p>{% if item.date %}<small>Preferred date: {{ item.date|date:'d M Y' }}</small>{% endif %}</td><td>{{ item.created_at|date:'d M Y' }}<small>{{ item.created_at|date:'h:i A' }} IST</small></td>
+        {% else %}
+        <td><strong>{{ item.name }}</strong><small>{{ item.phone }}</small><small>{{ item.email }}</small><small>{% if item.email_verified_at %}✓ Email verified{% else %}Email not verified{% endif %}</small></td><td><strong>{{ item.slot.car.name }}</strong><small>{{ item.slot.starts_at|date:'d M Y · h:i A' }} IST</small></td><td><small class="reference">{{ item.reference }}</small></td>
+        {% endif %}
+        <td><span class="badge {{ item.status }}">{{ item.status|capfirst }}</span></td>
+        <td>{% if can_edit %}<details><summary>Update {% if section == 'enquiries' %}follow-up{% else %}status{% endif %}</summary><form method="post" class="update-form">{% csrf_token %}<input type="hidden" name="id" value="{{ item.pk }}"><label>Status<select name="status">{% for value,label in choices %}<option value="{{ value }}" {% if item.status == value %}selected{% endif %}>{{ label|capfirst }}</option>{% endfor %}</select></label>{% if section == 'enquiries' %}<label>Internal notes<textarea name="notes" rows="3" maxlength="5000">{{ item.notes }}</textarea></label>{% endif %}<button class="button">Save changes</button></form></details>{% endif %}{% if section == 'inventory' %}<a class="edit-link" href="/admin/showroom/car/{{ item.pk }}/change/">{% if can_edit %}Edit car & photos{% else %}View car{% endif %} ↗</a>{% elif section == 'enquiries' %}{% if not can_edit %}<p>{{ item.notes }}</p>{% endif %}{% endif %}</td>
+      </tr>{% empty %}<tr><td colspan="5"><div class="empty"><h3>No records found</h3><p>{% if q or selected_status %}Try another search or reset your filters.{% else %}New records will appear here as your showroom gets busy.{% endif %}</p></div></td></tr>{% endfor %}
+      </tbody></table></div>
+      <footer class="pagination"><span>Page {{ page.number }} of {{ page.paginator.num_pages }} · {{ page.paginator.count }} records</span><div>{% if page.has_previous %}<a href="?section={{ section }}&q={{ q|urlencode }}&status={{ selected_status|urlencode }}&page={{ page.previous_page_number }}">← Previous</a>{% endif %}{% if page.has_next %}<a href="?section={{ section }}&q={{ q|urlencode }}&status={{ selected_status|urlencode }}&page={{ page.next_page_number }}">Next →</a>{% endif %}</div></footer>
+    </section>
+    {% endif %}
+    <p class="footnote">Manu’s Car World · Private workspace · All appointment times in India Standard Time</p>
+  </main>
+</div>
+</body></html>
