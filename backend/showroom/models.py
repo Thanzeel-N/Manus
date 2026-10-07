@@ -4,6 +4,7 @@ from bookings.models import TestDriveSlot, Booking
 from enquiries.models import Enquiry
 from verification.models import EmailVerification
 
+
 __all__ = [
     'Car',
     'CarImage',

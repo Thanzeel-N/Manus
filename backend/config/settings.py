@@ -19,7 +19,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'local-development-only-change-before-launch')
 if not DEBUG and SECRET_KEY == 'local-development-only-change-before-launch':
     raise RuntimeError('Set DJANGO_SECRET_KEY for production.')
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver').split(',')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000').split(',')
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -76,6 +76,9 @@ CLOUDFLARE_R2_ENDPOINT_URL = (
 
 _raw_domain = os.environ.get('CLOUDFLARE_R2_CUSTOM_DOMAIN') or os.environ.get('R2_CUSTOM_DOMAIN') or os.environ.get('R2_PUBLIC_URL') or os.environ.get('AWS_S3_CUSTOM_DOMAIN', '')
 CLOUDFLARE_R2_CUSTOM_DOMAIN = _raw_domain.replace('https://', '').replace('http://', '').rstrip('/') if _raw_domain else ''
+# If the domain is the raw S3 API endpoint, it is not a public CDN domain and requires signed auth
+if CLOUDFLARE_R2_CUSTOM_DOMAIN.endswith('.r2.cloudflarestorage.com'):
+    CLOUDFLARE_R2_CUSTOM_DOMAIN = ''
 
 # Cloudflare R2 is activated when credentials exist and not running hermetic tests
 IS_RUNNING_TESTS = 'test' in sys.argv
@@ -92,7 +95,15 @@ if USE_CLOUDFLARE_R2:
     AWS_S3_SIGNATURE_VERSION = 's3v4'
     AWS_DEFAULT_ACL = None
     AWS_S3_FILE_OVERWRITE = False
-    AWS_QUERYSTRING_AUTH = os.environ.get('CLOUDFLARE_R2_QUERYSTRING_AUTH', '0' if CLOUDFLARE_R2_CUSTOM_DOMAIN else '1') == '1'
+    
+    # If a real public domain/r2.dev is present, querystring auth is not required;
+    # otherwise presigned URLs are used to allow web browsers to view private R2 objects.
+    if 'CLOUDFLARE_R2_QUERYSTRING_AUTH' in os.environ:
+        AWS_QUERYSTRING_AUTH = os.environ['CLOUDFLARE_R2_QUERYSTRING_AUTH'] in ('1', 'true', 'True')
+    else:
+        AWS_QUERYSTRING_AUTH = False if CLOUDFLARE_R2_CUSTOM_DOMAIN else True
+    AWS_QUERYSTRING_EXPIRE = int(os.environ.get('CLOUDFLARE_R2_QUERYSTRING_EXPIRE', 604800))  # 7 days
+
     if CLOUDFLARE_R2_CUSTOM_DOMAIN:
         AWS_S3_CUSTOM_DOMAIN = CLOUDFLARE_R2_CUSTOM_DOMAIN
         MEDIA_URL = f'https://{CLOUDFLARE_R2_CUSTOM_DOMAIN}/'

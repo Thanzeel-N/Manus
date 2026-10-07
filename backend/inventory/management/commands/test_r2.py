@@ -48,17 +48,17 @@ class Command(BaseCommand):
             content = ContentFile(b'Cloudflare R2 health check passed for Manu Car World showroom.')
 
             saved_path = storage.save(test_filename, content)
-            self.stdout.write(self.style.SUCCESS(f'  [✓] Successfully uploaded test object: {saved_path}'))
+            self.stdout.write(self.style.SUCCESS(f'  [OK] Successfully uploaded test object: {saved_path}'))
 
             public_url = storage.url(saved_path)
-            self.stdout.write(self.style.SUCCESS(f'  [✓] Generated Public Media URL: {public_url}'))
+            self.stdout.write(self.style.SUCCESS(f'  [OK] Generated Public Media URL: {public_url}'))
 
             exists = storage.exists(saved_path)
             if exists:
-                self.stdout.write(self.style.SUCCESS('  [✓] Verified file existence in bucket.'))
+                self.stdout.write(self.style.SUCCESS('  [OK] Verified file existence in bucket.'))
 
             storage.delete(saved_path)
-            self.stdout.write(self.style.SUCCESS('  [✓] Cleaned up temporary healthcheck file.'))
+            self.stdout.write(self.style.SUCCESS('  [OK] Cleaned up temporary healthcheck file.'))
 
             self.stdout.write(self.style.SUCCESS('\n*** Cloudflare R2 Storage is fully working and ready for car uploads! ***\n'))
         except Exception as exc:

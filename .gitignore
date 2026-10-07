@@ -5,6 +5,10 @@ frontend/node_modules/
 .next/
 frontend/.next/
 out/
+.env
+.env.*
+backend/.env
+backend/.env.*
 .env*.local
 frontend/.env*.local
 .runtime/
