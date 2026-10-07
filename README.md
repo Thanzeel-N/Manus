@@ -1,33 +1,83 @@
-# Manu’s Car World
+# Manu’s Car World — Showroom Platform
 
-A Next.js App Router project for a pre-owned car dealership, using Motorflow Home V3 as the design reference.
+A dealership platform for certified pre-owned cars, split into independent `frontend` and `backend` applications.
 
-## Development
+---
 
-Requires Node.js 20.9 or newer. Run npm install, then npm run dev. Open the URL printed by Next.js. On Windows PowerShell, use npm.cmd if script execution is restricted.
+## 📁 Repository Structure
 
-## Production
+```
+showroom/
+├── frontend/             # Next.js 16 (App Router) + Turbopack + Vanilla CSS
+│   ├── app/              # Multi-page routes (/, /cars, /about, /exchange, /visit, /contact, /dashboard)
+│   ├── components/       # UI components (Header, Footer, Valuation Calculator, Enquiry, Inventory, etc.)
+│   ├── public/           # Static assets, brand logos, optimized WebP images
+│   ├── lib/              # Stock data fetching and demo car models
+│   ├── scripts/          # Image optimization and verification scripts
+│   ├── package.json      # Frontend dependencies & Next.js scripts
+│   └── next.config.mjs   # Next.js configuration & image caching
+│
+├── backend/              # Python Django + Django REST Framework
+│   ├── config/           # Django project settings, URLs, WSGI/ASGI
+│   ├── showroom/         # Car models, bookings, test-drive slots, enquiries, staff API
+│   ├── manage.py         # Django management script
+│   ├── requirements.txt  # Python dependencies (Django 5, DRF, Pillow)
+│   └── db.sqlite3        # SQLite development database
+│
+└── package.json          # Top-level workspace runner scripts
+```
 
-Run npm run build, then npm start.
+---
 
-For a fast forwarded-port preview, run `npm run preview` and forward port **3000** in VS Code. This builds once and serves the production bundle on all interfaces. To use another port, run `npm run build`, then `npm start -- --hostname 0.0.0.0 --port 3001` and forward that port. Stop any existing server on the chosen port first. Rebuild after changing the site; use `npm run dev` while editing.
+## 🚀 Quick Start
 
-Images are generated at build time in responsive WebP sizes, with content-hashed filenames and long-lived caching. The hero loads eagerly; other sections load lazily. No remote image host or first-request image conversion is required. Run `npm run images:optimize` after replacing source photography. Generated scene sources live in `assets/section-*.png`; image prompts and placements are documented in `design-reference/section-images.md`.
+### 1. Frontend (Next.js)
 
-## Structure
+```powershell
+# From the repository root:
+npm run dev
 
-- app/page.jsx: server-rendered home page and dealership sections.
-- app/layout.jsx: root layout and search metadata.
-- app/globals.css: responsive styling.
-- components/: React car filters, saved favourites, navigation, and enquiry dialog.
-- public/assets/: locally stored car photography.
+# Or directly in the frontend directory:
+cd frontend
+npm install
+npm run dev
+```
 
-The site includes a Django backend for inventory, multiple photo uploads, optional short videos, saved contact enquiries and test-drive bookings. Open `/dashboard/` for the protected admin/staff workspace, with search, status filters, follow-up notes, booking confirmation and links to vehicle and staff management. See [backend setup and staff workflow](backend/README.md). The initial collection contains sample vehicles, prices and illustrative images. Saved favourites stay in the visitor’s browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-`node scripts/verify-dashboard.mjs` checks public enquiry submission, login/logout, saved follow-up notes, the car editor, mobile layout and staff access restrictions. It expects running Next.js and Django servers, migrated data, the `Showroom staff` group (`manage.py setup_staff`) and installed Chrome. Set `SITE_URL` to the frontend origin; that origin must also be included in Django's `CSRF_TRUSTED_ORIGINS`. The test creates temporary accounts and one enquiry, then removes them in cleanup. Screenshots are saved to `design-reference/result/dashboard-desktop.png` and `dashboard-mobile.png`.
+#### Multi-Page Routes:
+- `/` — Homepage: Hero, brand strip, trust badges, live inventory, showroom preview, FAQs
+- `/cars` — Full pre-owned car catalog with multi-facet filters (make, budget, body, fuel, transmission, year)
+- `/cars/[slug]` — Individual vehicle details: specifications grid, walkaround video, verified email booking
+- `/about` — Why Manu’s: 150+ point technical inspection breakdown, customer reviews, leadership team
+- `/exchange` — Sell & Exchange: Interactive instant car valuation calculator & 4-step handover guide
+- `/visit` — Showroom Visit: Climate-controlled bays, test-drive circuit route, hours, and directions
+- `/contact` — Contact Showroom: Departmental contacts, opening hours, interactive enquiry modal
+- `/dashboard` — Showroom Workspace: Protected admin & staff dashboard
 
-## Reference and verification
+---
 
-The live reference was inspected in Chrome at desktop and mobile widths before the dark redesign. See `design-reference/notes.md` for the findings and `design-reference/` for screenshots. Showcase imagery from the supplied reference is included for design preview; use the dealership’s own licensed photography before publication.
+### 2. Backend (Django REST Framework)
 
-`node verify-site.mjs` checks the site at http://127.0.0.1:3002 using installed Chrome: inventory filters, favourites, enquiries, carousel, mobile navigation, FAQ, and horizontal overflow. Set SITE_URL to check another server. Screenshots are saved in `design-reference/result/`.
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
+```
+
+The Django REST API runs on [http://localhost:8000/api/](http://localhost:8000/api/).
+
+---
+
+## 🛠️ Production Build
+
+```powershell
+# Build the frontend production bundle:
+npm run build
+
+# Start the production server:
+npm start
+```
