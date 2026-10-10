@@ -1,0 +1,8 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{{ title }} | Manu’s Car World{% endblock %}
+{% block branding %}
+<a href="{% url 'admin:index' %}" aria-label="Manu’s Car World administration"><img class="admin-brand-logo" src="{% static 'showroom/brand/logo-dark.svg' %}" alt="Manu’s Car World" width="234" height="65"></a>
+{% if user.is_anonymous %}{% include "admin/color_theme_toggle.html" %}{% endif %}
+{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'showroom/brand/admin.css' %}"><link rel="icon" href="{% static 'showroom/brand/icon.svg' %}" type="image/svg+xml">{% endblock %}

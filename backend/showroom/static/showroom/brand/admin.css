@@ -1,0 +1,16 @@
+:root, html[data-theme="light"], html[data-theme="dark"] {
+  --primary: #a6241d; --secondary: #161618; --accent: #fff;
+  --header-bg: #161618; --header-color: #fff; --header-branding-color: #fff;
+  --header-link-color: #fff; --breadcrumbs-bg: #29292d;
+  --breadcrumbs-fg: #d4d4d9; --breadcrumbs-link-fg: #fff;
+  --button-bg: #cf241c; --button-hover-bg: #b51e17;
+  --default-button-bg: #cf241c; --default-button-hover-bg: #b51e17;
+  --selected-row: #fff0ee;
+}
+html[data-theme="light"], :root { --link-fg: #a6241d; --link-hover-color: #801a15; --link-selected-fg: #a6241d; }
+html[data-theme="dark"] { --link-fg: #ff8279; --link-hover-color: #ffaaa4; --link-selected-fg: #ff8279; --selected-row: #3e201e; }
+.admin-brand-logo { display: block; width: 234px; max-width: 100%; height: auto; padding: 8px; box-sizing: border-box; background: transparent; border-radius: 0; }
+#header { border-bottom: 3px solid #ee2b20; }
+input:focus, select:focus, textarea:focus { outline-color: #ee2b20; }
+.login #header { padding: 20px; }
+.login #branding { float: none; }

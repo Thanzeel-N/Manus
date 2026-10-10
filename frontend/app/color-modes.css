@@ -1,0 +1,83 @@
+/* Theme selection is applied before paint in the root layout. */
+:root, :root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #080809; --ink: #f6f6f7; --panel: #141415;
+  --line: #343438; --muted: #b4b4bb; --mode-raised: #202024;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --paper: #fafafa; --ink: #202024; --panel: #fff;
+  --line: #dcdce1; --muted: #606069; --mode-raised: #f0f0f3;
+}
+.brand-logo { display: block; background: transparent; border: 0; border-radius: 0; }
+.brand-logo img { width: 100%; height: auto; }
+.brand-logo .logo-for-light { display: none; }
+.brand-logo .logo-for-dark { display: block; }
+[data-theme="light"] .brand-logo .logo-for-light { display: block; }
+[data-theme="light"] .brand-logo .logo-for-dark { display: none; }
+/* The sign-in photograph panel remains dark in either theme. */
+.workspace-app .ws-login-story .brand-logo .logo-for-light { display: none; }
+.workspace-app .ws-login-story .brand-logo .logo-for-dark { display: block; }
+.theme-toggle, .workspace-app .theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 0 0 40px; width: 40px; height: 40px; padding: 0;
+  background: var(--panel); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 6px; cursor: pointer;
+}
+.theme-toggle:hover, .workspace-app .theme-toggle:hover { border-color: var(--brand-red); }
+.theme-toggle:focus-visible { outline: 2px solid var(--brand-red); outline-offset: 4px; }
+.theme-moon { display: none; }
+[data-theme="light"] .theme-sun { display: none; }
+[data-theme="light"] .theme-moon { display: block; }
+.header { gap: 18px; }
+.header nav { gap: 20px; }
+.detail-nav .theme-toggle { margin-left: auto; margin-right: 20px; }
+.ws-login-tools { display: flex; align-items: center; justify-content: flex-end; gap: 18px; width: 100%; }
+.workspace-app .ws-login-tools .ws-back { align-self: auto; }
+/* Photograph sections keep white copy over dark image overlays. */
+.hero, .interior { background-color: #080809; color: #fff; --muted: #c4c4ca; }
+.hero p, .interior p { color: #c4c4ca; }
+.car-badge, .save-car, .gallery-main > span { color: #fff; }
+[data-theme="light"] .header nav a { color: #55555e; }
+[data-theme="light"] .header nav a.active { color: #161619; }
+[data-theme="light"] .header nav a:hover { color: #b51e17; }
+[data-theme="light"] :is(.catalog-heading h1, .stock-search input, .stock-sort select, select, select option, .booking-form input:not([type="radio"]), dialog:not(.ws-dialog), #enquiry-form input, #enquiry-form select, #enquiry-form textarea) { color: var(--ink); }
+[data-theme="light"] :is(.filters, .stock-search, .stock-sort select, select option, .car-card, .gallery-main, .booking-panel, dialog:not(.ws-dialog)) { background: var(--panel); }
+[data-theme="light"] :is(.booking-form input:not([type="radio"]), #enquiry-form input, #enquiry-form select, #enquiry-form textarea) { background: #fff; border-color: #c9c9d0; }
+[data-theme="light"] :is(.email-verification, .stock-search, .stock-sort select, .car-detail-link, .stock-book, .detail-nav, .detail-block, .booking-panel, .time-slots label, .gallery-thumbs button, dialog:not(.ws-dialog)) { border-color: var(--line); }
+[data-theme="light"] :is(.stock-search label, .stock-search > span, .stock-sort, .detail-nav > a:last-child, .detail-price small, .spec-grid dt, .feature-list, .filters label, .sample-label, .car-meta, .price small, .inventory-foot, .footer-bottom, .faq summary span, .close-dialog) { color: var(--muted); }
+[data-theme="light"] .car-image::after { background: linear-gradient(transparent 70%, #fff); }
+[data-theme="light"] .car-card:hover { box-shadow: 0 15px 35px #17171912; border-color: #aaaab4; }
+[data-theme="light"] .car-image > img { filter: none; }
+[data-theme="light"] .time-slots .chosen { background: #fff0ee; border-color: #cf241c; }
+[data-theme="light"] .verification-send { color: #a6241d; background: #fff0ee; border-color: #e6b5ae; }
+[data-theme="light"] .verification-send:hover:not(:disabled) { background: #ffe1dc; }
+[data-theme="light"] :is(.stock-book > a, .text-link:hover, .car-detail-link:hover, .faq summary:hover) { color: #b51e17; }
+[data-theme="light"] .exchange-copy li::before { color: var(--brand-action); }
+[data-theme="light"] .closing { background: radial-gradient(ellipse at 50% 100%, #ffe9e5, transparent 70%); border-color: #efd7d2; }
+[data-theme="light"] #form-status { color: #28603b; }
+[data-theme="light"] #form-status:not(:empty) { background: #edf5ef; border-color: #cddfd2; }
+[data-theme="light"] :is(.trust-strip) { background: #f2f2f6; border-color: #dcdce1; }
+[data-theme="light"] :is(.inspection-card, .review-card, .team-card, .step-card, .amenity-card, .checklist-card, .visit-schedule-card, .visit-location-card, .highlight-box, .valuation-card, .contact-card, .contact-cta-panel, .map-placeholder) { background: #fff; border-color: #dcdce1; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+[data-theme="light"] :is(.inspection-card h3, .step-card h3, .amenity-card h3, .team-card h3, .contact-card h2, .map-title, .location-info strong, .schedule-list strong, .trust-badge strong, .valuation-header h2) { color: #161619; }
+[data-theme="light"] .review-quote { color: #2a2a30; }
+[data-theme="light"] :is(.val-field input, .val-field select) { background: #fafafa; color: #161619; border-color: #d0d0d8; }
+[data-theme="light"] .valuation-result-box { background: linear-gradient(135deg, #24252a 0%, #301715 100%); border-color: #cf241c; }
+[data-theme="light"] .button.dark { background: #1f2025; color: #fff; border-color: #1f2025; }
+[data-theme="light"] .button.dark:hover { background: #32343c; border-color: var(--brand-red); color: #fff; }
+[data-theme="light"] .about-stats-bar { background: #fff; border-color: #dcdce1; }
+[data-theme="light"] .site-footer { background: #f4f4f7; border-color: #dcdce1; }
+[data-theme="light"] .footer-col h4 { color: #161619; }
+[data-theme="light"] .schedule-tip { background: #f0f0f4; border-left-color: var(--brand-red); }
+[data-theme="light"] .benefit-list strong { color: #161619; }
+[data-theme="light"] .hours-list li { border-bottom-color: #e4e4ea; }
+[data-theme="light"] .inspection-card li { border-bottom-color: #e8e8ee; }
+
+@media(max-width:700px) {
+  .header { gap: 12px; }
+  .header .brand-logo { width: clamp(120px, 35vw, 130px); }
+  .header > .theme-toggle { margin-left: auto; }
+  .header .menu-button { margin-left: 0; width: 40px; height: 40px; }
+  .detail-nav { flex-wrap: wrap; }
+  .detail-nav .theme-toggle { margin-right: 0; }
+}

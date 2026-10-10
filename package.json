@@ -1,31 +1,12 @@
 {
-  "name": "manus-car-world",
+  "name": "manus-car-world-workspace",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=22 <23"
-  },
   "scripts": {
-    "predev": "npm run images:optimize",
-    "dev": "next dev",
-    "test": "node --test tests/*.test.mjs",
-    "test:e2e": "playwright test",
-    "format:check": "prettier --check app components lib scripts tests *.mjs *.json .github/**/*.yml",
-    "build": "next build",
-    "start": "next start",
-    "images:optimize": "node scripts/optimize-images.mjs",
-    "prebuild": "npm run images:optimize",
-    "preview": "npm run build && next start --hostname 0.0.0.0"
-  },
-  "dependencies": {
-    "next": "^16.3.5",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.63.0",
-    "prettier": "^3.9.7",
-    "sharp": "0.35.4"
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "python backend/manage.py runserver 0.0.0.0:8000"
   }
 }

@@ -1,0 +1,21 @@
+.sidebar { background: #121214; }
+.brand img { display: block; width: 210px; max-width: 100%; height: auto; border: 0; border-radius: 0; background: transparent; }
+nav a[aria-current], .button { background: #cf241c; color: #fff; border-color: #cf241c; }
+.button:hover { background: #b51e17; }
+.button.secondary { background: #fff; color: #a6241d; border-color: #d4d4d8; }
+.welcome { background: #fff0ee; border-color: #f0d1cd; }
+.eyebrow { color: #a6241d; }
+.avatar { background: #fff0ee; color: #a6241d; }
+.panel-heading > a, .edit-link { color: #a6241d; }
+input:focus, select:focus, textarea:focus, a:focus-visible, button:focus-visible { outline: 2px solid #ee2b20; outline-offset: 3px; }
+.available, .confirmed, .closed { background: #eaf5ef; color: #256441; }
+.notice { background: #eaf5ef; color: #256441; }
+[data-theme-toggle] { padding: 8px 10px; border: 1px solid #aaa; border-radius: 4px; background: transparent; color: inherit; cursor: pointer; }
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body { background: #151518; color: #eeeef2; }
+html[data-theme="dark"] :is(header, .panel, .stat, input, select, textarea) { background: #202024; color: #eeeef2; border-color: #3c3c44; }
+html[data-theme="dark"] :is(.filters, .panel-heading, .activity, td) { border-color: #3c3c44; }
+html[data-theme="dark"] th { background: #29292e; color: #b4b4c0; }
+html[data-theme="dark"] :is(.page-heading p:not(.eyebrow), .activity p, .stat > span, .stat small, td small, .details p, .filters label, .footnote, .pagination) { color: #b4b4c0; }
+html[data-theme="dark"] .welcome { background: #352020; border-color: #6c302b; }
+html[data-theme="dark"] .welcome p:last-child { color: #c4c4cc; }

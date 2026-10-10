@@ -1,0 +1,17 @@
+.workspace-app .ws-permissions { margin-top: 14px; padding-top: 22px; border-top: 1px solid var(--ws-line); }
+.workspace-app .ws-permissions h3 { font-size: 16px; font-weight: 600; }
+.workspace-app .ws-permissions > p { margin: 9px 0 16px; font-size: 11px; }
+.workspace-app .ws-access-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.workspace-app .ws-access-presets button { border: 1px solid var(--ws-line); border-radius: 5px; padding: 7px 10px; font-size: 11px; }
+.workspace-app .ws-access-presets button:hover { background: #819c5920; }
+.workspace-app .ws-access-matrix { border: 1px solid var(--ws-line); border-radius: 7px; overflow: hidden; }
+.workspace-app .ws-access-row { display: grid; grid-template-columns: minmax(0, 1fr) repeat(3, 48px); align-items: center; gap: 4px; padding: 15px 12px; border-top: 1px solid var(--ws-line); }
+.workspace-app .ws-access-row > span:not(:first-child) { text-align: center; display: flex; justify-content: center; }
+.workspace-app .ws-access-row strong { font-size: 12px; font-weight: 500; }
+.workspace-app .ws-access-row small { font-size: 10px; color: var(--ws-muted); margin-top: 4px; line-height: 1.5; }
+.workspace-app .ws-access-heading { border: 0; background: #819c5910; font-size: 10px; }
+.workspace-app .ws-access-row input[type=checkbox] { width: 17px; height: 17px; cursor: pointer; }
+@media(max-width:450px) { .workspace-app .ws-access-row { grid-template-columns: minmax(0, 1fr) repeat(3, 37px); padding: 12px 9px; gap: 2px; } }
+.ws-field-requirement { margin-left: .6rem; font-size: .7rem; font-weight: 400; opacity: .8; }
+.ws-alerts { padding: 1.5rem; }
+.ws-alert-item { padding: 1.2rem 0; border-bottom: 1px solid var(--ws-border, #8884); overflow-wrap: anywhere; }

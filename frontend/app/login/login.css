@@ -1,0 +1,102 @@
+.ws-shared-login .ws-login-form > form {
+  display: grid;
+  gap: 20px;
+}
+.ws-shared-login .ws-login-form > form > .ws-field { margin-bottom: 0; }
+.ws-shared-login .ws-login-form { max-width: 400px; padding-block: 28px; }
+.ws-shared-login .ws-login-form > form > .ws-button {
+  width: 100%;
+}
+.ws-shared-login .ws-login-divider {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  color: var(--ws-muted);
+  font-size: 11px;
+  margin: 25px 0;
+}
+.ws-shared-login .ws-login-divider::before,
+.ws-shared-login .ws-login-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--ws-line);
+}
+.ws-shared-login .ws-google-unavailable {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--ws-line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ws-muted);
+  font: inherit;
+  font-size: 13px;
+}
+.ws-shared-login .ws-google-note {
+  display: block;
+  margin-top: 12px;
+  color: var(--ws-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.ws-shared-login .ws-shared-account {
+  display: grid;
+  gap: 20px;
+}
+.ws-shared-login .ws-shared-account a {
+  text-decoration: none;
+}
+.ws-shared-login .ws-login-form .ws-login-help {
+  margin-top: 25px;
+}
+/* Lock the layout to the viewport — left story is fixed, right side scrolls */
+.ws-shared-login.workspace-app.ws-login {
+  height: 100dvh;
+  overflow: hidden;
+}
+.ws-shared-login .ws-login-story {
+  overflow: hidden;
+}
+.ws-shared-login .ws-login-form-side {
+  overflow-y: auto;
+  height: 100dvh;
+}
+.ws-shared-login .ws-google-button {
+  min-height: 44px;
+}
+@media (max-width: 650px) {
+  .ws-shared-login.workspace-app.ws-login {
+    height: auto;
+    overflow: visible;
+  }
+  .ws-shared-login .ws-login-form-side {
+    overflow-y: visible;
+    height: auto;
+  }
+}
+
+.ws-shared-login .ws-password-help {
+  color: var(--ws-muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: -10px;
+}
+.ws-shared-login .ws-auth-switch {
+  border: 0;
+  padding: 8px 3px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.ws-shared-login .ws-login-help a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+.ws-shared-login .ws-auth-options .ws-auth-tab:focus-visible,
+.ws-shared-login .ws-auth-switch:focus-visible {
+  outline: 2px solid var(--brand-action);
+  outline-offset: 3px;
+}
