@@ -19,6 +19,7 @@ from rest_framework import serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from workspace.alerts import is_admin
 from .models import Car, CarImage, Booking, Enquiry, TestDriveSlot
 
 
@@ -26,7 +27,7 @@ def identity(user):
     if not user.is_authenticated or not user.is_active or not user.is_staff:
         return None
     return {'id': user.pk, 'username': user.username, 'name': user.get_full_name() or user.username,
-            'is_admin': user.is_superuser, 'permissions': sorted(user.get_all_permissions())}
+            'is_admin': is_admin(user), 'permissions': sorted(user.get_all_permissions())}
 
 
 @never_cache
