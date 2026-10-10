@@ -50,9 +50,40 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'config.urls'
 TEMPLATES = [{'BACKEND': 'django.template.backends.django.DjangoTemplates', 'DIRS': [BASE_DIR / 'showroom' / 'templates'], 'APP_DIRS': True, 'OPTIONS': {'context_processors': ['django.template.context_processors.request', 'django.contrib.auth.context_processors.auth', 'django.contrib.messages.context_processors.messages']}}]
 WSGI_APPLICATION = 'config.wsgi.application'
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3', 'OPTIONS': {'timeout': 30}}}
-if os.environ.get('POSTGRES_DB'):
-    DATABASES['default'] = {'ENGINE': 'django.db.backends.postgresql', 'NAME': os.environ['POSTGRES_DB'], 'USER': os.environ['POSTGRES_USER'], 'PASSWORD': os.environ['POSTGRES_PASSWORD'], 'HOST': os.environ.get('POSTGRES_HOST', 'localhost'), 'PORT': os.environ.get('POSTGRES_PORT', '5432')}
+# Database Configuration
+# Default to SQLite for local development and hermetic test runs; MySQL for production (or when configured)
+IS_RUNNING_TESTS = 'test' in sys.argv
+MYSQL_DB_NAME = os.environ.get('MYSQL_DATABASE') or os.environ.get('MYSQL_DB')
+USE_MYSQL = bool(MYSQL_DB_NAME) or (not DEBUG and not IS_RUNNING_TESTS)
+
+if USE_MYSQL:
+    if not MYSQL_DB_NAME:
+        raise RuntimeError(
+            'Production requires MySQL database configuration. '
+            'Please set MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, and MYSQL_PORT in your environment.'
+        )
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': MYSQL_DB_NAME,
+            'USER': os.environ.get('MYSQL_USER', 'root'),
+            'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
+            'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+            'PORT': os.environ.get('MYSQL_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'OPTIONS': {'timeout': 30},
+        }
+    }
 AUTH_PASSWORD_VALIDATORS = [{'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'}, {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'}, {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'}]
 LANGUAGE_CODE = 'en-in'
 TIME_ZONE = 'Asia/Kolkata'
@@ -82,7 +113,6 @@ if CLOUDFLARE_R2_CUSTOM_DOMAIN.endswith('.r2.cloudflarestorage.com'):
     CLOUDFLARE_R2_CUSTOM_DOMAIN = ''
 
 # Cloudflare R2 is activated when credentials exist and not running hermetic tests
-IS_RUNNING_TESTS = 'test' in sys.argv
 USE_CLOUDFLARE_R2 = not IS_RUNNING_TESTS and (
     os.environ.get('CLOUDFLARE_R2_ENABLED', '1' if (CLOUDFLARE_R2_BUCKET_NAME and CLOUDFLARE_R2_ACCESS_KEY_ID) else '0') == '1'
 )
