@@ -25,15 +25,20 @@
 .ws-shared-login .ws-google-unavailable {
   min-height: 44px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--ws-line);
   border-radius: 4px;
   background: transparent;
   color: var(--ws-muted);
   font: inherit;
   font-size: 13px;
+  text-align: center;
 }
 .ws-shared-login .ws-google-note {
   display: block;
+  text-align: center;
   margin-top: 12px;
   color: var(--ws-muted);
   font-size: 11px;
@@ -61,8 +66,23 @@
   overflow-y: auto;
   height: 100dvh;
 }
-.ws-shared-login .ws-google-button {
+.ws-shared-login .ws-google-button,
+.ws-google-button {
   min-height: 44px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 auto;
+}
+.ws-shared-login .ws-google-button > div,
+.ws-shared-login .ws-google-button iframe,
+.ws-google-button > div,
+.ws-google-button iframe {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
 }
 @media (max-width: 650px) {
   .ws-shared-login.workspace-app.ws-login {

@@ -148,7 +148,7 @@ function Overview({ data, navigate, user, open }) {
     data.inventory && { label: 'Available cars', value: data.inventory.available || 0, icon: 'car', note: `${Object.values(data.inventory).reduce((a, b) => a + b, 0)} vehicles in your collection`, tab: 'inventory' },
     data.enquiries && { label: 'New enquiries', value: data.enquiries.new || 0, icon: 'mail', note: 'Conversations waiting to happen', tab: 'enquiries' },
     data.bookings && { label: 'Pending test drives', value: data.bookings.pending || 0, icon: 'wheel', note: 'Ready for your confirmation', tab: 'test-drives' },
-    data.inventory && { label: 'Available stock value', value: croreMoney(data.stock_value), icon: 'grid', note: 'Total listed price · INR crore', tab: 'inventory' },
+    data.inventory && (user.is_admin || user.is_owner) && data.stock_value != null && { label: 'Available stock value', value: croreMoney(data.stock_value), icon: 'grid', note: 'Total listed price · INR crore', tab: 'inventory' },
   ].filter(Boolean);
   const totalStock = Object.values(data.inventory || {}).reduce((a, b) => a + b, 0);
   return <><div className="ws-stat-grid">{cards.map((card, index) => <button className={`ws-stat-card ${index === 0 ? 'ws-highlight' : ''}`} key={card.label} onClick={() => navigate(card.tab)}><div><span>{card.label}</span><span className="ws-stat-icon"><Icon name={card.icon} size={20}/></span></div><strong>{card.value}</strong><small>{card.note}<Icon name="external" size={15}/></small></button>)}</div>

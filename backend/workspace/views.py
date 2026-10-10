@@ -165,7 +165,8 @@ def overview(request):
     data = {}
     if allowed(user, 'view', Car):
         data['inventory'] = {x['status']: x['total'] for x in Car.objects.values('status').annotate(total=Count('id'))}
-        data['stock_value'] = Car.objects.filter(status='available').aggregate(total=Sum('price'))['total'] or 0
+        if is_admin(user) or user.is_superuser:
+            data['stock_value'] = Car.objects.filter(status='available').aggregate(total=Sum('price'))['total'] or 0
         data['cars'] = CarSerializer(Car.objects.prefetch_related('images')[:4], many=True).data
     if allowed(user, 'view', Enquiry):
         data['enquiries'] = {x['status']: x['total'] for x in Enquiry.objects.values('status').annotate(total=Count('id'))}
