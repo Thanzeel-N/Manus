@@ -319,6 +319,62 @@
   background: #ffffff0e;
   border-color: #b0b0b0;
 }
+.public-site .p-header-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 5px 14px 5px 6px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.public-site .p-header-user-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+.public-site .p-header-user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.public-site .p-header-user-initial {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.public-site .p-header-user-name {
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+:root[data-theme="light"] .public-site .p-header-user-btn,
+[data-theme="light"] .public-site .p-header-user-btn {
+  color: #111827;
+  border-color: #d1d5db;
+  background: #f3f4f6;
+}
+:root[data-theme="light"] .public-site .p-header-user-btn:hover,
+[data-theme="light"] .public-site .p-header-user-btn:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
 .public-site .p-header .theme-toggle {
   height: 34px;
   width: 34px;

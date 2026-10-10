@@ -4,10 +4,15 @@ import { usePathname } from "next/navigation";
 import BrandLogo from "./brand-logo";
 import ThemeToggle from "./theme-toggle";
 import Icon from "./icon";
+import { useCustomerSession } from "./customer-session";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { session } = useCustomerSession();
+  const customer = session?.user;
+  const account = session?.account;
+
   useEffect(() => {
     const close = (e) => {
       if (e.key === "Escape") setOpen(false);
@@ -42,10 +47,35 @@ export default function Header() {
       </nav>
       <div className="p-header-actions">
         <ThemeToggle />
-        <a className="p-header-cta" href="/login">
-          Sign in
-          <Icon name="users" size={16} />
-        </a>
+        {account ? (
+          <a
+            className="p-header-user-btn"
+            href={account.role === "customer" ? "/login" : "/dashboard"}
+            title={`Signed in as ${account.name || account.email}`}
+            aria-label={`Signed in as ${account.name || account.email}`}
+          >
+            {customer?.picture ? (
+              <img
+                src={customer.picture}
+                alt=""
+                className="p-header-user-avatar"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <span className="p-header-user-initial">
+                {(account.name || account.email || "U")[0].toUpperCase()}
+              </span>
+            )}
+            <span className="p-header-user-name">
+              {account.name ? account.name.split(" ")[0] : "Account"}
+            </span>
+          </a>
+        ) : (
+          <a className="p-header-cta" href="/login">
+            Sign in
+            <Icon name="users" size={16} />
+          </a>
+        )}
         <button
           className="p-menu"
           aria-label={open ? "Close navigation" : "Open navigation"}

@@ -47,8 +47,13 @@ def customer_for(request):
     return get_user_model().objects.filter(pk=customer_id, is_active=True, username__startswith='google_', is_staff=False, is_superuser=False).first()
 
 
-def customer_data(customer):
-    return {'name': customer.first_name, 'email': customer.email} if customer else None
+def customer_data(customer, request=None):
+    if not customer:
+        return None
+    data = {'name': customer.first_name, 'email': customer.email}
+    if request:
+        data['picture'] = request.session.get('customer_picture')
+    return data
 
 
 def account_data(request):
@@ -56,7 +61,7 @@ def account_data(request):
     if user.is_authenticated and user.is_active and (user.is_staff or user.is_superuser):
         return {'name': user.get_full_name() or user.username, 'role': 'admin' if user.is_superuser else 'staff', 'destination': '/dashboard'}
     customer = customer_for(request)
-    return {**customer_data(customer), 'role': 'customer', 'destination': '/cars'} if customer else None
+    return {**customer_data(customer, request), 'role': 'customer', 'destination': '/cars'} if customer else None
 
 
 def establish_session(request, user):
@@ -65,7 +70,7 @@ def establish_session(request, user):
     request.session['customer_login_at'] = time.time()
     request.session.pop('google_nonce', None)
     rotate_token(request)
-    response = Response({'user': customer_data(user), 'csrf': get_token(request)})
+    response = Response({'user': customer_data(user, request), 'csrf': get_token(request)})
     response['Cache-Control'] = 'no-store'
     return response
 
@@ -176,7 +181,7 @@ def session(request):
     account = account_data(request)
     if not request.session.get('google_nonce'):
         request.session['google_nonce'] = secrets.token_urlsafe(32)
-    response = Response({'user': customer_data(customer), 'csrf': get_token(request),
+    response = Response({'user': customer_data(customer, request), 'csrf': get_token(request),
                          'client_id': settings.GOOGLE_CLIENT_ID, 'nonce': request.session['google_nonce'], 'account': account})
     response['Cache-Control'] = 'no-store'
     return response
@@ -213,6 +218,8 @@ def google_login(request):
     user.email = claims['email'][:254]
     user.first_name = claims.get('name', '')[:150]
     user.save()
+    if claims.get('picture'):
+        request.session['customer_picture'] = claims['picture']
     return establish_session(request, user)
 
 
@@ -220,7 +227,7 @@ def google_login(request):
 @authentication_classes([])
 def logout(request):
     SessionAuthentication().enforce_csrf(request)
-    for key in ['customer_id', 'customer_login_at', 'google_nonce']:
+    for key in ['customer_id', 'customer_login_at', 'google_nonce', 'customer_picture']:
         request.session.pop(key, None)
     request.session.cycle_key()
     return Response({'user': None})
