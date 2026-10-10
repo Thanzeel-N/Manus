@@ -1,343 +1,295 @@
-import BrandLogo from "../components/brand-logo";
+import PublicShell from "../components/public-shell";
+import HeroVideo from "../components/hero-video";
+import VehicleImage from "../components/vehicle-image";
+import Icon from "../components/icon";
 import SiteImage from "../components/site-image";
-import Header from "../components/header";
-import Footer from "../components/footer";
-import Experience from "../components/experience";
-import Inventory from "../components/inventory";
-import SiteMotion from "../components/site-motion";
-import { EnquiryButton, EnquiryProvider } from "../components/enquiry";
+import { ContactBand, FAQ } from "../components/public-sections";
+import { getStock } from "../lib/stock";
 
 export const dynamic = "force-dynamic";
-
 export default async function HomePage() {
+  const { cars, unavailable } = await getStock();
+  const featured = cars.filter((car) => car.status === "available").slice(0, 3);
   return (
-    <EnquiryProvider>
-      <SiteMotion />
-      <Header />
+    <PublicShell>
       <main id="main-content">
-        <section className="hero">
-          <div className="hero-title">
-            <div className="eyebrow">Welcome to Manu’s Car World</div>
+        <section className="p-hero">
+          <HeroVideo />
+          <div className="p-container p-hero-content">
+            <p className="p-eyebrow">
+              <span />
+              PRE-OWNED. RECONSIDERED.
+            </p>
             <h1>
-              Your next car.
+              Great cars.
               <br />
-              One trusted destination.
+              New possibilities.
             </h1>
-          </div>
-          <div className="hero-photo">
-            <SiteImage
-              name="hero"
-              alt="Multi-brand dealership showroom with rows of certified pre-owned sedans, hatchbacks, and SUVs"
-              priority
-            />
-          </div>
-          <div className="hero-intro">
             <p>
-              A curated world of certified pre-owned cars, all under one roof.
-              Browse luxury sedans, family SUVs, and city hatchbacks with verified
-              service history and transparent pricing.
+              The car you’ve been thinking about.
+              <br />
+              The confidence to make it yours.
             </p>
-            <div className="hero-actions">
-              <a className="button light" href="/cars">
-                Explore our cars <span>→</span>
+            <div className="p-actions">
+              <a className="p-button" href="/cars">
+                Explore our collection
+                <Icon name="northeast" size={18} />
               </a>
-              <a className="button dark" href="/about">
-                Why Manu’s <span>↗</span>
+              <a className="p-hero-link" href="/visit">
+                Experience the showroom
+                <Icon name="arrow" size={19} />
               </a>
             </div>
           </div>
-          <a className="hero-scroll" href="#features">
-            Discover Manu’s <span>↓</span>
-          </a>
-        </section>
-
-        {/* Brand strip */}
-        <div className="brand-strip" aria-label="Explore premium car brands">
-          <span>BMW</span>
-          <i>•</i>
-          <span>Mercedes-Benz</span>
-          <i>•</i>
-          <span>Audi</span>
-          <i>•</i>
-          <span>Volkswagen</span>
-          <i>•</i>
-          <span>Toyota</span>
-          <i>•</i>
-          <span>Porsche</span>
-        </div>
-
-        {/* Trust Badges Bar */}
-        <section className="trust-strip" id="features">
-          <div className="trust-strip-inner">
-            <div className="trust-badge">
-              <span className="trust-icon">🛡️</span>
-              <div>
-                <strong>150+ Point Inspection</strong>
-                <p>Engine, suspension, electronics, and chassis verified</p>
-              </div>
-            </div>
-            <div className="trust-badge">
-              <span className="trust-icon">📄</span>
-              <div>
-                <strong>Complete Documentation</strong>
-                <p>100% verified RTO paperwork and clean service history</p>
-              </div>
-            </div>
-            <div className="trust-badge">
-              <span className="trust-icon">🔄</span>
-              <div>
-                <strong>Instant Car Exchange</strong>
-                <p>Best valuation offer and seamless same-day trade-in</p>
-              </div>
-            </div>
-            <div className="trust-badge">
-              <span className="trust-icon">✨</span>
-              <div>
-                <strong>Non-Accidental Guarantee</strong>
-                <p>Transparent condition report before you commit</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Collection intro */}
-        <section className="section collection-intro">
-          <div className="eyebrow">Your next chapter starts here</div>
-          <h2>A car for every journey.</h2>
-          <p>
-            Explore our handpicked collection, compare full specifications, and
-            book a verified test drive at our showroom.
-          </p>
-          <div className="collection-links-bar">
-            <a className="button light" href="/cars">
-              View full catalog ({'>'} 10+ cars) <span>↗</span>
-            </a>
-            <a className="button dark" href="/exchange">
-              Sell or exchange your car <span>→</span>
+          <div className="p-hero-bottom p-container">
+            <span>
+              MANU’S CAR WORLD
+              <span className="p-divider" />
+              BUY. SELL. EXCHANGE.
+            </span>
+            <a href="#collection">
+              Discover your next drive
+              <Icon name="down" size={15} />
             </a>
           </div>
         </section>
-
-        {/* Live Inventory Preview */}
-        <Inventory />
-
-        {/* Experience carousel */}
-        <Experience />
-
-        {/* Journey steps */}
-        <section className="story section" id="journey">
-          <div className="story-copy">
-            <div className="eyebrow">Buying with Manu’s</div>
-            <h2>
-              From your shortlist
-              <br />
-              to your showroom drive.
-            </h2>
-            <p>
-              Tell us your budget and what you’re looking for. We’ll help you
-              compare suitable cars, understand the available documents, and
-              plan a showroom visit to see your favourites in person.
-            </p>
-            <div className="story-buttons">
-              <EnquiryButton
-                className="button light"
-                title="Let’s find your next car"
-              >
-                Let’s talk cars <span>→</span>
-              </EnquiryButton>
-              <a href="/about" className="button dark">
-                Read our story <span>↗</span>
+        <section className="p-container p-assurances" aria-label="Our approach">
+          {[
+            [
+              "shield",
+              "Confidence in the details",
+              "Explore condition, specifications and available records.",
+            ],
+            [
+              "users",
+              "Advice that starts with you",
+              "Your needs, your budget, your next chapter.",
+            ],
+            [
+              "exchange",
+              "Buy. Sell. Move forward.",
+              "Explore a straightforward route to your next car.",
+            ],
+          ].map(([icon, title, text]) => (
+            <div key={title}>
+              <Icon name={icon} size={29} />
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </div>
+          ))}
+        </section>
+        <section className="p-container p-section" id="collection">
+          <div className="p-section-heading">
+            <div>
+              <p className="p-eyebrow">THE COLLECTION</p>
+              <h2>
+                Something exceptional.
+                <br />
+                Something for you.
+              </h2>
+            </div>
+            <div>
+              <p>
+                City streets or open roads.
+                <br />
+                Find the car for wherever life takes you.
+              </p>
+              <a className="p-text-link" href="/cars">
+                View the full collection
+                <Icon name="northeast" size={18} />
               </a>
             </div>
           </div>
-          <div className="journey-steps">
-            <article>
-              <span>01</span>
-              <div>
-                <h3>Browse and shortlist</h3>
-                <p>
-                  Filter stock by make, budget, and body style. Save the
-                  cars you’d like to compare at the showroom.
-                </p>
-              </div>
-            </article>
-            <article>
-              <span>02</span>
-              <div>
-                <h3>Review car & paperwork</h3>
-                <p>
-                  Examine detailed mechanical inspection reports, ownership
-                  records, and certified service history with our specialists.
-                </p>
-              </div>
-            </article>
-            <article>
-              <span>03</span>
-              <div>
-                <h3>Visit, test drive, and decide</h3>
-                <p>
-                  Experience the car on our dedicated drive route, discuss
-                  easy financing or trade-in credit, and drive away with confidence.
-                </p>
-              </div>
-            </article>
+          <div className="p-featured-grid">
+            {featured.map((car) => (
+              <article className="p-car" key={car.id}>
+                <a
+                  className="p-car-image"
+                  href={`/cars/${car.id}`}
+                  aria-label={`View ${car.name}`}
+                >
+                  {car.image ? (
+                    <VehicleImage
+                      sampleId={car.is_sample ? car.id : undefined}
+                      src={car.image}
+                      alt={car.name}
+                      loading="lazy"
+                      width="800"
+                      height="560"
+                    />
+                  ) : (
+                    <span>
+                      <Icon name="car" size={55} />
+                    </span>
+                  )}
+                  <span className="p-car-tag">
+                    {car.is_sample ? "Sample listing" : car.body}
+                  </span>
+                  <span className="p-car-arrow">
+                    <Icon name="northeast" />
+                  </span>
+                </a>
+                <div className="p-car-copy">
+                  <p>
+                    {car.year} / {car.brand}
+                  </p>
+                  <h3>
+                    <a href={`/cars/${car.id}`}>{car.name}</a>
+                  </h3>
+                  <span>{car.variant}</span>
+                  <div className="p-car-specs">
+                    <span>
+                      <Icon name="gauge" size={15} />
+                      {car.km} km
+                    </span>
+                    <span>
+                      <Icon name="fuel" size={15} />
+                      {car.fuel}
+                    </span>
+                    <span>
+                      <Icon name="settings" size={15} />
+                      {car.transmission}
+                    </span>
+                  </div>
+                  <div className="p-car-price">
+                    <strong>
+                      ₹{Number(car.price).toFixed(2)} <small>lakh</small>
+                    </strong>
+                    <a href={`/cars/${car.id}`}>
+                      Explore car
+                      <Icon name="arrow" size={17} />
+                    </a>
+                  </div>
+                  {car.is_sample && (
+                    <small className="p-sample">
+                      Illustrative vehicle and price
+                    </small>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
-        </section>
-
-        {/* Showroom Visit highlight */}
-        <section className="interior" id="visit">
-          <SiteImage
-            name="visit"
-            alt="Dealership team helping customers compare cars in a modern showroom"
-          />
-          <div className="interior-copy">
-            <div className="eyebrow">Come explore the showroom</div>
-            <h2>
-              Meet the cars.
-              <br />
-              Meet the team.
-            </h2>
-            <p>
-              Inspect your shortlisted vehicles side by side under optimal lighting,
-              enjoy a complimentary espresso in our lounge, and test drive on open roads.
-            </p>
-            <div className="interior-buttons">
-              <a className="button light" href="/visit">
-                Plan your showroom visit <span>→</span>
-              </a>
-              <EnquiryButton
-                className="button dark"
-                title="Request a showroom appointment"
-                car="Visiting the showroom"
+          {!featured.length && (
+            <div className="p-empty">
+              <Icon name="car" size={32} />
+              <h3>
+                {unavailable
+                  ? "The collection is taking a short pause."
+                  : "Your next car could be on its way."}
+              </h3>
+              <p>
+                {unavailable
+                  ? "We couldn’t load current inventory. Please try again shortly or speak to our team."
+                  : "Ask our team about upcoming vehicles and your preferences."}
+              </p>
+              <a
+                className="p-text-link"
+                href="/visit#contact"
+                data-contact-trigger="true"
+                data-title="Speak with our showroom team"
+                data-interest="Visiting the showroom"
               >
-                Book VIP Appointment <span>↗</span>
-              </EnquiryButton>
+                Talk to us
+                <Icon name="arrow" />
+              </a>
+            </div>
+          )}
+        </section>
+        <section className="p-story-section">
+          <div className="p-container p-split">
+            <div className="p-editorial-image">
+              <SiteImage
+                name="visit"
+                alt="A spacious modern dealership showroom"
+              />
+              <span className="p-image-caption">
+                A SPACE TO EXPLORE. ROOM TO DECIDE.
+              </span>
+            </div>
+            <div className="p-editorial-copy">
+              <p className="p-eyebrow">MORE THAN A CAR DEALERSHIP</p>
+              <h2>
+                The right car.
+                <br />
+                The right way.
+              </h2>
+              <p>
+                A car is a personal choice. It should feel right in the driver’s
+                seat, on your daily commute, and in your plans for what comes
+                next.
+              </p>
+              <p>
+                At Manu’s Car World, we make space for that decision. Explore
+                the details, ask your questions and get to know your next car
+                before you make it yours.
+              </p>
+              <a className="p-text-link" href="/about">
+                Get to know Manu’s
+                <Icon name="northeast" size={18} />
+              </a>
+              <div className="p-editorial-signature">
+                <span>YOUR NEXT CHAPTER</span>
+                <strong>Starts with a better conversation.</strong>
+              </div>
             </div>
           </div>
         </section>
-
-        {/* Sell / Exchange Section */}
-        <section className="exchange section" id="exchange">
-          <div className="exchange-photo">
-            <SiteImage
-              name="assessment"
-              sizes="(max-width: 700px) 90vw, 45vw"
-              alt="Vehicle assessor reviewing a car with its owner before an exchange"
-            />
-          </div>
-          <div className="exchange-copy">
-            <div className="eyebrow">Sell or exchange</div>
-            <h2>
-              A premium valuation for
-              <br />
-              your current vehicle.
-            </h2>
-            <p>
-              Ready to upgrade? We offer transparent market evaluations, quick
-              paperwork transfer, and immediate credit towards any car in our collection.
-            </p>
-            <ul>
-              <li>Instant valuation estimate based on current market trends</li>
-              <li>Free 20-minute physical inspection at our showroom</li>
-              <li>Same-day transfer and zero paperwork headaches</li>
-            </ul>
-            <div className="exchange-actions">
-              <a className="button light" href="/exchange">
-                Calculate exchange value <span>→</span>
-              </a>
-              <EnquiryButton
-                className="button dark"
-                title="Discuss selling or exchanging"
-                car="Selling or exchanging my car"
-              >
-                Quick enquiry <span>↗</span>
-              </EnquiryButton>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="faq section">
+        <section className="p-container p-section p-exchange-feature">
           <div>
-            <div className="eyebrow">Frequently asked questions</div>
+            <p className="p-eyebrow">EXPERIENCE IT IN PERSON</p>
             <h2>
-              Everything you need
+              A showroom crafted
               <br />
-              to know.
+              for passionate drivers.
             </h2>
             <p>
-              Have a question not listed here? Our showroom advisors are just a
-              call or message away.
+              Step inside our 12,000 sq.ft climate-controlled showroom. Explore
+              our handpicked certified pre-owned collection, inspect our
+              diagnostic facilities, and enjoy an unhurried consultation.
             </p>
-            <a href="/contact" className="text-link" style={{ marginTop: "16px" }}>
-              Contact support <span>→</span>
-            </a>
+            <div className="p-actions">
+              <a href="/visit" className="p-button">
+                Plan a showroom visit
+                <Icon name="northeast" size={18} />
+              </a>
+            </div>
+            <span className="p-subtle-note">
+              Climate-controlled bays. Curated test-drive circuit.
+            </span>
           </div>
-          <div className="faq-list">
-            <details>
-              <summary>
-                Can I book a test drive online?<span>+</span>
-              </summary>
-              <p>
-                Yes! Simply choose any car from our collection, pick your preferred date
-                and time slot, verify your email, and our team will prepare the car for your visit.
-              </p>
-            </details>
-            <details>
-              <summary>
-                What documentation is provided with each car?<span>+</span>
-              </summary>
-              <p>
-                Every vehicle includes its original Registration Certificate (RC),
-                detailed service history records, insurance policy documents, and our
-                150-point technical inspection checklist.
-              </p>
-            </details>
-            <details>
-              <summary>
-                How does the car exchange process work?<span>+</span>
-              </summary>
-              <p>
-                Bring your car for a rapid 20-minute inspection. We provide an instant,
-                fair-market valuation that can be deducted immediately from your new purchase,
-                handling all RTO ownership transfer on your behalf.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Are warranty and financing options available?<span>+</span>
-              </summary>
-              <p>
-                Yes, we offer comprehensive warranty packages along with attractive
-                financing rates through our leading banking partners, with fast approval times.
-              </p>
-            </details>
+          <div className="p-exchange-image">
+            <SiteImage
+              name="visit"
+              alt="Manu’s Car World modern showroom display floor"
+            />
+            <span>
+              <Icon name="pin" size={27} />
+              <strong>
+                Visit our showroom.<small>Prestige Auto Mile.</small>
+              </strong>
+            </span>
           </div>
         </section>
-
-        {/* Closing banner */}
-        <section className="closing section">
-          <div className="eyebrow">Manu’s Car World</div>
-          <h2>
-            Your next car starts
-            <br />
-            at Manu’s Car World.
-          </h2>
-          <div className="closing-actions">
-            <a href="/cars" className="button light">
-              Browse available cars <span>→</span>
-            </a>
-            <EnquiryButton
-              className="button dark"
-              title="Talk to the dealership team"
-            >
-              Talk to our team <span>↗</span>
-            </EnquiryButton>
-          </div>
-        </section>
+        <FAQ
+          items={[
+            [
+              "How do I book a test drive?",
+              "Open a vehicle from our collection, choose an available date and time, and submit your request. Our team will confirm the appointment before your visit.",
+            ],
+            [
+              "Can I arrange a personalized showroom visit?",
+              "Yes. Request an appointment through our visit page or contact our concierge. Our team will prepare the vehicles on your shortlist and ensure a specialist is dedicated to your visit.",
+            ],
+            [
+              "Can I review the vehicle’s history?",
+              "Ask our team for available service, ownership and registration records for the car you’re considering. Review the documents and inspect the car on our hoist before making your decision.",
+            ],
+          ]}
+        />
+        <ContactBand />
       </main>
-
-      <Footer />
-    </EnquiryProvider>
+    </PublicShell>
   );
 }

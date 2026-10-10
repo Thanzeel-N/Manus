@@ -1,4 +1,26 @@
 .workspace-app { color-scheme: light; }
+/* Light mode sidebar */
+:root[data-theme="light"] .workspace-app { --ws-dark: #ffffff; }
+/* Switch to the dark-ink logo so it's visible on the white sidebar */
+:root[data-theme="light"] .workspace-app .ws-sidebar .brand-logo .logo-for-light { display: block; }
+:root[data-theme="light"] .workspace-app .ws-sidebar .brand-logo .logo-for-dark { display: none; }
+:root[data-theme="light"] .workspace-app .ws-sidebar {
+  background: #ffffff;
+  color: var(--ws-ink);
+  border-right-color: var(--ws-line);
+}
+:root[data-theme="light"] .workspace-app .ws-brand > small { color: #9898a2; }
+:root[data-theme="light"] .workspace-app .ws-sidebar nav a { color: #55555e; }
+:root[data-theme="light"] .workspace-app .ws-sidebar nav a:hover { background: #f0f0f3; color: #1a1a20; }
+:root[data-theme="light"] .workspace-app .ws-sidebar nav a.active { background: var(--brand-action); color: #fff; }
+:root[data-theme="light"] .workspace-app .ws-sidebar nav a > b { background: #fff0ee; color: var(--brand-action); }
+:root[data-theme="light"] .workspace-app .ws-workspace-name { border-color: var(--ws-line); color: #69696f; }
+:root[data-theme="light"] .workspace-app .ws-nav-label { color: #9898a2; }
+:root[data-theme="light"] .workspace-app .ws-tip { background: #f5f5f6; border-color: var(--ws-line); }
+:root[data-theme="light"] .workspace-app .ws-tip p,
+:root[data-theme="light"] .workspace-app .ws-account-link small { color: #69696f; }
+:root[data-theme="light"] .workspace-app .ws-tip a { color: var(--ws-ink); border-color: var(--ws-line); }
+:root[data-theme="light"] .workspace-app .ws-account-link { border-color: var(--ws-line); }
 .workspace-app .ws-brand .brand-logo { border: 0; background: transparent; }
 [data-theme="dark"] .workspace-app {
   color-scheme: dark;

@@ -14,11 +14,12 @@
 ::selection { background: var(--brand-red); color: #fff; }
 :focus-visible { outline-color: var(--brand-red); }
 .brand { flex-shrink: 0; }
-.brand-logo { display: block; width: 234px; max-width: 100%; height: auto; background: #fff; border: 8px solid #fff; border-radius: 3px; object-fit: contain; }
+.brand-logo { display: block; width: 154px; max-width: 100%; height: auto; background: #fff; border: 8px solid #fff; border-radius: 3px; object-fit: contain; }
 
 /* Header & Navigation */
-.header { height: 108px; border-bottom: 1px solid var(--line); }
-.header nav { background: transparent; border-radius: 4px; padding: 16px 0; gap: 26px; }
+.header { height: 84px; border-bottom: 1px solid var(--line); }
+.header .brand-logo { width: 154px; }
+.header nav { background: transparent; border-radius: 4px; padding: 12px 0; gap: 24px; }
 .header nav a { position: relative; font-size: 14px; font-weight: 500; }
 .header nav a.active::after { content: ""; position: absolute; height: 2px; bottom: -10px; left: 0; right: 0; background: var(--brand-red); }
 .header nav a:hover { color: #ff756c; }
@@ -130,7 +131,7 @@
 .collection-links-bar { display: flex; gap: 14px; flex-wrap: wrap; }
 .exchange-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 .faq summary:hover, .faq details[open] summary span { color: #ff756c; }
-.detail-nav .brand-logo { width: 220px; }
+.detail-nav .brand-logo { width: 154px; }
 dialog:not(.ws-dialog) { border-top: 3px solid var(--brand-red); border-radius: 6px; }
 
 /* Trust Badges Strip */
@@ -859,8 +860,8 @@ dialog:not(.ws-dialog) { border-top: 3px solid var(--brand-red); border-radius: 
 }
 
 @media (max-width: 700px) {
-  .header { height: 90px; }
-  .header .brand-logo { width: 210px; }
+  .header { height: 74px; }
+  .header .brand-logo { width: 130px; }
   .header .menu-button { margin-left: auto; }
   .hero-intro { padding-left: 18px; }
   .trust-strip-inner { grid-template-columns: 1fr; }
@@ -873,7 +874,7 @@ dialog:not(.ws-dialog) { border-top: 3px solid var(--brand-red); border-radius: 
   .valuation-form-grid { grid-template-columns: 1fr; }
   .footer-links-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
-  .detail-nav .brand-logo { width: 180px; }
+  .detail-nav .brand-logo { width: 130px; }
   .detail-nav { gap: 16px; }
   .detail-nav > a:last-child { font-size: 12px; }
 }

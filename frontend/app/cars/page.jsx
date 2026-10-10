@@ -1,29 +1,34 @@
-import Header from "../../components/header";
-import Footer from "../../components/footer";
 import Inventory from "../../components/car-inventory";
 import { getStock } from "../../lib/stock";
+import PublicShell from "../../components/public-shell";
+import { PageIntro, ContactBand } from "../../components/public-sections";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Certified Pre-Owned Cars | Manu’s Car World",
+  title: "Pre-Owned Car Collection | Manu’s Car World",
   description:
-    "Explore certified pre-owned cars at Manu’s Car World. Filter luxury sedans, family SUVs, and compare full specifications or book a verified test drive.",
+    "Explore pre-owned cars at Manu’s Car World. Filter luxury sedans, family SUVs, and compare full specifications or book a verified test drive.",
 };
 
 export default async function CarsPage() {
   const stock = await getStock();
   return (
-    <>
-      <Header />
+    <PublicShell>
       <main id="main-content">
-        <div className="catalog-heading">
-          <a href="/">Home</a>
-          <span>/</span>
-          <h1>Our cars</h1>
-        </div>
+        <PageIntro
+          label="Our collection"
+          title={
+            <>
+              Find your next
+              <br />
+              great drive.
+            </>
+          }
+          text="A considered collection. Space to compare. Explore the cars, look into the details and find the one that feels right."
+        />
         <Inventory {...stock} />
+        <ContactBand />
       </main>
-      <Footer />
-    </>
+    </PublicShell>
   );
 }

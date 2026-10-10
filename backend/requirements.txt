@@ -5,3 +5,5 @@ psycopg[binary]>=3.2,<4
 django-storages[s3]>=1.14
 boto3>=1.35
 python-dotenv>=1.0
+google-auth>=2.40,<3
+requests>=2.32,<3

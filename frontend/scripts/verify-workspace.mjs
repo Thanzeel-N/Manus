@@ -88,6 +88,7 @@ try {
   await page.getByRole('button', { name: 'Add staff member' }).click();
   await field('first_name').fill('Sam'); await field('last_name').fill('Wilson');
   await field('username').fill(`${tag}-staff`); await field('email').fill(`${tag}-staff@example.com`); await field('password').fill(password);
+  await dialog.getByRole('button', { name: 'All daily operations', exact: true }).click();
   await dialog.getByRole('button', { name: 'Create staff account' }).click();
   await expect(page.getByRole('status')).toContainText('Staff account created.');
   await nav('Overview');

@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('profile/', views.profile),
+    path('notifications/', views.notifications),
+    path('notifications/<int:pk>/', views.notifications),
     path('session/', views.session, name='workspace-session'),
     path('overview/', views.overview, name='workspace-overview'),
     path('staff/', views.staff, name='workspace-staff-list'),

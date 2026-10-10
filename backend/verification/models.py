@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.conf import settings
 
 
 class EmailVerification(models.Model):
@@ -10,6 +11,8 @@ class EmailVerification(models.Model):
     expires_at = models.DateTimeField()
     attempts = models.PositiveSmallIntegerField(default=0)
     used_at = models.DateTimeField(null=True, blank=True)
+    purpose = models.CharField(max_length=16, default='booking', choices=[('booking', 'Booking'), ('signup', 'Account registration')])
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='email_verifications')
 
     class Meta:
         app_label = 'showroom'

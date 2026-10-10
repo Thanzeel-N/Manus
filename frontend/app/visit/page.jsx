@@ -1,252 +1,234 @@
-import Header from "../../components/header";
-import Footer from "../../components/footer";
-import SiteImage from "../../components/site-image";
-import { EnquiryButton, EnquiryProvider } from "../../components/enquiry";
-import SiteMotion from "../../components/site-motion";
+import PublicShell from "../../components/public-shell";
+import Icon from "../../components/icon";
+import ContactForm from "../../components/contact-form";
+import ShowroomSpaces from "../../components/showroom-spaces";
 
 export const metadata = {
-  title: "Visit Our Showroom — Manu’s Car World Bengaluru",
+  title: "Visit Our Showroom | Manu’s Car World",
   description:
-    "Plan your visit to Manu’s Car World showroom in Bengaluru. Indoor viewing bays, dedicated test drive route, espresso lounge, and on-site vehicle inspection.",
+    "Visit our flagship showroom on Outer Ring Road, Bangalore. Explore certified luxury cars, our client lounge, diagnostic studio, and test-drive routes.",
 };
-
-const showroomFeatures = [
-  {
-    icon: "🏢",
-    title: "Climate-Controlled Viewing Bays",
-    description:
-      "Inspect every vehicle in pristine studio lighting, protected from weather, road dust, and glare.",
-  },
-  {
-    icon: "🛣️",
-    title: "Dedicated Test Drive Circuit",
-    description:
-      "Experience acceleration, high-speed stability, and tight city cornering on our curated 12-minute test route.",
-  },
-  {
-    icon: "🔧",
-    title: "On-Site Lift & Inspection Bay",
-    description:
-      "Put the car on our hydraulic lift. Our technicians will walk you through the underbody, chassis, and suspension.",
-  },
-  {
-    icon: "☕",
-    title: "Private Consultation Lounge",
-    description:
-      "Enjoy complimentary artisanal espresso while discussing paperwork, title documents, and financing options in privacy.",
-  },
-  {
-    icon: "🅿️",
-    title: "Complimentary Valet Parking",
-    description:
-      "Seamless arrival with secure, covered valet parking for all our showroom guests.",
-  },
-  {
-    icon: "🤝",
-    title: "Non-Commissioned Specialists",
-    description:
-      "Take your time. Our vehicle advisors are automotive enthusiasts dedicated to matching you with the right car.",
-  },
-];
-
-const visitChecklist = [
-  {
-    icon: "🪪",
-    title: "Valid Driving License",
-    description: "Original physical driving license required for test drives.",
-  },
-  {
-    icon: "📄",
-    title: "Trade-in Documents (Optional)",
-    description:
-      "Bring your current car’s RC and insurance copy if you’d like an instant exchange valuation.",
-  },
-  {
-    icon: "👥",
-    title: "Family & Decision Makers",
-    description:
-      "Bring along your family or trusted mechanic to test rear-seat comfort and ride quality.",
-  },
-];
 
 export default function VisitPage() {
   return (
-    <EnquiryProvider>
-      <SiteMotion />
-      <Header />
+    <PublicShell>
       <main id="main-content">
-        {/* Hero Section */}
-        <section className="visit-hero section">
-          <div className="eyebrow">The Showroom Experience</div>
-          <h1>
-            Meet the cars.
-            <br />
-            Feel the drive.
-          </h1>
-          <p className="visit-lead">
-            Nothing compares to stepping inside a car, feeling the leather,
-            listening to the engine idle, and taking it out on the open road.
-            Welcome to Bengaluru’s premier automotive showroom experience.
-          </p>
-          <div className="visit-hero-actions">
-            <EnquiryButton
-              className="button light"
-              title="Plan your showroom visit"
-              car="Visiting the showroom"
-            >
-              Book a showroom visit <span>→</span>
-            </EnquiryButton>
-            <a href="/cars" className="button dark">
-              Shortlist cars first <span>↗</span>
-            </a>
-          </div>
-        </section>
-
-        {/* Feature Image Banner */}
-        <section className="visit-banner-section">
-          <div className="visit-banner-wrap">
-            <SiteImage
-              name="visit"
-              alt="Manu’s Car World climate-controlled indoor showroom with pre-owned cars"
-              priority
-            />
-          </div>
-        </section>
-
-        {/* Showroom Amenities Grid */}
-        <section className="section showroom-amenities">
-          <div className="center-heading">
-            <div className="eyebrow">Designed For You</div>
-            <h2>What to expect when you visit.</h2>
-            <p>
-              We designed our facility to make evaluating, testing, and choosing
-              your next car an enjoyable, relaxed experience.
-            </p>
-          </div>
-
-          <div className="amenities-grid">
-            {showroomFeatures.map((f) => (
-              <div className="amenity-card" key={f.title}>
-                <span className="amenity-icon">{f.icon}</span>
-                <h3>{f.title}</h3>
-                <p>{f.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Hours & Directions Section */}
-        <section className="section visit-details-section">
-          <div className="visit-details-grid">
-            <div className="visit-schedule-card">
-              <div className="eyebrow">Hours & Access</div>
-              <h2>Operating hours.</h2>
-              <ul className="schedule-list">
-                <li>
-                  <div>
-                    <strong>Monday – Friday</strong>
-                    <span>Full sales, inspection & financing team</span>
-                  </div>
-                  <b>9:00 AM – 7:00 PM</b>
-                </li>
-                <li>
-                  <div>
-                    <strong>Saturday</strong>
-                    <span>Peak test drive day · Valet active</span>
-                  </div>
-                  <b>10:00 AM – 6:00 PM</b>
-                </li>
-                <li>
-                  <div>
-                    <strong>Sunday</strong>
-                    <span>VIP viewings by prior appointment</span>
-                  </div>
-                  <b>Appointment Only</b>
-                </li>
-              </ul>
-              <div className="schedule-tip">
-                💡 <em>Pro-Tip:</em> Weekdays between 11:00 AM and 4:00 PM offer the
-                fastest road conditions for extensive test drives.
-              </div>
+        {/* Simple Page Header (No dark hero section) */}
+        <section className="p-visit-intro-section" aria-labelledby="visit-heading">
+          <div className="p-container">
+            <div className="p-breadcrumb">
+              <a href="/">Home</a>
+              <Icon name="chevron" size={12} />
+              <span>Visit our showroom</span>
             </div>
 
-            <div className="visit-location-card">
-              <div className="eyebrow">Location</div>
-              <h2>Finding us.</h2>
-              <address className="location-info">
-                <strong>Manu’s Car World Showroom</strong>
-                <p>123 Motor Street, Showroom District</p>
-                <p>Bengaluru, Karnataka 560001</p>
-                <p>Near Central Ring Road Junction</p>
-              </address>
-              <div className="location-points">
-                <span>📍 15 mins from Indiranagar</span>
-                <span>📍 20 mins from MG Road</span>
-                <span>🅿️ Free guest valet parking on premises</span>
-              </div>
-              <div className="location-actions">
+            <div className="p-visit-intro-content">
+              <p className="p-eyebrow">FLAGSHIP SHOWROOM · BANGALORE</p>
+              <h1 id="visit-heading">Visit our showroom</h1>
+              <p className="p-visit-lead">
+                Step inside Manu’s Car World. Explore our 12,000 sq.ft climate-controlled showroom, review certified luxury cars in daylight bays, or meet our vehicle specialists for an unhurried consultation.
+              </p>
+
+              <div className="p-visit-intro-actions">
+                <button
+                  type="button"
+                  className="p-button"
+                  data-contact-trigger="true"
+                  data-title="Plan your showroom visit"
+                  data-interest="Visiting the showroom"
+                >
+                  Plan your showroom visit
+                  <Icon name="calendar" size={17} />
+                </button>
+
                 <a
-                  className="button light"
                   href="https://maps.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="p-button p-button-ghost"
                 >
-                  Get directions on Maps <span>↗</span>
+                  Get directions on Maps
+                  <Icon name="northeast" size={15} />
                 </a>
-                <a href="tel:+919876543210" className="button dark">
-                  Call reception <span>📞</span>
+
+                <a href="tel:+919876543210" className="p-visit-phone-link">
+                  <Icon name="phone" size={15} />
+                  <span>+91 98765 43210</span>
                 </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* What to bring */}
-        <section className="section checklist-section">
-          <div className="center-heading">
-            <div className="eyebrow">Preparation</div>
-            <h2>What to bring for your visit.</h2>
+        {/* Showroom Photos Section */}
+        <section className="p-container p-section" id="showroom-spaces" aria-labelledby="spaces-heading">
+          <div className="p-section-heading">
+            <div>
+              <p className="p-eyebrow">THE SHOWROOM SPACES</p>
+              <h2 id="spaces-heading">
+                Take a look inside.
+                <br />
+                Our facility spaces.
+              </h2>
+            </div>
             <p>
-              A few simple items will ensure you can test drive and review documents
-              without delays.
+              Take an interactive look around our presentation bays, client suites, and technical facilities.
             </p>
           </div>
 
-          <div className="checklist-grid" style={{ maxWidth: "900px", margin: "40px auto 0" }}>
-            {visitChecklist.map((item) => (
-              <div className="checklist-card" key={item.title}>
-                <span className="check-icon">{item.icon}</span>
-                <h4>{item.title}</h4>
-                <p>{item.description}</p>
+          <ShowroomSpaces />
+        </section>
+
+        {/* Showroom Location & Timings Section */}
+        <section className="p-container p-section p-visit-logistics" id="location" aria-labelledby="location-heading">
+          <div className="p-section-heading">
+            <div>
+              <p className="p-eyebrow">LOCATION &amp; TIMINGS</p>
+              <h2 id="location-heading">
+                How to find us.
+                <br />
+                Hours &amp; directions.
+              </h2>
+            </div>
+            <p>
+              Situated conveniently on Outer Ring Road, Bangalore with complimentary guest valet and fast charging.
+            </p>
+          </div>
+
+          <div className="p-logistics-grid">
+            {/* Showroom Location & Directions */}
+            <article className="p-logistics-card">
+              <div className="p-logistics-card-header">
+                <Icon name="pin" size={18} />
+                <h3>Showroom Location</h3>
               </div>
-            ))}
+              <p className="p-address-text">
+                <strong>Manu’s Car World Flagship</strong>
+                <br />
+                Plot 42, Prestige Auto Boulevard, Sector 4,
+                <br />
+                Outer Ring Road (Opposite Horizon Tower),
+                <br />
+                Bangalore, Karnataka 560100
+              </p>
+              <div className="p-transit-notes">
+                <p>Complimentary guest valet parking &amp; 150kW DC fast chargers on premises.</p>
+                <p>5-minute walk from Prestige Central Metro; Outer Ring Road Exit 8.</p>
+              </div>
+              <div className="p-location-card-actions">
+                <a
+                  href="https://maps.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-text-link"
+                >
+                  Open in Google Maps
+                  <Icon name="northeast" size={15} />
+                </a>
+              </div>
+            </article>
+
+            {/* Operating Hours */}
+            <article className="p-logistics-card">
+              <div className="p-logistics-card-header">
+                <Icon name="clock" size={18} />
+                <h3>Operating Hours</h3>
+              </div>
+              <ul className="p-hours-list">
+                <li>
+                  <span>Monday – Friday</span>
+                  <strong>9:30 AM – 8:00 PM</strong>
+                </li>
+                <li>
+                  <span>Saturday</span>
+                  <strong>9:30 AM – 8:00 PM</strong>
+                </li>
+                <li>
+                  <span>Sunday</span>
+                  <strong>10:00 AM – 6:30 PM</strong>
+                </li>
+              </ul>
+              <p className="p-logistics-subtext">
+                Weekdays between 11:00 AM and 3:00 PM offer our quietest, most unhurried browsing atmosphere.
+              </p>
+            </article>
+
+            {/* What to Bring */}
+            <article className="p-logistics-card">
+              <div className="p-logistics-card-header">
+                <Icon name="document" size={18} />
+                <h3>Visitor Information</h3>
+              </div>
+              <ul className="p-checklist">
+                <li>
+                  <Icon name="check" size={14} />
+                  <span>
+                    <strong>Valid Driving License</strong>
+                    Mandatory for all circuit test-drive participants.
+                  </span>
+                </li>
+                <li>
+                  <Icon name="check" size={14} />
+                  <span>
+                    <strong>Vehicle Registration Documents</strong>
+                    If you would like an on-the-spot valuation for your current car.
+                  </span>
+                </li>
+                <li>
+                  <Icon name="check" size={14} />
+                  <span>
+                    <strong>Government ID</strong>
+                    For same-day reservations or financing eligibility check.
+                  </span>
+                </li>
+              </ul>
+            </article>
           </div>
         </section>
 
-        {/* Closing CTA */}
-        <section className="closing section">
-          <div className="eyebrow">We look forward to welcoming you</div>
-          <h2>
-            Plan your showroom visit
-            <br />
-            today.
-          </h2>
-          <div className="closing-actions">
-            <EnquiryButton
-              className="button light"
-              title="Plan your showroom visit"
-              car="Visiting the showroom"
-            >
-              Book an appointment slot <span>→</span>
-            </EnquiryButton>
-            <a href="/cars" className="button dark">
-              Explore inventory <span>↗</span>
-            </a>
+        {/* Contact & Appointment Section */}
+        <section
+          className="p-form-section"
+          id="contact"
+          aria-labelledby="contact-heading"
+        >
+          <span id="plan-visit" />
+          <div className="p-container p-contact-grid">
+            <div>
+              <p className="p-eyebrow">VISIT US · CONTACT US</p>
+              <h2 id="contact-heading">
+                Come say hello.
+                <br />
+                Or start right here.
+              </h2>
+              <p>
+                Plan a visit, request a specific vehicle walkaround, or talk to our concierge team. Settle on a preferred date below and our concierge will confirm your slot.
+              </p>
+
+              {/* Appointment Pop-up Trigger Card */}
+              <div className="p-popup-trigger-card">
+                <span className="p-trigger-tag">SCHEDULED PRIVATE APPOINTMENT</span>
+                <h3>Reserve a 1-on-1 Showroom Advisor</h3>
+                <p>
+                  Book through our interactive appointment system to choose your preferred morning, afternoon, or evening slot.
+                </p>
+                <button
+                  type="button"
+                  className="p-button"
+                  data-contact-trigger="true"
+                  data-title="Schedule a showroom appointment"
+                  data-interest="Visiting the showroom"
+                >
+                  Open Appointment Pop-up
+                  <Icon name="northeast" size={18} />
+                </button>
+              </div>
+            </div>
+
+            <ContactForm title="Send us a message" button="Send my enquiry" interest="Visiting the showroom" />
           </div>
         </section>
       </main>
-
-      <Footer />
-    </EnquiryProvider>
+    </PublicShell>
   );
 }

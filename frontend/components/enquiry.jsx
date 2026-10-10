@@ -2,17 +2,44 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
+import { useContactModal } from "./contact-modal";
+
 const EnquiryContext = createContext(null);
 
 export function EnquiryButton({
   title = "Book a test drive",
   car,
   children,
+  onClick,
   ...props
 }) {
-  const open = useContext(EnquiryContext);
+  const openContext = useContext(EnquiryContext);
+  const { openContactModal } = useContactModal();
+
+  function handleClick(e) {
+    if (onClick) onClick(e);
+    if (openContactModal) {
+      openContactModal({
+        title,
+        car,
+        interest:
+          car && car !== "Help me choose"
+            ? `Buying a car (${car})`
+            : title.toLowerCase().includes("visit")
+            ? "Visiting the showroom"
+            : title.toLowerCase().includes("car")
+            ? "Selling or exchanging my car"
+            : "Book a test drive",
+      });
+      return;
+    }
+    if (openContext) {
+      openContext(title, car);
+    }
+  }
+
   return (
-    <button {...props} onClick={() => open(title, car)}>
+    <button {...props} onClick={handleClick}>
       {children}
     </button>
   );

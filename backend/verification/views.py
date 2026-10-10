@@ -26,6 +26,10 @@ def send_code(request):
     payload = VerificationInput(data=request.data)
     payload.is_valid(raise_exception=True)
     email = payload.validated_data['email'].strip().lower()
+    return send_verification(email)
+
+
+def send_verification(email, purpose='booking'):
     now = timezone.now()
     recent = EmailVerification.objects.filter(email=email, created_at__gt=now - timedelta(hours=1))
     if recent.filter(created_at__gt=now - timedelta(seconds=60)).exists():
@@ -40,6 +44,7 @@ def send_code(request):
     code = f'{secrets.randbelow(1000000):06d}'
     challenge = EmailVerification.objects.create(
         email=email,
+        purpose=purpose,
         code_hash=make_password(code),
         expires_at=now + timedelta(minutes=10),
     )
@@ -52,7 +57,9 @@ def send_code(request):
     try:
         sent = _mail_sender(
             'Your showroom verification code',
-            f'Your verification code is {code}.\n\nIt expires in 10 minutes. Enter it on the booking page to verify your email and request a test drive.\nIf you did not request this, ignore this email.',
+            f'Your verification code is {code}.\n\nIt expires in 10 minutes. '
+            + ('Enter it on the create account page to verify your email and finish registration.' if purpose == 'signup' else 'Enter it on the booking page to verify your email and request a test drive.')
+            + '\nIf you did not request this, ignore this email.',
             settings.DEFAULT_FROM_EMAIL,
             [email],
         )
@@ -62,6 +69,9 @@ def send_code(request):
         challenge.used_at = timezone.now()
         challenge.save(update_fields=['used_at'])
         return Response({'detail': 'The verification email could not be sent. Please try again later.'}, status=503)
+
+    if purpose == 'signup':
+        EmailVerification.objects.filter(email=email, purpose='signup', used_at__isnull=True).exclude(pk=challenge.pk).update(used_at=timezone.now())
 
     if settings.DEBUG:
         print(f'[DEV OTP] {email}: {code} (expires in 10 minutes)', flush=True)

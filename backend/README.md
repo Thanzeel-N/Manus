@@ -97,3 +97,67 @@ Set `DJANGO_DEBUG=0`, a unique `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, and 
 Deploy Django behind an HTTPS-capable application server and reverse proxy. Run migrations and `collectstatic`; serve static files and uploaded media via durable storage and a web server (Django only serves media directly with DEBUG enabled). The Next.js `/media/` rewrite assumes the Django origin can serve media. Enforce upload limits at the proxy and use a shared cache for throttling. Replace demo inventory and illustrative photos before launch; verify PostgreSQL and actual production storage in staging.
 
 Admin upload handling follows [Django’s admin documentation](https://docs.djangoproject.com/en/5.2/ref/contrib/admin/).
+
+
+## Set individual staff permissions
+
+In the frontend, sign in as an administrator and open **Staff & access > Manage > Dashboard permissions**. Choose **View**, **Add**, and **Edit** separately for Vehicles, Contact enquiries, Test drives and Availability, then save the staff member. New frontend accounts begin with no selected access; choose their permissions before saving. Existing accounts keep their current access until an administrator changes it.
+
+Examples: a stock editor needs Vehicles View + Edit (and Add to create listings); a customer service employee needs Contact enquiries View + Edit and Test drives View + Edit. Editing vehicles includes photo uploads. View-only staff cannot save changes. Selecting Add or Edit also grants View; adding availability also grants vehicle viewing so the employee can select a car. Unchecking View removes that section's Add/Edit access. The presets are No access, View only, and All daily operations. Account and permission management remain administrator-only.
+
+Access is enforced on each backend request, including direct API requests. Staff should refresh their dashboard after a change to update visible menus. Turning off Active account blocks sign-in. This editor replaces the employee's default Showroom staff group with individual showroom permissions; unrelated permissions remain unchanged. If a custom group grants access that conflicts with a restriction, saving is rejected with instructions to adjust that group in advanced administration rather than falsely claiming access was removed.
+
+Verification: `manage.py test showroom.test_workspace` covers revocation, role escalation, new accounts, inactive accounts, dependencies and custom-group conflicts. From `frontend`, `node scripts/verify-staff-access.mjs` verifies the permission editor with mocked API responses; set `SITE_URL` to a running frontend (default port 3006).
+
+## Customer email and password accounts
+
+The shared `/login` page offers Google first, followed by **Sign in** and **Create account**. Customers can register with their name, email, password and password confirmation. Registration creates a customer account, signs them in, and returns them to their selected car (or `/cars`). Returning customers sign in with email and password; staff continue using their existing username and password.
+
+`POST /api/customer/register/` uses CSRF protection, the existing login throttle and Django password validation. Passwords are hashed; public registration cannot grant staff status or permissions. Duplicate emails are rejected without linking or modifying an existing Google, staff or customer account. Customer email sign-in is case-insensitive and rejects ambiguous matches. Registration does not verify inbox ownership; bookings from password sessions keep `email_verified_at` empty. Password recovery currently directs customers to the showroom team.
+
+Verification: `python backend/manage.py test showroom.test_customer_auth --noinput` and `node frontend/scripts/verify-customer-signup.mjs`. The browser check uses the local backend, creates one temporary customer, and removes that customer afterward.
+## Owner/admin alerts and delegated administrators
+
+Run `python manage.py migrate` and `python manage.py setup_staff` before starting the updated app.
+For production, also run `python manage.py createcachetable` to provision the shared database-backed throttle cache.
+Production requires a random `DJANGO_SECRET_KEY` of at least 50 characters and enables HTTPS redirects and one-hour HSTS.
+Behind a trusted TLS-terminating proxy that overwrites `X-Forwarded-Proto`, set `DJANGO_TRUST_PROXY_HTTPS=1`.
+Configure the Next.js proxy to preserve that trusted header; verify secure login and CSRF in staging.
+Run `python manage.py check --deploy` with your production environment before launch.
+Existing superusers are owners. In **Staff & access**, an owner can enable **Administrator** on an employee.
+Administrators have full showroom workspace access and can create, edit, deactivate and set permissions for ordinary staff.
+Only owners can grant/revoke administrator status or edit another administrator. Owner accounts remain protected;
+use **My account** for your own phone and password. Delegated administrators are not Django superusers.
+
+**My account > Your alert phone** sets the owner's/admin's number. Owners can also set employee numbers in the staff editor.
+Use E.164 format (`+919876543210`). Car details/photos and enquiry/test-drive status changes create durable alerts for
+every active owner and administrator, including the person who made the change. Customers and ordinary staff receive no phone alerts.
+Unchanged records do not generate duplicate alerts. Changes through the workspace, legacy dashboard and Django admin are tracked.
+Maintenance scripts and bulk ORM updates do not have a staff request actor and are not tracked.
+
+To enable SMS, configure `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` and set `SMS_ENABLED=1`.
+Use a Twilio sender enabled for your destination countries. Schedule **one** worker every minute:
+
+```sh
+python manage.py deliver_alerts
+```
+
+The command submits up to 100 queued messages per run. Web requests never wait for SMS delivery.
+Run it under your scheduler's single-instance/overlap protection. Credentials must remain in the server environment.
+No live messages are sent by tests. Before launch, verify an alert on a real owner/admin phone in staging.
+
+The **Alerts** page refreshes every 30 seconds and shows per-recipient SMS submission state.
+`submitted` means the provider accepted the request, not confirmed handset delivery; see the
+[Twilio message lifecycle](https://www.twilio.com/docs/messaging/guides/outbound-message-status-in-status-callbacks).
+Rate limits retry on subsequent runs (maximum five attempts). `unknown`, `failed`, or stale `submitting` entries need
+operator review in Twilio before retrying, to avoid duplicate messages after a network timeout/process crash.
+After reconciling the provider result, an operator can update the corresponding `workspace.Alert` status using Django shell;
+reset to `pending` only when the provider has confirmed no message was accepted. Monitor these states and queue age in production.
+Demotion, deactivation or a changed phone cancels queued delivery to the old recipient/number. Alerts created without a phone
+remain dashboard-only; saving a phone affects future alerts. Set a retention policy for alert records appropriate to your business.
+
+Validation: `python manage.py test showroom workspace --noinput`; `npm.cmd run build` from the repository root.
+Configure HTTPS, PostgreSQL, shared throttling cache, SMTP and durable storage as described above before deployment.
+HSTS for all subdomains and browser preloading remain disabled until the deployment domain and all its subdomains have been verified for HTTPS;
+the deployment check reports those two domain-specific warnings. The local development environment intentionally keeps DEBUG enabled.
+Browser coverage: from `frontend`, run `node scripts/verify-owner-alerts.mjs` against `SITE_URL` (default `http://localhost:3011`).

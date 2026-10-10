@@ -1,72 +1,61 @@
 "use client";
-
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import BrandLogo from "./brand-logo";
 import ThemeToggle from "./theme-toggle";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import Icon from "./icon";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  useEffect(() => {
+    const close = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, []);
   return (
-    <header className="header">
-      <a className="brand" href="/" aria-label="Manu's Car World home">
+    <header className="p-header">
+      <a className="p-logo" href="/" aria-label="Manu’s Car World home">
         <BrandLogo />
       </a>
       <nav
-        id="navigation"
-        className={open ? "open" : ""}
+        id="public-navigation"
+        className={open ? "is-open" : ""}
         aria-label="Main navigation"
       >
         {[
-          ["/", "Home"],
-          ["/cars", "Our cars"],
-          ["/about", "Why Manu’s"],
-          ["/exchange", "Sell & exchange"],
-          ["/visit", "Visit showroom"],
-          ["/contact", "Contact"],
+          ["/cars", "Our collection"],
+          ["/about", "Our story"],
+          ["/visit", "Visit us"],
         ].map(([href, label]) => (
           <a
             key={href}
             href={href}
-            className={
-              (href === "/" ? pathname === "/" : pathname.startsWith(href))
-                ? "active"
-                : ""
-            }
-            aria-current={href === pathname ? "page" : undefined}
+            aria-current={pathname.startsWith(href) ? "page" : undefined}
             onClick={() => setOpen(false)}
           >
             {label}
           </a>
         ))}
-        <div className="mobile-nav-footer">
-          <a
-            href="/cars"
-            className="button light mobile-cta-btn"
-            onClick={() => setOpen(false)}
-          >
-            Book a test drive <span>↗</span>
-          </a>
-          <div className="mobile-nav-contact">
-            <a href="tel:+919876543210">📞 +91 98765 43210</a>
-            <span>Mon – Sat: 9 AM – 7 PM</span>
-          </div>
-        </div>
       </nav>
-      <a href="/cars" className="button light nav-cta">
-        Book a test drive <span>↗</span>
-      </a>
-      <ThemeToggle />
-      <button
-        className="menu-button"
-        aria-label={open ? "Close navigation" : "Open navigation"}
-        aria-expanded={open}
-        aria-controls="navigation"
-        onClick={() => setOpen(!open)}
-      >
-        {open ? "×" : "☰"}
-      </button>
+      <div className="p-header-actions">
+        <ThemeToggle />
+        <a className="p-header-cta" href="/login">
+          Sign in
+          <Icon name="users" size={16} />
+        </a>
+        <button
+          className="p-menu"
+          aria-label={open ? "Close navigation" : "Open navigation"}
+          aria-controls="public-navigation"
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          <Icon name={open ? "close" : "menu"} size={24} />
+        </button>
+      </div>
     </header>
   );
 }

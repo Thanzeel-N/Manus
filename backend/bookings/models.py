@@ -29,6 +29,7 @@ class TestDriveSlot(models.Model):
 
 
 class Booking(models.Model):
+    customer = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.SET_NULL, related_name='customer_bookings')
     reference = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     slot = models.ForeignKey(TestDriveSlot, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)

@@ -3,7 +3,7 @@ import json
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.password_validation import validate_password
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
@@ -25,6 +25,8 @@ from rest_framework.response import Response
 from inventory.models import Car, CarImage
 from bookings.models import Booking, TestDriveSlot
 from enquiries.models import Enquiry
+from .models import StaffProfile, Alert
+from .alerts import is_admin, notify
 
 
 def identity(user):
@@ -34,7 +36,9 @@ def identity(user):
         'id': user.pk,
         'username': user.username,
         'name': user.get_full_name() or user.username,
-        'is_admin': user.is_superuser,
+        'is_admin': is_admin(user),
+        'is_owner': user.is_superuser,
+        'phone': getattr(getattr(user, 'workspace_profile', None), 'phone', ''),
         'permissions': sorted(user.get_all_permissions()),
     }
 
@@ -93,6 +97,11 @@ class PhotoSerializer(serializers.ModelSerializer):
 class CarSerializer(serializers.ModelSerializer):
     images = PhotoSerializer(many=True, read_only=True)
 
+    def validate_year(self, value):
+        if value > 2100:
+            raise serializers.ValidationError('Year must be between 1900 and 2100.')
+        return value
+
     class Meta:
         model = Car
         fields = [
@@ -145,7 +154,7 @@ class SlotSerializer(serializers.ModelSerializer):
 
 
 def allowed(user, action, model):
-    return user.has_perm(f'showroom.{action}_{model._meta.model_name}') or user.has_perm(f'{model._meta.app_label}.{action}_{model._meta.model_name}')
+    return is_admin(user) or user.has_perm(f'showroom.{action}_{model._meta.model_name}') or user.has_perm(f'{model._meta.app_label}.{action}_{model._meta.model_name}')
 
 
 @never_cache
@@ -267,13 +276,52 @@ def photos(request, pk, photo_id=None):
     return Response(PhotoSerializer(car.images.all(), many=True).data, status=201)
 
 
-class StaffSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False, allow_blank=False)
+STAFF_ACCESS = {
+    'inventory.view': ['view_car', 'view_carimage'],
+    'inventory.add': ['add_car'],
+    'inventory.edit': ['change_car', 'add_carimage', 'change_carimage'],
+    'enquiries.view': ['view_enquiry'],
+    'enquiries.edit': ['change_enquiry'],
+    'test-drives.view': ['view_booking'],
+    'test-drives.edit': ['change_booking'],
+    'slots.view': ['view_testdriveslot'],
+    'slots.add': ['add_testdriveslot'],
+    'slots.edit': ['change_testdriveslot'],
+}
 
+
+def access_permissions(access):
+    codes = set()
+    for key in access:
+        codes.update(STAFF_ACCESS[key])
+        # Editors and creators must be able to open their dashboard section.
+        codes.update(STAFF_ACCESS[key.split('.')[0] + '.view'])
+    if 'slots.add' in access:
+        codes.update(STAFF_ACCESS['inventory.view'])
+    return codes
+
+
+class StaffSerializer(serializers.ModelSerializer):
+    is_admin = serializers.BooleanField(required=False)
+    phone = serializers.CharField(required=False, allow_blank=True, validators=StaffProfile._meta.get_field('phone').validators)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=False)
+    access = serializers.ListField(child=serializers.ChoiceField(choices=list(STAFF_ACCESS)), required=False, write_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'is_superuser', 'last_login', 'password']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'is_superuser', 'is_admin', 'phone', 'last_login', 'password', 'access']
         read_only_fields = ['id', 'is_superuser', 'last_login']
+
+    def to_representation(self, instance):
+        result = super().to_representation(instance)
+        profile = getattr(instance, 'workspace_profile', None)
+        result['is_admin'] = instance.is_superuser or bool(profile and profile.is_admin)
+        result['phone'] = profile.phone if profile else ''
+        # Query assigned permissions even for inactive accounts so reactivation
+        # doesn't accidentally discard an employee's saved access settings.
+        codes = set(instance.user_permissions.filter(content_type__app_label='showroom').values_list('codename', flat=True))
+        codes.update(Permission.objects.filter(group__user=instance, content_type__app_label='showroom').values_list('codename', flat=True))
+        result['access'] = [key for key, permissions in STAFF_ACCESS.items() if instance.is_superuser or permissions[0] in codes]
+        return result
 
     def validate(self, attrs):
         if not self.instance and not attrs.get('password'):
@@ -291,7 +339,7 @@ class StaffSerializer(serializers.ModelSerializer):
 @api_view(['GET', 'POST', 'PATCH'])
 @permission_classes([IsAdminUser])
 def staff(request, pk=None):
-    if not request.user.is_superuser:
+    if not is_admin(request.user):
         return Response({'detail': 'Only administrators can manage staff accounts.'}, status=403)
     if request.method == 'GET':
         return Response(StaffSerializer(User.objects.filter(is_staff=True).order_by('username'), many=True).data)
@@ -299,12 +347,24 @@ def staff(request, pk=None):
         return Response({'detail': 'Invalid staff action.'}, status=400)
     with transaction.atomic():
         user = get_object_or_404(User.objects.select_for_update(), pk=pk, is_staff=True) if pk else None
+        if user and (user.pk == request.user.pk or ((user.is_superuser or StaffProfile.objects.filter(user=user, is_admin=True).exists()) and not request.user.is_superuser)):
+            return Response({'detail': 'Only the owner can change administrator accounts. Use My account for your own profile.'}, status=403)
         if user and user.is_superuser:
             return Response({'detail': 'Administrator accounts cannot be changed here. Use My account to change your password.'}, status=403)
         serializer = StaffSerializer(user, data=request.data, partial=bool(pk))
         serializer.is_valid(raise_exception=True)
         values = dict(serializer.validated_data)
+        admin_role = values.pop('is_admin', None)
+        phone = values.pop('phone', None)
+        if admin_role is not None and not request.user.is_superuser:
+            return Response({'detail': 'Only the owner can assign administrator access.'}, status=403)
         password = values.pop('password', None)
+        access = values.pop('access', None)
+        if access is not None and user:
+            requested_codes = access_permissions(access)
+            inherited = Permission.objects.filter(group__in=user.groups.exclude(name='Showroom staff'), content_type__app_label='showroom')
+            if inherited.exclude(codename__in=requested_codes).exists():
+                return Response({'detail': 'This employee inherits additional showroom permissions from a custom group. Remove or adjust that group in advanced administration before restricting access here.'}, status=400)
         if not user:
             group = Group.objects.filter(name='Showroom staff').first()
             if not group:
@@ -315,9 +375,50 @@ def staff(request, pk=None):
         if password:
             user.set_password(password)
         user.save()
-        if not pk:
+        profile, _ = StaffProfile.objects.get_or_create(user=user)
+        if admin_role is not None:
+            profile.is_admin = admin_role
+        if phone is not None:
+            profile.phone = phone
+        profile.save()
+        if access is not None:
+            user.groups.remove(*user.groups.filter(name='Showroom staff'))
+            # Replace showroom permissions only; never alter unrelated app access.
+            user.user_permissions.remove(*user.user_permissions.filter(content_type__app_label='showroom'))
+            user.user_permissions.add(*Permission.objects.filter(content_type__app_label='showroom', codename__in=access_permissions(access)))
+        elif not pk:
             user.groups.add(group)
+        notify(f'{request.user.username} {"updated" if pk else "created"} staff account {user.username}. Role: {"administrator" if profile.is_admin else "staff"}. Active: {user.is_active}.')
     return Response(StaffSerializer(user).data, status=200 if pk else 201)
+
+
+@never_cache
+@api_view(['GET', 'PATCH'])
+@permission_classes([IsAdminUser])
+def notifications(request, pk=None):
+    if not is_admin(request.user):
+        return Response({'detail': 'Only owners and administrators can read alerts.'}, status=403)
+    query = Alert.objects.filter(recipient=request.user)
+    if request.method == 'PATCH':
+        alert = get_object_or_404(query, pk=pk)
+        alert.read_at = timezone.now()
+        alert.save(update_fields=['read_at'])
+        return Response({'id': alert.pk, 'read_at': alert.read_at})
+    page = Paginator(query, 30).get_page(request.GET.get('page'))
+    from django.conf import settings
+    return Response({'results': list(page.object_list.values('id', 'message', 'created_at', 'read_at', 'sms_status', 'last_error')),
+                     'page': page.number, 'pages': page.paginator.num_pages,
+                     'unread': query.filter(read_at__isnull=True).count(), 'sms_enabled': settings.SMS_ENABLED})
+
+
+@never_cache
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+def profile(request):
+    payload = StaffSerializer(request.user, data={'phone': request.data.get('phone', '')}, partial=True)
+    payload.is_valid(raise_exception=True)
+    StaffProfile.objects.update_or_create(user=request.user, defaults={'phone': payload.validated_data['phone']})
+    return Response({'phone': payload.validated_data['phone']})
 
 
 @never_cache
@@ -336,7 +437,7 @@ def dashboard(request):
         if section not in sections:
             return HttpResponseForbidden('Choose a section.')
         model, codename, _ = sections[section]
-        if not request.user.has_perm(f'showroom.change_{codename}'):
+        if not allowed(request.user, 'change', model):
             return HttpResponseForbidden('You do not have permission to update these records.')
         try:
             with transaction.atomic():
@@ -360,7 +461,7 @@ def dashboard(request):
             messages.error(request, 'Unable to save. The record is invalid or this slot already has a booking.')
         return redirect(request.get_full_path())
 
-    can = {key: request.user.has_perm(f'showroom.view_{code}') for key, (_, code, _) in sections.items()}
+    can = {key: allowed(request.user, 'view', model) for key, (model, code, _) in sections.items()}
     context = {'section': section, 'can': can, 'q': request.GET.get('q', ''), 'selected_status': request.GET.get('status', '')}
     if section in sections:
         model, codename, search = sections[section]
@@ -381,7 +482,7 @@ def dashboard(request):
         context.update(
             page=Paginator(records_query, 20).get_page(request.GET.get('page')),
             choices=choices,
-            can_edit=request.user.has_perm(f'showroom.change_{codename}'),
+            can_edit=allowed(request.user, 'change', model),
         )
     context['stats'] = [
         {'label': 'Available cars', 'value': Car.objects.filter(status='available').count(), 'section': 'inventory'} if can['inventory'] else None,

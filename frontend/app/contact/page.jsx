@@ -1,179 +1,122 @@
-import Header from "../../components/header";
-import Footer from "../../components/footer";
-import { EnquiryButton, EnquiryProvider } from "../../components/enquiry";
-import SiteMotion from "../../components/site-motion";
+import PublicShell from "../../components/public-shell";
+import Icon from "../../components/icon";
+import ContactForm from "../../components/contact-form";
 
 export const metadata = {
-  title: "Contact Showroom & Team — Manu’s Car World",
+  title: "Contact Showroom Concierge | Manu’s Car World",
   description:
-    "Get in touch with Manu’s Car World Bengaluru. Visit our climate-controlled showroom, call our team, or send an enquiry for car purchase, test drive, or exchange.",
+    "Get in touch with the showroom concierge at Manu’s Car World. Arrange a personal appointment, test drive, or discuss certified luxury vehicles.",
 };
 
 export default function ContactPage() {
   return (
-    <EnquiryProvider>
-      <SiteMotion />
-      <Header />
+    <PublicShell>
       <main id="main-content">
-        {/* Hero */}
-        <section className="contact-hero section">
-          <div className="eyebrow">Get in touch</div>
-          <h1>
-            We’d love to
-            <br />
-            hear from you.
-          </h1>
-          <p className="contact-lead">
-            Whether you want to inspect a car in person, arrange a test drive,
-            or explore an exchange valuation for your current vehicle — our
-            dealership team is at your service.
-          </p>
-        </section>
+        <section className="p-contact-intro-section" aria-labelledby="contact-heading">
+          <div className="p-container">
+            <div className="p-breadcrumb">
+              <a href="/">Home</a>
+              <Icon name="chevron" size={12} />
+              <span>Contact us</span>
+            </div>
 
-        {/* Contact details + CTA */}
-        <section className="contact-grid section">
-          <div className="contact-details">
-            <div className="contact-card">
-              <div className="contact-icon">📍</div>
-              <h2>Visit our showroom</h2>
-              <p>
-                123 Motor Street, Showroom District
-                <br />
-                Bengaluru, Karnataka 560001
-                <br />
-                India
+            <div className="p-contact-intro-content">
+              <p className="p-eyebrow">SHOWROOM CONCIERGE &amp; CLIENT ADVISORY</p>
+              <h1 id="contact-heading">Contact our team</h1>
+              <p className="p-contact-lead">
+                Whether you’re planning a showroom visit, looking for a specific certified vehicle, or seeking an unhurried consultation, our dedicated concierge team is at your service.
               </p>
-              <a
-                href="/visit"
-                className="text-link"
-                style={{ marginTop: "12px", display: "inline-flex" }}
-              >
-                Showroom visitor guide <span>→</span>
-              </a>
-            </div>
-
-            <div className="contact-card">
-              <div className="contact-icon">📞</div>
-              <h2>Call our advisors</h2>
-              <p>
-                <a href="tel:+919876543210">+91 98765 43210</a>
-                <br />
-                Direct desk: +91 80 4567 8900
-                <br />
-                Monday to Saturday, 9:00 am to 7:00 pm IST
-              </p>
-            </div>
-
-            <div className="contact-card">
-              <div className="contact-icon">✉️</div>
-              <h2>Email our team</h2>
-              <p>
-                <a href="mailto:hello@manuscarworld.in">
-                  hello@manuscarworld.in
-                </a>
-                <br />
-                Valuation team: <a href="mailto:exchange@manuscarworld.in">exchange@manuscarworld.in</a>
-                <br />
-                We reply within one business day.
-              </p>
-            </div>
-
-            <div className="contact-card">
-              <div className="contact-icon">🕐</div>
-              <h2>Opening hours</h2>
-              <ul className="hours-list">
-                <li>
-                  <span>Monday to Friday</span>
-                  <span>9:00 am – 7:00 pm</span>
-                </li>
-                <li>
-                  <span>Saturday</span>
-                  <span>10:00 am – 6:00 pm</span>
-                </li>
-                <li>
-                  <span>Sunday</span>
-                  <span>By prior appointment only</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="contact-cta-panel">
-            <div className="eyebrow">Direct enquiry</div>
-            <h2>Talk to our team.</h2>
-            <p>
-              Tell us what you are looking for. Whether it is finding a specific
-              model, planning an in-depth mechanical review, or trading in your
-              vehicle, we will reach out promptly.
-            </p>
-            <div className="contact-cta-buttons">
-              <EnquiryButton className="button light" title="Contact the team">
-                Send an enquiry <span>→</span>
-              </EnquiryButton>
-              <a href="/cars" className="button dark">
-                Explore available cars <span>↗</span>
-              </a>
-            </div>
-            <div className="contact-trust-points">
-              <span>✓ Guaranteed 2-Hour Response Time</span>
-              <span>✓ No Obligation Consultation</span>
-              <span>✓ Friendly & Non-Pushy Advisors</span>
             </div>
           </div>
         </section>
 
-        {/* Map Section */}
-        <section className="contact-map-section section">
-          <div className="eyebrow">Showroom location</div>
-          <h2>Come see us in person.</h2>
-          <div className="contact-map">
-            <div className="map-placeholder" aria-label="Showroom location map">
-              <div className="map-pin">📍</div>
-              <p className="map-title">Manu’s Car World Showroom</p>
-              <p className="map-address">
-                123 Motor Street, Showroom District, Bengaluru, Karnataka
+        {/* Quick Contact Cards */}
+        <section className="p-container p-contact-channels" aria-label="Direct contact channels">
+          <div className="p-channels-grid">
+            <article className="p-channel-card">
+              <div className="p-channel-icon">
+                <Icon name="phone" size={24} />
+              </div>
+              <p className="p-channel-label">DIRECT CONCIERGE LINE</p>
+              <h3>+91 98765 43210</h3>
+              <p>Daily 9:30 AM – 8:00 PM for private bookings and general enquiries.</p>
+              <a href="tel:+919876543210" className="p-text-link">
+                Call showroom concierge
+                <Icon name="arrow" size={16} />
+              </a>
+            </article>
+
+            <article className="p-channel-card">
+              <div className="p-channel-icon">
+                <Icon name="pin" size={24} />
+              </div>
+              <p className="p-channel-label">SHOWROOM LOCATION</p>
+              <h3>Prestige Luxury Mile</h3>
+              <p>Plot 42, Prestige Auto Boulevard, Sector 4, Outer Ring Road, Bangalore.</p>
+              <a href="/visit" className="p-text-link">
+                View showroom directions
+                <Icon name="northeast" size={16} />
+              </a>
+            </article>
+
+            <article className="p-channel-card">
+              <div className="p-channel-icon">
+                <Icon name="mail" size={24} />
+              </div>
+              <p className="p-channel-label">DIGITAL CORRESPONDENCE</p>
+              <h3>concierge@manuscarworld.com</h3>
+              <p>Send documentation, service history or specific vehicle requests.</p>
+              <a href="mailto:concierge@manuscarworld.com" className="p-text-link">
+                Email the team
+                <Icon name="arrow" size={16} />
+              </a>
+            </article>
+          </div>
+        </section>
+
+        {/* Contact Form Section */}
+        <section className="p-form-section" id="contact" aria-labelledby="form-heading">
+          <div className="p-container p-contact-grid">
+            <div>
+              <p className="p-eyebrow">A PERSONAL CONVERSATION</p>
+              <h2 id="form-heading">
+                Come say hello.
+                <br />
+                Or start right here.
+              </h2>
+              <p>
+                Leave your details and preferred time below. Our client advisor will prepare your vehicle files and contact you before your visit.
               </p>
-              <p className="map-tip">Free valet parking available for all visitors.</p>
-              <div className="map-actions">
-                <a
-                  className="button light"
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open in Google Maps <span>↗</span>
-                </a>
-                <a className="button dark" href="/visit">
-                  Visiting directions & amenities <span>→</span>
-                </a>
+
+              <div className="p-info-card">
+                <Icon name="wheel" size={26} />
+                <div>
+                  <h3>Planning a test drive?</h3>
+                  <p>Browse our live collection to select your vehicle and book available slots.</p>
+                  <a className="p-text-link" href="/cars">
+                    Find a car to test drive
+                    <Icon name="arrow" size={17} />
+                  </a>
+                </div>
+              </div>
+
+              <div className="p-info-card" style={{ marginTop: "16px" }}>
+                <Icon name="clock" size={26} />
+                <div>
+                  <h3>Showroom Visiting Hours</h3>
+                  <p>Mon – Sat: 9:30 AM – 8:00 PM<br />Sun: 10:00 AM – 6:30 PM (By Appointment)</p>
+                  <a className="p-text-link" href="/visit">
+                    Explore showroom facilities
+                    <Icon name="northeast" size={17} />
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Closing CTA */}
-        <section className="closing section">
-          <div className="eyebrow">Manu’s Car World</div>
-          <h2>
-            Your next car starts
-            <br />
-            at Manu’s Car World.
-          </h2>
-          <div className="closing-actions">
-            <EnquiryButton
-              className="button light"
-              title="Talk to the dealership team"
-            >
-              Talk to our team <span>→</span>
-            </EnquiryButton>
-            <a href="/cars" className="button dark">
-              Browse car inventory <span>↗</span>
-            </a>
+            <ContactForm title="Send us a message" button="Send my enquiry" />
           </div>
         </section>
       </main>
-
-      <Footer />
-    </EnquiryProvider>
+    </PublicShell>
   );
 }

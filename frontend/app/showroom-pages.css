@@ -1,0 +1,1144 @@
+/* ==========================================================================
+   Our Story: Editorial Header, Centered Quote & Full-Width Photo Showcase
+   ========================================================================== */
+
+.public-site .p-story-intro-section {
+  padding-top: clamp(38px, 5.5vw, 70px);
+  padding-bottom: clamp(36px, 4.5vw, 60px);
+  text-align: center;
+}
+
+.public-site .p-story-intro-section .p-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--p-muted);
+  margin-bottom: clamp(22px, 3.2vw, 36px);
+}
+
+.public-site .p-story-intro-section .p-breadcrumb a {
+  color: var(--p-muted);
+  transition: color 0.15s ease;
+}
+
+.public-site .p-story-intro-section .p-breadcrumb a:hover {
+  color: var(--p-text);
+}
+
+.public-site .p-story-intro-content {
+  max-width: 820px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.public-site .p-story-intro-content .p-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 2.4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--p-red);
+  margin-bottom: 16px;
+}
+
+.public-site .p-story-intro-content .p-eyebrow::before,
+.public-site .p-story-intro-content .p-eyebrow::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--p-line);
+}
+
+.public-site .p-story-intro-content h1 {
+  font-size: clamp(42px, 5.6vw, 72px);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  color: var(--p-text);
+  margin: 0 0 24px 0;
+}
+
+.public-site .p-story-quote {
+  margin: 0;
+  max-width: 680px;
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1.62;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.015em;
+  position: relative;
+  padding: 0 12px;
+}
+
+[data-theme="light"] .public-site .p-story-quote {
+  color: #38383f;
+}
+
+[data-theme="dark"] .public-site .p-story-quote {
+  color: #d2d2dc;
+}
+
+/* Full-Width Showcase */
+.public-site .p-story-photo-showcase {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #08080a;
+}
+
+.public-site .p-story-photo-frame {
+  position: relative;
+  width: 100%;
+  height: clamp(500px, 75vh, 840px);
+  overflow: hidden;
+}
+
+.public-site .p-story-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 36%;
+  display: block;
+}
+
+.public-site .p-story-photo-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px clamp(20px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(to top,
+      rgba(8, 8, 10, 0.76) 0%,
+      rgba(8, 8, 10, 0.25) 55%,
+      transparent 100%);
+  pointer-events: none;
+}
+
+.public-site .p-story-photo-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--p-red);
+  padding: 4px 10px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.public-site .p-story-photo-meta {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.public-site .p-real-photo {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--p-line);
+  background: var(--p-panel);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.public-site .p-real-photo>img {
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+}
+
+.public-site .p-team-photo>img {
+  object-fit: contain;
+  background: var(--p-soft);
+}
+
+.public-site .p-photo-pending {
+  min-height: 230px;
+  aspect-ratio: 8 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--p-soft), var(--p-panel));
+}
+
+.public-site .p-photo-pending>.p-icon {
+  color: var(--p-red);
+  margin-bottom: 8px;
+}
+
+.public-site .p-photo-pending strong {
+  font-weight: 500;
+  font-size: 23px;
+  line-height: 1.3;
+}
+
+.public-site .p-photo-pending>span {
+  font-size: 13px;
+  color: var(--p-muted);
+}
+
+.public-site .p-real-photo figcaption {
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 12px;
+}
+
+.public-site .p-real-photo figcaption>span:last-child {
+  color: var(--p-muted);
+}
+
+.public-site .p-showroom-gallery {
+  padding-top: 12px;
+}
+
+.public-site .p-showroom-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.public-site #contact,
+.public-site #our-people {
+  scroll-margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .public-site .p-story-photo-frame {
+    height: clamp(420px, 62vh, 600px);
+  }
+
+  .public-site .p-showroom-photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-site .p-showroom-photo-grid> :first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .public-site .p-story-intro-section {
+    padding-top: 28px;
+    padding-bottom: 24px;
+  }
+
+  .public-site .p-story-intro-content h1 {
+    font-size: clamp(34px, 9vw, 44px);
+    margin-bottom: 16px;
+  }
+
+  .public-site .p-story-quote {
+    font-size: 16px;
+    line-height: 1.55;
+    padding: 0 8px;
+  }
+
+  .public-site .p-story-photo-frame {
+    height: clamp(320px, 50vh, 420px);
+  }
+
+  .public-site .p-story-photo-caption {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 16px 20px;
+  }
+
+  .public-site .p-showroom-photo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .public-site .p-photo-pending {
+    min-height: 220px;
+    padding: 20px;
+  }
+
+  .public-site .p-real-photo figcaption {
+    padding: 16px;
+  }
+}
+
+/* ==========================================================================
+   Visit Us Redesign: Cinematic Luxury Flagship Architecture
+   ========================================================================== */
+
+.public-site .p-visit-intro-section {
+  padding-top: clamp(40px, 5.5vw, 70px);
+  padding-bottom: clamp(36px, 4.5vw, 56px);
+  border-bottom: 1px solid var(--p-line);
+  background: var(--p-bg);
+}
+
+.public-site .p-visit-intro-section .p-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--p-muted);
+  margin-bottom: 24px;
+}
+
+.public-site .p-visit-intro-section .p-breadcrumb a {
+  color: var(--p-muted);
+  transition: color 0.15s ease;
+}
+
+.public-site .p-visit-intro-section .p-breadcrumb a:hover {
+  color: var(--p-text);
+}
+
+.public-site .p-visit-intro-content {
+  max-width: 820px;
+}
+
+.public-site .p-visit-intro-content .p-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: var(--p-red);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.public-site .p-visit-intro-content h1 {
+  font-size: clamp(38px, 5.2vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--p-text);
+  margin: 0 0 18px 0;
+  line-height: 1.1;
+}
+
+.public-site .p-visit-lead {
+  font-size: clamp(16px, 1.8vw, 19px);
+  line-height: 1.65;
+  color: var(--p-muted);
+  max-width: 680px;
+  margin: 0 0 32px 0;
+}
+
+.public-site .p-visit-intro-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.public-site .p-visit-intro-actions .p-button-ghost {
+  background: transparent;
+  color: var(--p-text);
+  border: 1px solid var(--p-line);
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.public-site .p-visit-intro-actions .p-button-ghost:hover {
+  border-color: var(--p-text);
+  background: var(--p-soft);
+}
+
+.public-site .p-visit-phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--p-text);
+  padding: 8px 12px;
+  transition: color 0.15s ease;
+}
+
+.public-site .p-visit-phone-link:hover {
+  color: var(--p-red);
+}
+
+.public-site .p-location-card-actions {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--p-line);
+}
+
+/* ==========================================================================
+   Interactive Showroom Spaces Component
+   ========================================================================== */
+
+.public-site .p-showroom-spaces-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.public-site .p-space-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--p-line);
+  margin-bottom: 14px;
+}
+
+.public-site .p-space-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 20px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--p-muted);
+  position: relative;
+  bottom: -1px;
+}
+
+.public-site .p-space-tab:hover {
+  color: var(--p-text);
+}
+
+.public-site .p-space-tab.is-active {
+  color: var(--p-text);
+  border-bottom-color: var(--p-red);
+  background: transparent;
+  box-shadow: none;
+}
+
+.public-site .p-space-tab-category {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--p-muted);
+  margin-bottom: 4px;
+  transition: color 0.15s ease;
+}
+
+.public-site .p-space-tab.is-active .p-space-tab-category {
+  color: var(--p-red);
+}
+
+.public-site .p-space-tab-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.public-site .p-active-space-card {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  background: var(--p-panel);
+  border: 1px solid var(--p-line);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+}
+
+.public-site .p-active-space-media {
+  position: relative;
+  min-height: 460px;
+  background: #000;
+}
+
+.public-site .p-active-space-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.public-site .p-active-space-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: rgba(8, 8, 10, 0.82);
+  color: #fff;
+  border-radius: 2px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+
+.public-site .p-active-space-content {
+  padding: clamp(34px, 4.5vw, 52px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.public-site .p-active-space-content .p-eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--p-red);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.public-site .p-active-space-content h3 {
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 450;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px 0;
+  color: var(--p-text);
+  line-height: 1.18;
+}
+
+.public-site .p-active-space-desc {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--p-muted);
+  margin: 0 0 22px 0;
+}
+
+.public-site .p-active-space-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+
+.public-site .p-space-highlight-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--p-text);
+  font-weight: 450;
+}
+
+.public-site .p-space-highlight-pill .p-icon {
+  color: var(--p-red);
+  flex-shrink: 0;
+}
+
+.public-site .p-active-space-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Gallery Thumbnails Grid */
+.public-site .p-spaces-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.public-site .p-space-grid-item {
+  background: var(--p-panel);
+  border: 1px solid var(--p-line);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-site .p-space-grid-item:hover {
+  border-color: var(--p-text);
+  transform: translateY(-2px);
+}
+
+.public-site .p-space-grid-item.is-selected {
+  border-color: var(--p-red);
+}
+
+.public-site .p-space-thumb-wrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #000;
+  overflow: hidden;
+}
+
+.public-site .p-space-thumb-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.public-site .p-space-grid-item:hover .p-space-thumb-wrap img {
+  transform: scale(1.05);
+}
+
+.public-site .p-space-thumb-tag {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 2px 7px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+
+.public-site .p-space-thumb-meta {
+  padding: 10px 12px;
+}
+
+.public-site .p-space-thumb-meta h4 {
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--p-text);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.public-site .p-space-thumb-meta p {
+  display: none;
+}
+
+/* ==========================================================================
+   Visual Experience Showcase Cards (Minimal Architectural Editorial)
+
+
+
+
+/* ==========================================================================
+   Showroom Logistics, Hours & Location (Minimal Clean Layout)
+   ========================================================================== */
+
+.public-site .p-logistics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.public-site .p-logistics-card {
+  background: var(--p-panel);
+  border: 1px solid var(--p-line);
+  border-radius: 4px;
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.public-site .p-logistics-card:hover {
+  border-color: var(--p-text);
+}
+
+.public-site .p-logistics-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--p-line);
+  margin-bottom: 16px;
+}
+
+.public-site .p-logistics-card-header .p-icon {
+  color: var(--p-red);
+}
+
+.public-site .p-logistics-card-header h3 {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--p-text);
+  flex-grow: 1;
+}
+
+.public-site .p-hours-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.public-site .p-hours-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--p-line);
+}
+
+.public-site .p-hours-list span {
+  color: var(--p-muted);
+}
+
+.public-site .p-hours-list strong {
+  color: var(--p-text);
+  font-weight: 500;
+}
+
+.public-site .p-logistics-subtext {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--p-muted);
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--p-line);
+  margin-bottom: 0;
+}
+
+.public-site .p-address-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--p-muted);
+  margin: 0 0 16px 0;
+}
+
+.public-site .p-address-text strong {
+  color: var(--p-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.public-site .p-transit-notes {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--p-muted);
+  padding-top: 14px;
+  border-top: 1px solid var(--p-line);
+}
+
+.public-site .p-transit-notes p {
+  margin: 0;
+}
+
+.public-site .p-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.public-site .p-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--p-muted);
+}
+
+.public-site .p-checklist li .p-icon {
+  color: var(--p-red);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.public-site .p-checklist li strong {
+  color: var(--p-text);
+  display: block;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+/* Appointment Quick Popup Trigger Card */
+.public-site .p-popup-trigger-card {
+  margin-top: 28px;
+  padding: 24px 26px;
+  background: var(--p-panel);
+  border: 1px solid var(--p-line);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.public-site .p-popup-trigger-card:hover {
+  border-color: var(--p-text);
+}
+
+.public-site .p-trigger-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: var(--p-red);
+  text-transform: uppercase;
+}
+
+.public-site .p-popup-trigger-card h3 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin: 2px 0 4px 0;
+  color: var(--p-text);
+}
+
+.public-site .p-popup-trigger-card p {
+  font-size: 13px;
+  color: var(--p-muted);
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+.public-site .p-popup-trigger-card .p-button {
+  align-self: flex-start;
+  border-radius: 4px;
+}
+
+
+/* ==========================================================================
+   Dedicated Contact Channels (for /contact)
+   ========================================================================== */
+
+.public-site .p-contact-intro-section {
+  padding-top: clamp(38px, 5.5vw, 68px);
+  padding-bottom: clamp(28px, 3.5vw, 44px);
+}
+
+.public-site .p-contact-intro-content {
+  max-width: 820px;
+}
+
+.public-site .p-contact-intro-content h1 {
+  font-size: clamp(38px, 5.4vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  margin: 0 0 16px 0;
+  color: var(--p-text);
+}
+
+.public-site .p-contact-lead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--p-muted);
+  margin: 0;
+}
+
+.public-site .p-contact-channels {
+  padding-bottom: clamp(30px, 4vw, 50px);
+}
+
+.public-site .p-channels-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.public-site .p-channel-card {
+  background: var(--p-panel);
+  border: 1px solid var(--p-line);
+  border-radius: 6px;
+  padding: 30px 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-site .p-channel-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: var(--p-soft);
+  border-radius: 6px;
+  color: var(--p-red);
+  margin-bottom: 18px;
+}
+
+.public-site .p-channel-label {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--p-muted);
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.public-site .p-channel-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--p-text);
+  word-break: break-word;
+}
+
+.public-site .p-channel-card p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--p-muted);
+  margin: 0 0 18px 0;
+}
+
+.public-site .p-channel-card .p-text-link {
+  margin-top: auto;
+}
+
+/* ==========================================================================
+   Contact Pop-up Modal Dialog
+   ========================================================================== */
+
+dialog.p-contact-modal-dialog {
+  border: 1px solid var(--p-line);
+  background: var(--p-panel);
+  color: var(--p-text);
+  border-radius: 4px;
+  padding: 0;
+  width: min(600px, 94vw);
+  max-height: 92dvh;
+  overflow-y: auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+  margin: auto;
+  position: fixed;
+  inset: 0;
+}
+
+dialog.p-contact-modal-dialog::backdrop {
+  background: rgba(8, 8, 10, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Modal Open Animation */
+dialog.p-contact-modal-dialog[open] {
+  animation: p-modal-fade-in 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+dialog.p-contact-modal-dialog[data-closing="true"] {
+  animation: p-modal-fade-out 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes p-modal-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes p-modal-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+}
+
+.public-site .p-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--p-soft);
+  color: var(--p-text);
+  border: 1px solid var(--p-line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 10;
+}
+
+.public-site .p-modal-close:hover {
+  background: var(--p-red);
+  color: #fff;
+  border-color: var(--p-red);
+}
+
+/* Header & Nav Contact Actions */
+.public-site .p-header-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 16px;
+  background: var(--p-red);
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.public-site .p-header-contact-btn:hover {
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+@media (max-width: 1080px) {
+  .public-site .p-space-tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .public-site .p-active-space-card {
+    grid-template-columns: 1fr;
+  }
+
+  .public-site .p-active-space-media {
+    min-height: 340px;
+  }
+
+  .public-site .p-spaces-gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .public-site .p-experience-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .public-site .p-customizer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .public-site .p-logistics-grid,
+  .public-site .p-channels-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .public-site .p-visit-highlights-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 16px;
+    padding: 22px 20px;
+  }
+
+  .public-site .p-visit-highlight-item:not(:last-child) {
+    border-right: 0;
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  .public-site .p-circuit-track-stages {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .public-site .p-circuit-stage-step:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px dashed var(--p-line);
+    padding-right: 0;
+    padding-bottom: 8px;
+  }
+
+  .public-site .p-space-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .public-site .p-space-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .public-site .p-space-tab {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    white-space: nowrap;
+  }
+
+  .public-site .p-spaces-gallery-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .public-site .p-spaces-gallery-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .public-site .p-space-grid-item {
+    flex: 0 0 190px;
+  }
+
+  .public-site .p-customizer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-site .p-customizer-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .public-site .p-customizer-action-bar .p-button {
+    width: 100%;
+  }
+
+  .public-site .p-logistics-grid,
+  .public-site .p-channels-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .public-site .p-visit-highlights-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 16px;
+  }
+
+  .public-site .p-visit-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .public-site .p-visit-hero-actions .p-button {
+    width: 100%;
+  }
+
+  .public-site .p-visit-phone-cta {
+    justify-content: center;
+  }
+}

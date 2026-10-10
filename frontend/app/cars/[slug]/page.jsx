@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getStock } from "../../../lib/stock";
 import CarDetail from "../../../components/car-detail";
+import PublicShell from "../../../components/public-shell";
+import { PageIntro } from "../../../components/public-sections";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -14,11 +16,7 @@ export default async function CarPage({ params }) {
   const { cars, preview, unavailable } = await getStock();
   if (unavailable)
     return (
-      <main className="section">
-        <a href="/cars">← Back to cars</a>
-        <h1>Inventory temporarily unavailable</h1>
-        <p>Please try again shortly.</p>
-      </main>
+      <PublicShell><main id="main-content"><PageIntro label="OUR COLLECTION" title="Inventory temporarily unavailable" text="Please try again shortly, or contact our team for help."><a className="p-button" href="/cars">Back to the collection</a></PageIntro></main></PublicShell>
     );
   const car = cars.find((item) => item.id === slug);
   if (!car) notFound();

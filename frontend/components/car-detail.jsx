@@ -1,8 +1,9 @@
 "use client";
 
-import BrandLogo from "./brand-logo";
-import ThemeToggle from "./theme-toggle";
-import Footer from "./footer";
+import PublicShell from "./public-shell";
+import Icon from "./icon";
+import VehicleImage from "./vehicle-image";
+import { useCustomerSession } from "./customer-session";
 import { useEffect, useState } from "react";
 
 const dateKey = (value) =>
@@ -29,45 +30,7 @@ export default function CarDetail({ car, preview }) {
   const [busy, setBusy] = useState(false);
   const [receipt, setReceipt] = useState(null);
   const [reload, setReload] = useState(0);
-  const [email, setEmail] = useState("");
-  const [verification, setVerification] = useState(null);
-  const [code, setCode] = useState("");
-  const [sendingCode, setSendingCode] = useState(false);
-  const [verificationMessage, setVerificationMessage] = useState("");
-  const [cooldown, setCooldown] = useState(0);
-  useEffect(() => {
-    if (!cooldown) return;
-    const timer = setTimeout(
-      () => setCooldown((value) => Math.max(0, value - 1)),
-      1000,
-    );
-    return () => clearTimeout(timer);
-  }, [cooldown]);
-  async function sendCode(event) {
-    if (!event.currentTarget.form.elements.email.reportValidity()) return;
-    setSendingCode(true);
-    setVerificationMessage("");
-    try {
-      const response = await fetch("/api/verification/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.detail || Object.values(data).flat().join(" "));
-      setVerification(data.verification_id);
-      setCode("");
-      setCooldown(data.retry_after);
-      setVerificationMessage(data.detail);
-    } catch (err) {
-      setVerificationMessage(
-        err.message || "Unable to send a code. Please try again.",
-      );
-    } finally {
-      setSendingCode(false);
-    }
-  }
+  const { session, error: sessionError, setSession } = useCustomerSession();
   useEffect(() => {
     let active = true;
     if (preview || car.status !== "available") {
@@ -98,24 +61,23 @@ export default function CarDetail({ car, preview }) {
   const dates = [...new Set(slots.map((item) => dateKey(item.starts_at)))];
   async function submit(event) {
     event.preventDefault();
+    if (!session?.user || busy) return;
     setBusy(true);
     setError("");
     const form = new FormData(event.currentTarget);
     try {
       const response = await fetch("/api/bookings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-CSRFToken": session.csrf },
         body: JSON.stringify({
           slot: Number(slot),
           name: form.get("name"),
-          email: form.get("email"),
           phone: form.get("phone"),
-          verification_id: verification,
-          verification_code: code,
         }),
       });
       const data = await response.json();
       if (!response.ok) {
+        if (response.status === 401) setSession({ ...session, user: null });
         if (response.status === 409) {
           setSlots((current) =>
             current.filter((item) => String(item.id) !== slot),
@@ -124,8 +86,8 @@ export default function CarDetail({ car, preview }) {
         }
         throw new Error(
           data.detail ||
-            Object.values(data).flat().join(" ") ||
-            "Booking could not be saved.",
+          Object.values(data).flat().join(" ") ||
+          "Booking could not be saved.",
         );
       }
       setReceipt({
@@ -139,12 +101,12 @@ export default function CarDetail({ car, preview }) {
     }
   }
   return (
-    <>
-      <header className="detail-nav">
-        <a className="brand" href="/" aria-label="Manu’s Car World home"><BrandLogo /></a><ThemeToggle/>
-        <a href="/cars">← Back to all cars</a>
-      </header>
-      <main className="detail-page">
+    <PublicShell>
+      <main className="detail-page" id="main-content">
+        <a className="p-detail-back p-text-link" href="/cars">
+          <Icon name="arrow" className="p-reverse" size={17} /> Back to the
+          collection
+        </a>
         <div className="detail-heading">
           <div>
             <div className="eyebrow">
@@ -168,7 +130,9 @@ export default function CarDetail({ car, preview }) {
           <div>
             <div className="gallery-main">
               {car.images.length ? (
-                <img
+                <VehicleImage
+                  key={car.images[photo].url}
+                  sampleId={car.is_sample ? car.id : undefined}
                   src={car.images[photo].url}
                   alt={
                     car.images[photo].caption ||
@@ -192,7 +156,8 @@ export default function CarDetail({ car, preview }) {
                   aria-label={`View photo ${index + 1}`}
                   aria-pressed={photo === index}
                 >
-                  <img
+                  <VehicleImage
+                    sampleId={car.is_sample ? car.id : undefined}
                     src={item.url}
                     alt={item.caption || `Photo ${index + 1}`}
                   />
@@ -218,7 +183,7 @@ export default function CarDetail({ car, preview }) {
               <dl className="spec-grid">
                 {[
                   ["Year", car.year],
-                  ["Mileage", `${car.km} km`],
+                  ["Kilometres Driven", `${car.km} km`],
                   ["Fuel", car.fuel],
                   ["Transmission", car.transmission],
                   ["Body style", car.body],
@@ -275,6 +240,11 @@ export default function CarDetail({ car, preview }) {
               <p className="booking-note">
                 This car is {car.status}. Test drives are currently unavailable.
               </p>
+            ) : !session?.user ? (
+              <div className="p-booking-login">
+                <p>{sessionError || (session ? 'Please sign in before requesting a test drive.' : 'Checking your sign-in...')}</p>
+                <a className="p-button" href={`/login?next=${encodeURIComponent(`/cars/${car.id}#test-drive`)}`}>Sign in to book<Icon name="arrow" size={18} /></a>
+              </div>
             ) : (
               <>
                 {loading ? (
@@ -343,75 +313,17 @@ export default function CarDetail({ car, preview }) {
                             autoComplete="name"
                             required
                             maxLength={100}
+                            defaultValue={session.user.name}
                           />
                         </label>
-                        <label>
-                          Email
-                          <input
-                            name="email"
-                            type="email"
-                            autoComplete="email"
-                            required
-                            value={email}
-                            disabled={sendingCode || busy}
-                            onChange={(event) => {
-                              setEmail(event.target.value);
-                              setVerification(null);
-                              setCode("");
-                              setVerificationMessage("");
-                            }}
-                          />
-                        </label>
-                        <div className="email-verification">
-                          <p>
-                            Verify your email to request a test drive. We’ll
-                            send a six-digit code, valid for 10 minutes.
-                          </p>
-                          <button
-                            type="button"
-                            className="verification-send"
-                            onClick={sendCode}
-                            disabled={
-                              sendingCode || busy || cooldown > 0 || !email
-                            }
-                          >
-                            {sendingCode
-                              ? "Sending code…"
-                              : cooldown
-                                ? `Resend in ${cooldown}s`
-                                : verification
-                                  ? "Resend verification code"
-                                  : "Send verification code"}
-                          </button>
-                          {verificationMessage && (
-                            <p role="status">{verificationMessage}</p>
-                          )}
-                          {verification && (
-                            <label>
-                              Verification code
-                              <input
-                                name="verification_code"
-                                inputMode="numeric"
-                                autoComplete="one-time-code"
-                                pattern="[0-9]{6}"
-                                maxLength={6}
-                                required
-                                value={code}
-                                onChange={(event) =>
-                                  setCode(event.target.value.replace(/\D/g, ""))
-                                }
-                                placeholder="6-digit code"
-                              />
-                            </label>
-                          )}
-                        </div>
+                        <p className="booking-note">Signed in as {session.user.email}. <a href="/login">Manage account</a></p>
                         <label>
                           Phone number
                           <input
                             name="phone"
                             type="tel"
                             autoComplete="tel"
-                            pattern="[+0-9 ()-]{7,20}"
+                            minLength={7}
                             required
                             maxLength={20}
                           />
@@ -422,12 +334,12 @@ export default function CarDetail({ car, preview }) {
                         <button
                           className="button light"
                           disabled={
-                            busy || !slot || !verification || code.length !== 6
+                            busy || !slot
                           }
                         >
                           {busy
-                            ? "Verifying and sending…"
-                            : "Verify email & request test drive ↗"}
+                            ? "Sending…"
+                            : "Request test drive ↗"}
                         </button>
                       </>
                     ) : (
@@ -455,7 +367,6 @@ export default function CarDetail({ car, preview }) {
           </aside>
         </div>
       </main>
-      <Footer />
-    </>
+    </PublicShell>
   );
 }

@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { matchesCarSearch } from "../lib/car-search";
+import Icon from "./icon";
+import VehicleImage from "./vehicle-image";
 const defaults = {
   q: "",
   make: "all",
@@ -20,6 +23,27 @@ export default function Inventory({
   const [filters, setFilters] = useState(defaults);
   const [category, setCategory] = useState("all");
   const [saved, setSaved] = useState([]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filterDialog = useRef(null);
+  const activeFilterCount = [
+    "make",
+    "budget",
+    "body",
+    "fuel",
+    "transmission",
+    "year",
+  ].filter((key) => filters[key] !== defaults[key]).length;
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const dialog = filterDialog.current;
+    dialog.showModal();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [filtersOpen]);
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     setFilters(
@@ -65,9 +89,7 @@ export default function Inventory({
   const filtered = cars
     .filter(
       (car) =>
-        `${car.name} ${car.brand} ${car.variant}`
-          .toLowerCase()
-          .includes(filters.q.toLowerCase()) &&
+        matchesCarSearch(car, filters.q) &&
         (filters.make === "all" || car.brand === filters.make) &&
         (filters.budget === "all" || car.price < Number(filters.budget)) &&
         (filters.body === "all" || car.body === filters.body) &&
@@ -117,64 +139,140 @@ export default function Inventory({
           Then take it for a drive.
         </p>
       </div>
-      <div className="stock-search">
-        <label htmlFor="car-search">Search our cars</label>
-        <input
-          id="car-search"
-          type="search"
-          placeholder="Search by brand, model or variant…"
-          value={filters.q}
-          onChange={(event) => update("q", event.target.value)}
-        />
-        <span>{filtered.length} cars found</span>
-      </div>
-      <div className="filters inventory-filters">
-        {select(
-          "make",
-          "Make",
-          [...new Set(cars.map((car) => car.brand))],
-          "All brands",
-        )}
-        <label>
-          Budget
-          <select
-            aria-label="Budget"
-            value={filters.budget}
-            onChange={(event) => update("budget", event.target.value)}
-          >
-            <option value="all">Any budget</option>
-            {[10, 20, 30, 40, 50, 100].map((value) => (
-              <option value={value} key={value}>
-                Under ₹{value} lakh
-              </option>
-            ))}
-          </select>
+      <div
+        className="collection-search"
+        role="search"
+        aria-label="Search the collection"
+      >
+        <label className="collection-search-field" htmlFor="car-search">
+          <Icon name="search" size={20} />
+          <input
+            id="car-search"
+            type="search"
+            aria-label="Search our cars"
+            aria-describedby="car-search-help"
+            placeholder="Try BMW petrol or BMW M3 manual"
+            value={filters.q}
+            onChange={(event) => update("q", event.target.value)}
+          />
         </label>
-        {select(
-          "body",
-          "Body style",
-          [...new Set(cars.map((car) => car.body))],
-          "All body styles",
-        )}
-        {select(
-          "fuel",
-          "Fuel",
-          [...new Set(cars.map((car) => car.fuel))],
-          "All fuels",
-        )}
-        {select(
-          "transmission",
-          "Transmission",
-          ["Automatic", "Manual"],
-          "Any transmission",
-        )}
-        {select(
-          "year",
-          "Year from",
-          [...new Set(cars.map((car) => car.year))].sort((a, b) => b - a),
-          "Any year",
-        )}
+        <button
+          className="collection-filter-button"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="car-filter-dialog"
+          aria-expanded={filtersOpen}
+          onClick={() => setFiltersOpen(true)}
+        >
+          <Icon name="settings" size={18} /> Filters
+          {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
+        </button>
       </div>
+      <div className="collection-search-summary">
+        <p id="car-search-help">
+          Search by make, model, fuel or transmission. Combine them to find your
+          fit.
+        </p>
+        <span role="status">
+          {filtered.length} {filtered.length === 1 ? "car" : "cars"} found
+        </span>
+      </div>
+      <dialog
+        ref={filterDialog}
+        id="car-filter-dialog"
+        className="collection-filter-dialog"
+        aria-labelledby="car-filter-title"
+        onClose={() => setFiltersOpen(false)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            if (
+              event.clientX < bounds.left ||
+              event.clientX > bounds.right ||
+              event.clientY < bounds.top ||
+              event.clientY > bounds.bottom
+            )
+              setFiltersOpen(false);
+          }
+        }}
+      >
+        <div className="collection-filters">
+          <div className="filter-heading">
+            <div>
+              <h2 id="car-filter-title">Filter the collection</h2>
+              <p>Choose what matters to you.</p>
+            </div>
+            <button
+              type="button"
+              className="filter-reset"
+              aria-label="Close filters"
+              onClick={() => setFiltersOpen(false)}
+            >
+              <Icon name="close" size={20} />
+            </button>
+          </div>
+          <div className="filters inventory-filters">
+            {select(
+              "make",
+              "Make",
+              [...new Set(cars.map((car) => car.brand))],
+              "All brands",
+            )}
+            <label>
+              Budget
+              <select
+                aria-label="Budget"
+                value={filters.budget}
+                onChange={(event) => update("budget", event.target.value)}
+              >
+                <option value="all">Any budget</option>
+                {[10, 20, 30, 40, 50, 100].map((value) => (
+                  <option value={value} key={value}>
+                    Under ₹{value} lakh
+                  </option>
+                ))}
+              </select>
+            </label>
+            {select(
+              "body",
+              "Body style",
+              [...new Set(cars.map((car) => car.body))],
+              "All body styles",
+            )}
+            {select(
+              "fuel",
+              "Fuel",
+              [...new Set(cars.map((car) => car.fuel))],
+              "All fuels",
+            )}
+            {select(
+              "transmission",
+              "Transmission",
+              ["Automatic", "Manual"],
+              "Any transmission",
+            )}
+            {select(
+              "year",
+              "Year from",
+              [...new Set(cars.map((car) => car.year))].sort((a, b) => b - a),
+              "Any year",
+            )}
+          </div>
+          <div className="filter-dialog-actions">
+            <button type="button" className="filter-reset" onClick={reset}>
+              Reset all
+            </button>
+            <button
+              type="button"
+              className="p-button"
+              onClick={() => setFiltersOpen(false)}
+            >
+              Show {filtered.length} {filtered.length === 1 ? "car" : "cars"}
+              <Icon name="arrow" size={18} />
+            </button>
+          </div>
+        </div>
+      </dialog>
       <div className="collection-bar">
         <div className="tabs" role="group" aria-label="Car category">
           {[
@@ -218,7 +316,8 @@ export default function Inventory({
               <div className="car-image">
                 <a href={`/cars/${car.id}`} aria-label={`View ${car.name}`}>
                   {car.image ? (
-                    <img
+                    <VehicleImage
+                      sampleId={car.is_sample ? car.id : undefined}
                       src={car.image}
                       alt={
                         car.is_sample
@@ -235,7 +334,7 @@ export default function Inventory({
                 </a>
                 <span className="car-badge">
                   {car.status !== "available" ? car.status : car.body}
-                  {car.video ? " · ▶ Video" : ""}
+                  {car.video && <Icon name="play" size={12} />}
                 </span>
                 <button
                   className="save-car"
@@ -243,7 +342,11 @@ export default function Inventory({
                   aria-label={`${saved.includes(car.id) ? "Unsave" : "Save"} ${car.name}`}
                   aria-pressed={saved.includes(car.id)}
                 >
-                  {saved.includes(car.id) ? "♥" : "♡"}
+                  <Icon
+                    name="heart"
+                    size={19}
+                    filled={saved.includes(car.id)}
+                  />
                 </button>
               </div>
               <div className="car-content">
@@ -254,9 +357,18 @@ export default function Inventory({
                   <a href={`/cars/${car.id}`}>{car.name}</a>
                 </h3>
                 <div className="car-specs">
-                  <span>{car.km} km</span>
-                  <span>{car.fuel}</span>
-                  <span>{car.transmission}</span>
+                  <span>
+                    <Icon name="gauge" size={14} />
+                    {car.km} km
+                  </span>
+                  <span>
+                    <Icon name="fuel" size={14} />
+                    {car.fuel}
+                  </span>
+                  <span>
+                    <Icon name="settings" size={14} />
+                    {car.transmission}
+                  </span>
                 </div>
                 <div className="car-bottom">
                   <div className="price">
@@ -270,14 +382,14 @@ export default function Inventory({
                     href={`/cars/${car.id}`}
                     aria-label={`Details for ${car.name}`}
                   >
-                    ↗
+                    <Icon name="northeast" size={18} />
                   </a>
                 </div>
                 <a className="stock-book" href={`/cars/${car.id}#test-drive`}>
                   {car.status === "available"
                     ? "View details & book a test drive"
                     : "View car details"}{" "}
-                  <span>→</span>
+                  <Icon name="arrow" size={17} />
                 </a>
               </div>
             </article>
@@ -296,7 +408,7 @@ export default function Inventory({
             </p>
             {!unavailable && (
               <button className="text-link" onClick={reset}>
-                View all cars ↗
+                View all cars <Icon name="northeast" size={18} />
               </button>
             )}
           </div>
@@ -307,7 +419,7 @@ export default function Inventory({
           Showing {filtered.length} of {cars.length} cars
         </span>
         <button className="text-link" onClick={reset}>
-          Reset filters ↗
+          Reset filters <Icon name="northeast" size={18} />
         </button>
       </div>
     </section>

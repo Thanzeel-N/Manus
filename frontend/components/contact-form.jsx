@@ -1,0 +1,147 @@
+"use client";
+import { useState } from "react";
+import Icon from "./icon";
+
+export default function ContactForm({
+  interest = "Help me choose",
+  title = "How can we help?",
+  button = "Send enquiry",
+  vehicle = false,
+}) {
+  const [busy, setBusy] = useState(false),
+    [sent, setSent] = useState(false),
+    [feedback, setFeedback] = useState("");
+  async function submit(event) {
+    event.preventDefault();
+    if (busy || sent) return;
+    const fields = new FormData(event.currentTarget);
+    setBusy(true);
+    setFeedback("");
+    try {
+      const response = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fields.get("name"),
+          phone: fields.get("phone"),
+          email: fields.get("email") || "",
+          interest: fields.get("interest") || interest,
+          date: fields.get("date") || null,
+          message: fields.get("message") || "",
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok)
+        throw new Error(
+          result.detail ||
+            Object.entries(result)
+              .map(
+                ([key, value]) =>
+                  `${key}: ${Array.isArray(value) ? value.join(" ") : value}`,
+              )
+              .join(" "),
+        );
+      setSent(true);
+      setFeedback(
+        `Thank you. Enquiry #${result.reference} has reached our team. We’ll contact you about the next step.`,
+      );
+    } catch (error) {
+      setFeedback(
+        error.message || "We couldn’t send your enquiry. Please try again.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <form className="p-contact-form" onSubmit={submit}>
+      <div className="p-form-heading">
+        <span>
+          <Icon name={vehicle ? "exchange" : "mail"} size={22} />
+        </span>
+        <div>
+          <p className="p-eyebrow">A PERSONAL CONVERSATION</p>
+          <h2>{title}</h2>
+        </div>
+      </div>
+      <div className="p-field-grid">
+        <label>
+          Your name
+          <input
+            name="name"
+            autoComplete="name"
+            required
+            maxLength={100}
+            placeholder="Full name"
+          />
+        </label>
+        <label>
+          Phone number
+          <input
+            name="phone"
+            autoComplete="tel"
+            type="tel"
+            required
+            minLength={7}
+            maxLength={20}
+            placeholder="Your contact number"
+          />
+        </label>
+        <label className="p-field-wide">
+          Email <span>(optional)</span>
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            maxLength={254}
+            placeholder="you@example.com"
+          />
+        </label>
+        <label className="p-field-wide">
+          I’m interested in
+          <select name="interest" defaultValue={interest}>
+            <option>Help me choose</option>
+            <option>Buying a car</option>
+            <option>Selling or exchanging my car</option>
+            <option>Visiting the showroom</option>
+            <option>Changing a test-drive request</option>
+          </select>
+        </label>
+        <label className="p-field-wide">
+          Preferred callback or visit date <span>(optional)</span>
+          <input name="date" type="date" />
+        </label>
+        <label className="p-field-wide">
+          {vehicle ? "Tell us about your car" : "Your message"}
+          <textarea
+            name="message"
+            rows={4}
+            maxLength={5000}
+            required={vehicle}
+            placeholder={
+              vehicle
+                ? "Make, model, year, mileage and anything else we should know…"
+                : "A car you like, a question you have, or what you’re looking for…"
+            }
+          />
+        </label>
+      </div>
+      <button className="p-button" disabled={busy || sent}>
+        {busy ? "Sending your enquiry…" : sent ? "Enquiry received" : button}
+        <Icon name={sent ? "check" : "northeast"} size={18} />
+      </button>
+      <p className="p-form-privacy">
+        Your details are shared with the showroom team for this enquiry.
+        Appointments and vehicle availability are confirmed separately.
+      </p>
+      {feedback && (
+        <p
+          className={`p-form-feedback ${sent ? "is-success" : ""}`}
+          role={sent ? "status" : "alert"}
+        >
+          {feedback}
+        </p>
+      )}
+    </form>
+  );
+}

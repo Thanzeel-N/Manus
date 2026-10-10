@@ -1,10 +1,10 @@
 /* Shared branding, with white working surfaces for long showroom shifts. */
-.workspace-app { --ws-ink: #242426; --ws-muted: #69696f; --ws-line: #e5e5e7; --ws-accent: var(--brand-red); --ws-dark: #121214; background: #f5f5f6; color: var(--ws-ink); font-family: "Inter Tight", Arial, sans-serif; }
+.workspace-app { --ws-ink: #242426; --ws-muted: #69696f; --ws-line: #e5e5e7; --ws-accent: var(--brand-red); --ws-dark: #121214; background: #f5f5f6; color: var(--ws-ink); font-family: "Inter Tight", Arial, sans-serif; font-size: 15px; }
 .workspace-app .ws-brand { display: flex; align-items: flex-start; flex-direction: column; gap: 12px; }
 .workspace-app .ws-brand .brand-logo { width: 210px; border-width: 7px; }
 .workspace-app .ws-brand > small { font-size: 8px; letter-spacing: 2px; color: #c0c0c5; margin-left: 2px; }
 .workspace-app .ws-sidebar { border-right: 1px solid #303034; }
-.workspace-app .ws-sidebar nav a { color: #c5c5cb; border-radius: 4px; }
+.workspace-app .ws-sidebar nav a { color: #c5c5cb; border-radius: 4px; font-size: 13px; }
 .workspace-app .ws-sidebar nav a:hover { background: #29292d; color: #fff; }
 .workspace-app .ws-sidebar nav a.active { background: var(--brand-action); color: #fff; }
 .workspace-app .ws-sidebar nav a > b { background: #fff; color: var(--brand-action); }

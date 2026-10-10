@@ -157,3 +157,56 @@ class WorkspaceTests(TestCase):
         client.force_login(self.staff)
         self.assertEqual(client.patch(f'/api/workspace/inventory/{self.car.pk}/', {'status': 'sold'}, format='json').status_code, 403)
         self.assertIn('no-store', client.get('/api/workspace/overview/').headers['Cache-Control'])
+
+    def test_admin_can_restrict_existing_staff_and_restore_selected_access(self):
+        self.api.force_login(self.owner)
+        path = f'/api/workspace/staff/{self.staff.pk}/'
+        response = self.api.patch(path, {'access': ['inventory.view']}, format='json')
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['access'], ['inventory.view'])
+        self.api.force_login(self.staff)
+        self.assertEqual(self.api.get('/api/workspace/inventory/').status_code, 200)
+        self.assertEqual(self.api.get('/api/workspace/enquiries/').status_code, 403)
+        self.assertEqual(self.api.patch(f'/api/workspace/inventory/{self.car.pk}/', {'price': '10'}, format='json').status_code, 403)
+        self.assertEqual(self.api.patch(path, {'access': ['inventory.edit']}, format='json').status_code, 403)
+        self.api.force_login(self.owner)
+        response = self.api.patch(path, {'access': ['inventory.edit', 'slots.add']}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('inventory.view', response.data['access'])
+        self.assertIn('slots.view', response.data['access'])
+        self.api.force_login(self.staff)
+        self.assertEqual(self.api.patch(f'/api/workspace/inventory/{self.car.pk}/', {'price': '10'}, format='json').status_code, 200)
+        self.assertEqual(self.api.get('/api/workspace/enquiries/').status_code, 403)
+
+    def test_staff_access_validation_empty_and_inactive_round_trip(self):
+        self.api.force_login(self.owner)
+        path = f'/api/workspace/staff/{self.staff.pk}/'
+        self.assertEqual(self.api.patch(path, {'access': ['auth.change_user']}, format='json').status_code, 400)
+        self.assertEqual(self.api.patch(path, {'access': ['inventory.edit'], 'is_active': False}, format='json').status_code, 200)
+        listing = self.api.get('/api/workspace/staff/').data
+        inactive = next(item for item in listing if item['id'] == self.staff.pk)
+        self.assertIn('inventory.edit', inactive['access'])
+        self.assertEqual(self.api.patch(path, {'access': [], 'is_active': True}, format='json').status_code, 200)
+        self.api.force_login(self.staff)
+        self.assertEqual(self.api.get('/api/workspace/overview/').data, {})
+        self.assertEqual(self.api.get('/api/workspace/inventory/').status_code, 403)
+
+    def test_custom_groups_cannot_silently_override_permission_restrictions(self):
+        group = Group.objects.create(name='Custom vehicle editors')
+        group.permissions.add(Permission.objects.get(content_type__app_label='showroom', codename='change_car'))
+        self.staff.groups.add(group)
+        self.api.force_login(self.owner)
+        response = self.api.patch(f'/api/workspace/staff/{self.staff.pk}/', {'access': ['inventory.view'], 'first_name': 'Should not save'}, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.staff.refresh_from_db()
+        self.assertNotEqual(self.staff.first_name, 'Should not save')
+
+    def test_new_staff_permissions_are_explicit_and_do_not_grant_admin_access(self):
+        self.api.force_login(self.owner)
+        response = self.api.post('/api/workspace/staff/', {'username': 'limited-staff', 'password': 'Strong-initial-password-1987!', 'access': ['enquiries.edit']}, format='json')
+        self.assertEqual(response.status_code, 201, response.data)
+        user = User.objects.get(username='limited-staff')
+        self.assertTrue(user.has_perm('showroom.view_enquiry'))
+        self.assertTrue(user.has_perm('showroom.change_enquiry'))
+        self.assertFalse(user.has_perm('showroom.view_car'))
+        self.assertFalse(user.has_perm('auth.change_user'))

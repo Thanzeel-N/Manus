@@ -16,7 +16,7 @@ export async function POST(request) {
       `${process.env.DJANGO_API_URL}/api/bookings/`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Cookie: request.headers.get('cookie') || '', 'X-CSRFToken': request.headers.get('x-csrftoken') || '' },
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(10000),
       },

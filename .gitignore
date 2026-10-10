@@ -3,6 +3,7 @@ preview*.png
 node_modules/
 frontend/node_modules/
 .next/
+.next-dev/
 frontend/.next/
 out/
 .env
