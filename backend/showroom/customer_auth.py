@@ -70,7 +70,7 @@ def establish_session(request, user):
     request.session['customer_login_at'] = time.time()
     request.session.pop('google_nonce', None)
     rotate_token(request)
-    response = Response({'user': customer_data(user, request), 'csrf': get_token(request)})
+    response = Response({'user': customer_data(user, request), 'account': account_data(request), 'csrf': get_token(request)})
     response['Cache-Control'] = 'no-store'
     return response
 
@@ -208,18 +208,25 @@ def google_login(request):
         return Response({'detail': 'Sign-in expired. Reload this page and try again.'}, status=401)
     if not claims.get('sub') or claims.get('email_verified') is not True or not claims.get('email'):
         return Response({'detail': 'Please use a Google account with a verified email.'}, status=401)
-    # Never link a Google identity to an existing staff account by email.
+    email = claims['email'][:254].strip().lower()
+    staff_user = get_user_model().objects.filter(email__iexact=email, is_staff=True, is_active=True).first()
+    if staff_user:
+        if claims.get('picture'):
+            request.session['customer_picture'] = claims['picture']
+        return password_session(request, staff_user)
     username = 'google_' + hashlib.sha256(claims['sub'].encode()).hexdigest()
     user, created = get_user_model().objects.get_or_create(username=username)
     if not user.is_active:
         return Response({'detail': 'This account is inactive. Contact the showroom.'}, status=403)
     if created:
         user.set_unusable_password()
-    user.email = claims['email'][:254]
+    user.email = email
     user.first_name = claims.get('name', '')[:150]
     user.save()
     if claims.get('picture'):
         request.session['customer_picture'] = claims['picture']
+    if user.is_staff or user.is_superuser:
+        return password_session(request, user)
     return establish_session(request, user)
 
 

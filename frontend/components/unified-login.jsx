@@ -71,7 +71,13 @@ export default function UnifiedLogin({ fromWorkspace = false, createAccount = fa
           const result = await response.json();
           if (!response.ok)
             throw new Error(result.detail || "Unable to sign in.");
-          window.location.assign(next);
+          const destination =
+            result.account?.role === "staff" ||
+            result.account?.role === "admin" ||
+            result.account?.destination === "/dashboard"
+              ? "/dashboard"
+              : next;
+          window.location.assign(destination);
         } catch (error) {
           setError(error.message);
           setBusy(false);

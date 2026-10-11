@@ -26,6 +26,7 @@ def car_data(car):
         'image': photos[0]['url'] if photos else None,
         'video': car.video.url if car.video else None,
         'is_sample': car.is_sample,
+        'is_featured': car.is_featured,
     }
 
 

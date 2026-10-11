@@ -106,7 +106,7 @@ class CarSerializer(serializers.ModelSerializer):
         model = Car
         fields = [
             'id', 'slug', 'brand', 'name', 'variant', 'year', 'mileage', 'price', 'fuel',
-            'transmission', 'body', 'condition', 'status', 'description', 'features', 'video', 'is_sample', 'images',
+            'transmission', 'body', 'condition', 'status', 'description', 'features', 'video', 'is_sample', 'is_featured', 'images',
         ]
 
 
@@ -165,6 +165,7 @@ def overview(request):
     data = {}
     if allowed(user, 'view', Car):
         data['inventory'] = {x['status']: x['total'] for x in Car.objects.values('status').annotate(total=Count('id'))}
+        data['inventory']['featured'] = Car.objects.filter(is_featured=True).count()
         if is_admin(user) or user.is_superuser:
             data['stock_value'] = Car.objects.filter(status='available').aggregate(total=Sum('price'))['total'] or 0
         data['cars'] = CarSerializer(Car.objects.prefetch_related('images')[:4], many=True).data
@@ -215,7 +216,9 @@ def records(request, section, pk=None):
             lookup |= Q(**{field + '__icontains': request.GET.get('q', '')})
         query = query.filter(lookup)
         status = request.GET.get('status')
-        if status and model is not TestDriveSlot:
+        if status == 'featured' and model is Car:
+            query = query.filter(is_featured=True)
+        elif status and model is not TestDriveSlot:
             query = query.filter(status=status)
         elif model is TestDriveSlot:
             if status in ['open', 'blocked']:

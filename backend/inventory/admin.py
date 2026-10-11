@@ -42,8 +42,8 @@ class ImageInline(admin.TabularInline):
 class CarAdmin(admin.ModelAdmin):
     form = CarForm
     inlines = [ImageInline]
-    list_display = ['name', 'year', 'price', 'status', 'is_sample']
-    list_filter = ['status', 'brand', 'fuel', 'condition']
+    list_display = ['name', 'year', 'price', 'status', 'is_featured', 'is_sample']
+    list_filter = ['status', 'is_featured', 'brand', 'fuel', 'condition']
     search_fields = ['name', 'brand', 'variant']
     prepopulated_fields = {'slug': ['name', 'year']}
 

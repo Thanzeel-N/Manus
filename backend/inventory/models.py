@@ -30,6 +30,7 @@ class Car(models.Model):
     features = models.TextField(blank=True, help_text='One feature per line')
     video = models.FileField(upload_to='cars/videos/', blank=True, validators=[FileExtensionValidator(['mp4', 'webm']), video_size], help_text='Optional short walkaround: MP4 or WebM, up to 100 MB')
     is_sample = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False, help_text='Show in featured curated selection on the home page')
 
     class Meta:
         app_label = 'showroom'

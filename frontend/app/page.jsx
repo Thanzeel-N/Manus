@@ -9,7 +9,9 @@ import { getStock } from "../lib/stock";
 export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const { cars, unavailable } = await getStock();
-  const featured = cars.filter((car) => car.status === "available").slice(0, 3);
+  const availableCars = cars.filter((car) => car.status === "available");
+  const explicitlyFeatured = availableCars.filter((car) => car.is_featured);
+  const featured = (explicitlyFeatured.length ? explicitlyFeatured : availableCars).slice(0, 3);
   return (
     <PublicShell>
       <main id="main-content">

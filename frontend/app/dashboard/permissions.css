@@ -13,5 +13,11 @@
 .workspace-app .ws-access-row input[type=checkbox] { width: 17px; height: 17px; cursor: pointer; }
 @media(max-width:450px) { .workspace-app .ws-access-row { grid-template-columns: minmax(0, 1fr) repeat(3, 37px); padding: 12px 9px; gap: 2px; } }
 .ws-field-requirement { margin-left: .6rem; font-size: .7rem; font-weight: 400; opacity: .8; }
+.ws-required { margin-left: .25rem; font-size: .85rem; font-weight: 700; color: #e53e3e; line-height: 1; }
+.workspace-app .ws-small-dot.ws-featured { background: #f59e0b; }
+.workspace-app .ws-mini-stats button.ws-stat-featured { border-color: rgba(245, 158, 11, 0.4); }
+.workspace-app .ws-mini-stats button.ws-stat-featured.selected { background: rgba(245, 158, 11, 0.15); border-color: #f59e0b; }
+.ws-featured-star { color: #f59e0b; margin-left: 6px; font-size: 13px; font-weight: bold; }
+.ws-featured-pill { color: #d97706; font-weight: 600; }
 .ws-alerts { padding: 1.5rem; }
 .ws-alert-item { padding: 1.2rem 0; border-bottom: 1px solid var(--ws-border, #8884); overflow-wrap: anywhere; }

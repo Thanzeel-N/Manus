@@ -40,6 +40,7 @@ export const demoCars = [
   condition: "Used",
   status: "available",
   is_sample: true,
+  is_featured: true,
   features: [],
   description:
     "A sample from our pre-owned collection. Contact the showroom to confirm the actual vehicle, specifications, condition and service records.",
