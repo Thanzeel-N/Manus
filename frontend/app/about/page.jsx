@@ -43,7 +43,7 @@ export default function AboutPage() {
         >
           <div className="p-story-photo-frame">
             <img
-              src="/images/team.jpeg"
+              src="/images/team-optimized.webp"
               alt="The owner and staff of Manu’s Car World together at the showroom"
               width={1920}
               height={1080}
@@ -57,6 +57,7 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
         <section
           className="p-container p-section p-about-statement"
           id="our-people"
@@ -81,6 +82,7 @@ export default function AboutPage() {
             </p>
           </div>
         </section>
+
         <section className="p-story-section" id="inspection">
           <div className="p-container p-section">
             <div className="p-section-heading">
@@ -130,6 +132,7 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
         <section className="p-container p-section">
           <p className="p-eyebrow">FROM DISCOVERY TO DRIVE</p>
           <h2>

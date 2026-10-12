@@ -945,6 +945,7 @@ dialog.p-contact-modal-dialog[data-closing="true"] {
     opacity: 0;
     transform: scale(0.96) translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -956,6 +957,7 @@ dialog.p-contact-modal-dialog[data-closing="true"] {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+
   to {
     opacity: 0;
     transform: scale(0.97) translateY(6px);
@@ -1140,5 +1142,499 @@ dialog.p-contact-modal-dialog[data-closing="true"] {
 
   .public-site .p-visit-phone-cta {
     justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Visit Us: Supercar Luxury Flagship Experience (Exact Mockup Layout)
+   ========================================================================== */
+
+/* Dark Header Integration for Visit Page */
+.public-site:has(.p-visit-dark-page) .p-header {
+  background: rgba(8, 8, 10, 0.95) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header .brand-logo .logo-for-light {
+  display: none !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header .brand-logo .logo-for-dark {
+  display: block !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header nav>a {
+  color: #c4c4cd !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header nav>a:hover,
+.public-site:has(.p-visit-dark-page) .p-header nav>a[aria-current] {
+  color: #ffffff !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header nav>a[aria-current]:after {
+  background: #ee2b20 !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header-cta {
+  background: #ee2b20 !important;
+  color: #ffffff !important;
+  border-color: #ee2b20 !important;
+}
+
+.public-site:has(.p-visit-dark-page) .p-header-actions .theme-toggle {
+  color: #c4c4cd !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Visit Page Base */
+.public-site .p-visit-dark-page {
+  background: #08080a;
+  color: #f0f0f4;
+  overflow-x: hidden;
+}
+
+.public-site .p-visit-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: #ee2b20;
+  margin-bottom: 16px;
+}
+
+/* 1. Hero Section */
+.public-site .p-visit-hero-section {
+  padding-top: clamp(40px, 5.5vw, 72px);
+  padding-bottom: clamp(44px, 5.5vw, 68px);
+  background: #08080a;
+}
+
+.public-site .p-visit-hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.25fr;
+  gap: clamp(36px, 6vw, 72px);
+  align-items: center;
+}
+
+.public-site .p-visit-hero-title {
+  font-size: clamp(38px, 5.2vw, 64px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.public-site .p-visit-title-accent {
+  width: 44px;
+  height: 3px;
+  background: #ee2b20;
+  border-radius: 2px;
+  margin: 20px 0 24px;
+  box-shadow: 0 0 12px rgba(238, 43, 32, 0.6);
+}
+
+.public-site .p-visit-hero-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #b0b0bc;
+  max-width: 500px;
+  margin: 0 0 28px;
+}
+
+.public-site .p-visit-red-btn {
+  background: #ee2b20;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 13px 28px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  border: 1px solid #ee2b20;
+  box-shadow: 0 6px 20px rgba(238, 43, 32, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.public-site .p-visit-red-btn:hover {
+  background: #cf241c;
+  border-color: #cf241c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(238, 43, 32, 0.45);
+}
+
+.public-site .p-visit-photo-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(238, 43, 32, 0.12);
+  background: #000;
+}
+
+.public-site .p-visit-exterior-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.public-site .p-visit-media-badge {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Info Strip Below Hero */
+.public-site .p-visit-info-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: clamp(48px, 6vw, 70px);
+  padding-top: clamp(34px, 4.5vw, 50px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.public-site .p-visit-info-col {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.public-site .p-visit-info-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  color: #ee2b20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.public-site .p-visit-info-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.public-site .p-visit-info-text h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px;
+}
+
+.public-site .p-visit-info-text address,
+.public-site .p-visit-info-text p {
+  font-style: normal;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #9a9aa8;
+  margin: 0;
+}
+
+.public-site .p-visit-info-text a {
+  color: #9a9aa8;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.public-site .p-visit-info-text a:hover {
+  color: #ee2b20;
+}
+
+/* 2. Panoramic Interior Feature */
+.public-site .p-visit-panoramic-section {
+  padding: 0 0 clamp(60px, 8vw, 96px);
+  background: #08080a;
+}
+
+.public-site .p-visit-panoramic-frame {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(238, 43, 32, 0.1);
+  background: #000;
+}
+
+.public-site .p-visit-panoramic-img {
+  width: 100%;
+  height: clamp(380px, 56vh, 680px);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.public-site .p-visit-panoramic-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 6, 8, 0.85) 0%, rgba(6, 6, 8, 0.15) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.public-site .p-visit-panoramic-badge {
+  position: absolute;
+  bottom: 24px;
+  left: clamp(20px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.public-site .p-panoramic-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: #ee2b20;
+  text-transform: uppercase;
+}
+
+.public-site .p-panoramic-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* 3. Come Meet Us & Dark Map */
+.public-site .p-visit-map-section {
+  padding: clamp(60px, 8vw, 100px) 0;
+  background: #050507;
+}
+
+.public-site .p-visit-map-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+
+.public-site .p-visit-section-title {
+  font-size: clamp(32px, 4.2vw, 48px);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+}
+
+.public-site .p-visit-map-desc {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #a8a8b6;
+  margin: 0 0 32px;
+}
+
+.public-site .p-visit-map-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  background: #111116;
+}
+
+.public-site .p-dark-map-shell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10.5;
+  background: #111116;
+  overflow: hidden;
+}
+
+.public-site .p-dark-map-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.public-site .p-map-pin-anchor {
+  position: absolute;
+  top: 40%;
+  left: 64%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.public-site .p-pin-pulse {
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(238, 43, 32, 0.25);
+  animation: mapPulse 2.4s infinite ease-out;
+}
+
+@keyframes mapPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+  }
+}
+
+.public-site .p-pin-marker {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(238, 43, 32, 0.6));
+  position: relative;
+  z-index: 2;
+}
+
+.public-site .p-pin-marker svg {
+  width: 100%;
+  height: 100%;
+}
+
+.public-site .p-map-tooltip-card {
+  background: rgba(14, 14, 18, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 12px 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+
+.public-site .p-tooltip-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.public-site .p-tooltip-badge strong {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.public-site .p-tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ee2b20;
+}
+
+.public-site .p-map-tooltip-card p {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #a0a0ae;
+  margin: 0;
+}
+
+/* 4. 4-Photo Showcase Gallery Grid */
+.public-site .p-visit-gallery-section {
+  padding: 0 0 clamp(60px, 8vw, 100px);
+  background: #050507;
+}
+
+.public-site .p-visit-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.public-site .p-gallery-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #000;
+  aspect-ratio: 16 / 11;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.public-site .p-gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.public-site .p-gallery-card:hover img {
+  transform: scale(1.05);
+}
+
+.public-site .p-gallery-card:hover {
+  border-color: rgba(238, 43, 32, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(238, 43, 32, 0.15);
+}
+
+.public-site .p-gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+  display: flex;
+  align-items: center;
+}
+
+.public-site .p-gallery-caption span {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+
+  .public-site .p-visit-hero-grid,
+  .public-site .p-visit-map-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .public-site .p-visit-info-strip {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .public-site .p-visit-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .public-site .p-visit-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-site .p-map-tooltip-card {
+    white-space: normal;
+    padding: 8px 12px;
   }
 }
