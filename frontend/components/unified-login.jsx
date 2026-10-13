@@ -184,8 +184,6 @@ export default function UnifiedLogin({ fromWorkspace = false, createAccount = fa
             Great cars.
             <br />
             Good people.
-            <br />
-            <em>One place to sign in.</em>
           </h1>
           <p>
             Find your next drive or keep the showroom moving. Your account takes
@@ -208,7 +206,7 @@ export default function UnifiedLogin({ fromWorkspace = false, createAccount = fa
         </div>
         <div className="ws-login-photo">
           <img
-            src="/assets/optimized/bmw-900-24d7056e377e.webp"
+            src="/site-media/assets/optimized/bmw-900-24d7056e377e.webp"
             alt="BMW from the showroom collection"
           />
           <span>

@@ -14,8 +14,8 @@ class Command(BaseCommand):
         parser.add_argument(
             '--include-frontend-assets',
             action='store_true',
-            default=True,
-            help='Also upload frontend showcase assets (audi, bmw, mercedes, hero, etc.)',
+            default=False,
+            help='Also upload frontend showcase assets. Omit this for normal R2 media syncs.',
         )
 
     def handle(self, *args, **options):

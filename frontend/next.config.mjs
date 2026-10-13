@@ -12,6 +12,7 @@ const nextConfig = {
   async rewrites() {
     return process.env.DJANGO_API_URL
       ? [
+          { source: "/site-media/:path*", destination: `${process.env.DJANGO_API_URL}/api/site-media/:path*` },
           { source: "/api/workspace/:path+", destination: `${process.env.DJANGO_API_URL}/api/workspace/:path+/` },
           ...["admin"].flatMap((prefix) => [
             { source: `/${prefix}`, destination: `${process.env.DJANGO_API_URL}/${prefix}/` },
@@ -25,19 +26,6 @@ const nextConfig = {
           },
         ]
       : [];
-  },
-  async headers() {
-    return [
-      {
-        source: "/assets/optimized/:file(.*\\.webp)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-    ];
   },
 };
 export default nextConfig;

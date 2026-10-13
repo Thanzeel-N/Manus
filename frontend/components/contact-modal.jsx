@@ -2,13 +2,13 @@
 
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
 import Icon from "./icon";
+import { submitEnquiry } from "../lib/enquiries";
 
 const ContactModalContext = createContext(null);
 
 export function useContactModal() {
   const context = useContext(ContactModalContext);
   if (!context) {
-    // Return a graceful fallback if used outside provider
     return {
       openContactModal: () => {},
       closeContactModal: () => {},
@@ -41,19 +41,6 @@ export function ContactButton({
     </button>
   );
 }
-
-const INTEREST_PRESETS = [
-  { id: "visit", label: "Showroom Visit", value: "Visiting the showroom", icon: "pin" },
-  { id: "testdrive", label: "Test Drive", value: "Book a test drive", icon: "wheel" },
-  { id: "buy", label: "Buying a Car", value: "Buying a car", icon: "car" },
-  { id: "general", label: "General Enquiry", value: "Help me choose", icon: "mail" },
-];
-
-const TIME_SLOTS = [
-  { id: "morning", label: "Morning", time: "10:00 AM – 1:00 PM" },
-  { id: "afternoon", label: "Afternoon", time: "1:00 PM – 5:00 PM" },
-  { id: "evening", label: "Evening", time: "5:00 PM – 7:30 PM" },
-];
 
 export function ContactModalProvider({ children }) {
   const dialogRef = useRef(null);
@@ -146,7 +133,6 @@ export function ContactModalProvider({ children }) {
       const target = e.target;
       if (!target) return;
 
-      // Check if clicked element or parent has contact trigger attributes or hrefs
       const anchor = target.closest("a");
       const button = target.closest("button");
 
@@ -162,7 +148,6 @@ export function ContactModalProvider({ children }) {
 
       if (anchor) {
         const href = anchor.getAttribute("href") || "";
-        // Check for contact hash or links
         if (
           href === "#contact" ||
           href === "/visit#contact" ||
@@ -179,7 +164,6 @@ export function ContactModalProvider({ children }) {
       }
     }
 
-    // Auto-open if URL has #contact on load
     if (typeof window !== "undefined") {
       if (window.location.hash === "#contact") {
         openContactModal({
@@ -212,21 +196,7 @@ export function ContactModalProvider({ children }) {
     const message = slot ? `[Preferred Slot: ${slot}] ${rawMessage}`.trim() : rawMessage;
 
     try {
-      const response = await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, email, interest, date, message }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          result.detail ||
-            Object.entries(result)
-              .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(" ") : value}`)
-              .join(" ") ||
-            "Unable to submit enquiry. Please check your details."
-        );
-      }
+      const result = await submitEnquiry({ name, phone, email, interest, date, message });
       setSent(true);
       setFeedback(
         `Thank you, ${name}. Your enquiry #${result.reference} has been received. Our showroom concierge will contact you shortly to confirm.`
@@ -237,6 +207,7 @@ export function ContactModalProvider({ children }) {
       setBusy(false);
     }
   }
+
   return (
     <ContactModalContext.Provider
       value={{
@@ -279,103 +250,122 @@ export function ContactModalProvider({ children }) {
           <Icon name="close" size={20} />
         </button>
 
-        <form className="p-contact-form" onSubmit={submit}>
-          <div className="p-form-heading">
-            <span>
-              <Icon name="mail" size={22} />
-            </span>
-            <div>
-              <p className="p-eyebrow">A PERSONAL CONVERSATION</p>
-              <h2 id="contact-modal-title">{modalTitle}</h2>
+        <div className="p-modal-split-layout">
+          {/* Left Column: Car visual */}
+          <div className="p-modal-media-col">
+            <img
+              src="/site-media/assets/modal-contact-car.jpg"
+              alt="Manu’s Car World Luxury Vehicle"
+              className="p-modal-media-img"
+              loading="eager"
+            />
+            <div className="p-modal-media-overlay">
+              <span className="p-modal-media-badge">MANU’S CAR WORLD</span>
+              <p className="p-modal-media-tagline">Certified Pre-Owned Luxury</p>
             </div>
           </div>
 
-          <div className="p-field-grid">
-            <label>
-              Your name
-              <input
-                name="name"
-                autoComplete="name"
-                required
-                maxLength={100}
-                placeholder="Full name"
-              />
-            </label>
+          {/* Right Column: Original Form */}
+          <form className="p-contact-form" onSubmit={submit}>
+            <div className="p-form-heading">
+              <span>
+                <Icon name="mail" size={22} />
+              </span>
+              <div>
+                <p className="p-eyebrow">A PERSONAL CONVERSATION</p>
+                <h2 id="contact-modal-title">{modalTitle}</h2>
+              </div>
+            </div>
 
-            <label>
-              Phone number
-              <input
-                name="phone"
-                autoComplete="tel"
-                type="tel"
-                required
-                minLength={7}
-                maxLength={20}
-                placeholder="Your contact number"
-              />
-            </label>
+            <div className="p-field-grid">
+              <label>
+                Your name
+                <input
+                  name="name"
+                  autoComplete="name"
+                  required
+                  maxLength={100}
+                  placeholder="Full name"
+                />
+              </label>
 
-            <label className="p-field-wide">
-              Email <span>(optional)</span>
-              <input
-                name="email"
-                type="email"
-                autoComplete="email"
-                maxLength={254}
-                placeholder="you@example.com"
-              />
-            </label>
+              <label>
+                Phone number
+                <input
+                  name="phone"
+                  autoComplete="tel"
+                  type="tel"
+                  required
+                  minLength={7}
+                  maxLength={20}
+                  pattern={"(?:\\+)?[0-9 \\(\\)\\-]{7,20}"}
+                  inputMode="tel"
+                  placeholder="Your contact number"
+                />
+              </label>
 
-            <label className="p-field-wide">
-              I’m interested in
-              <select
-                name="interest"
-                value={activeInterest}
-                onChange={(e) => setActiveInterest(e.target.value)}
-              >
-                <option value="Visiting the showroom">Visiting the showroom</option>
-                <option value="Book a test drive">Book a test drive</option>
-                <option value="Buying a car">Buying a car</option>
-                <option value="Help me choose">Help me choose</option>
-                <option value="Changing a test-drive request">Changing a test-drive request</option>
-              </select>
-            </label>
+              <label className="p-field-wide">
+                Email <span>(optional)</span>
+                <input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  maxLength={254}
+                  placeholder="you@example.com"
+                />
+              </label>
 
-            <label className="p-field-wide">
-              Preferred callback or visit date <span>(optional)</span>
-              <input name="date" type="date" min={minDate} />
-            </label>
+              <label className="p-field-wide">
+                I’m interested in
+                <select
+                  name="interest"
+                  value={activeInterest}
+                  onChange={(e) => setActiveInterest(e.target.value)}
+                >
+                  <option value="Visiting the showroom">Visiting the showroom</option>
+                  <option value="Book a test drive">Book a test drive</option>
+                  <option value="Buying a car">Buying a car</option>
+                  <option value="Help me choose">Help me choose</option>
+                  <option value="Changing a test-drive request">Changing a test-drive request</option>
+                </select>
+              </label>
 
-            <label className="p-field-wide">
-              Your message
-              <textarea
-                name="message"
-                rows={4}
-                maxLength={5000}
-                placeholder="A car you like, a question you have, or what you’re looking for…"
-              />
-            </label>
-          </div>
+              <label className="p-field-wide">
+                Preferred callback or visit date <span>(optional)</span>
+                <input name="date" type="date" min={minDate} />
+              </label>
 
-          <button className="p-button" type="submit" disabled={busy || sent}>
-            {busy ? "Sending your enquiry…" : sent ? "Enquiry received" : "Send my enquiry"}
-            <Icon name={sent ? "check" : "northeast"} size={18} />
-          </button>
+              <label className="p-field-wide">
+                Your message
+                <textarea
+                  name="message"
+                  rows={4}
+                  maxLength={5000}
+                  placeholder="A car you like, a question you have, or what you’re looking for…"
+                />
+              </label>
+            </div>
 
-          <p className="p-form-privacy">
-            Your details are shared with the showroom team for this enquiry.
-            Appointments and vehicle availability are confirmed separately.
-          </p>
+            <button className="p-button" type="submit" disabled={busy || sent}>
+              {busy ? "Sending your enquiry…" : sent ? "Enquiry received" : "Send my enquiry"}
+              <Icon name={sent ? "check" : "northeast"} size={18} />
+            </button>
 
-          {feedback && (
-            <p
-              className={`p-form-feedback ${sent ? "is-success" : ""}`}
-              role={sent ? "status" : "alert"}
-            >
-              {feedback}
+            <p className="p-form-privacy">
+              Your details are shared with the showroom team for this enquiry.
+              Appointments and vehicle availability are confirmed separately.
             </p>
-          )}
-        </form>
+
+            {feedback && (
+              <p
+                className={`p-form-feedback ${sent ? "is-success" : ""}`}
+                role={sent ? "status" : "alert"}
+              >
+                {feedback}
+              </p>
+            )}
+          </form>
+        </div>
       </dialog>
     </ContactModalContext.Provider>
   );

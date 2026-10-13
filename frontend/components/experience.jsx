@@ -16,7 +16,7 @@ const slides = [
     title: "People to help you choose.",
     text: "Tell our team what you need from your next car. We’ll help you compare options and discuss the available ownership and service records before you decide.",
     image: "advice",
-    alt: "Illustrative advisor showing a car interior to customers",
+    alt: "Manu's Car World team members reviewing vehicle details in the showroom",
     link: "Talk to our team",
     interest: "Help me choose",
   },

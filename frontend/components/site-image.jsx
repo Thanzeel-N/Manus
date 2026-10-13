@@ -8,10 +8,18 @@ export default function SiteImage({
   priority = false,
 }) {
   const image = images[name];
+  const src = `/site-media${image.src}`;
+  const srcSet = image.srcSet
+    .split(",")
+    .map((candidate) => {
+      const [url, width] = candidate.trim().split(/\s+/);
+      return `/site-media${url} ${width}`;
+    })
+    .join(", ");
   return (
     <img
-      src={image.src}
-      srcSet={image.srcSet}
+      src={src}
+      srcSet={srcSet}
       sizes={sizes}
       width={image.width}
       height={image.height}

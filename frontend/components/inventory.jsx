@@ -15,7 +15,7 @@ export const cars = [
     fuel: "Diesel",
     body: "Sedan",
     price: 32.5,
-    image: "/assets/bmw.jpg",
+    image: "/site-media/assets/bmw.jpg",
   },
   {
     id: "mercedes",
@@ -27,7 +27,7 @@ export const cars = [
     fuel: "Diesel",
     body: "Sedan",
     price: 29.9,
-    image: "/assets/mercedes.jpg",
+    image: "/site-media/assets/mercedes.jpg",
   },
   {
     id: "audi",
@@ -39,7 +39,7 @@ export const cars = [
     fuel: "Petrol",
     body: "SUV",
     price: 46.5,
-    image: "/assets/audi.jpg",
+    image: "/site-media/assets/audi.jpg",
   },
 ];
 

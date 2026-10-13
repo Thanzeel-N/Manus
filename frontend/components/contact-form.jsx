@@ -1,16 +1,28 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "./icon";
+import { submitEnquiry } from "../lib/enquiries";
 
 export default function ContactForm({
   interest = "Help me choose",
   title = "How can we help?",
   button = "Send enquiry",
   vehicle = false,
+  requireMessage = false,
 }) {
   const [busy, setBusy] = useState(false),
     [sent, setSent] = useState(false),
-    [feedback, setFeedback] = useState("");
+    [feedback, setFeedback] = useState(""),
+    [minDate, setMinDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    setMinDate(`${year}-${month}-${day}`);
+  }, []);
+
   async function submit(event) {
     event.preventDefault();
     if (busy || sent) return;
@@ -18,29 +30,14 @@ export default function ContactForm({
     setBusy(true);
     setFeedback("");
     try {
-      const response = await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: fields.get("name"),
-          phone: fields.get("phone"),
-          email: fields.get("email") || "",
-          interest: fields.get("interest") || interest,
-          date: fields.get("date") || null,
-          message: fields.get("message") || "",
-        }),
+      const result = await submitEnquiry({
+        name: fields.get("name"),
+        phone: fields.get("phone"),
+        email: fields.get("email") || "",
+        interest: fields.get("interest") || interest,
+        date: fields.get("date") || null,
+        message: fields.get("message") || "",
       });
-      const result = await response.json();
-      if (!response.ok)
-        throw new Error(
-          result.detail ||
-            Object.entries(result)
-              .map(
-                ([key, value]) =>
-                  `${key}: ${Array.isArray(value) ? value.join(" ") : value}`,
-              )
-              .join(" "),
-        );
       setSent(true);
       setFeedback(
         `Thank you. Enquiry #${result.reference} has reached our team. We’ll contact you about the next step.`,
@@ -54,7 +51,7 @@ export default function ContactForm({
     }
   }
   return (
-    <form className="p-contact-form" onSubmit={submit}>
+    <form className="p-contact-form" onSubmit={submit} aria-busy={busy}>
       <div className="p-form-heading">
         <span>
           <Icon name={vehicle ? "exchange" : "mail"} size={22} />
@@ -84,6 +81,8 @@ export default function ContactForm({
             required
             minLength={7}
             maxLength={20}
+            pattern={"(?:\\+)?[0-9 \\(\\)\\-]{7,20}"}
+            inputMode="tel"
             placeholder="Your contact number"
           />
         </label>
@@ -100,6 +99,7 @@ export default function ContactForm({
         <label className="p-field-wide">
           I’m interested in
           <select name="interest" defaultValue={interest}>
+            <option>General enquiry</option>
             <option>Help me choose</option>
             <option>Buying a car</option>
             <option>Selling or exchanging my car</option>
@@ -109,7 +109,7 @@ export default function ContactForm({
         </label>
         <label className="p-field-wide">
           Preferred callback or visit date <span>(optional)</span>
-          <input name="date" type="date" />
+          <input name="date" type="date" min={minDate} />
         </label>
         <label className="p-field-wide">
           {vehicle ? "Tell us about your car" : "Your message"}
@@ -117,7 +117,7 @@ export default function ContactForm({
             name="message"
             rows={4}
             maxLength={5000}
-            required={vehicle}
+            required={vehicle || requireMessage}
             placeholder={
               vehicle
                 ? "Make, model, year, mileage and anything else we should know…"
@@ -126,7 +126,7 @@ export default function ContactForm({
           />
         </label>
       </div>
-      <button className="p-button" disabled={busy || sent}>
+      <button className="p-button" type="submit" disabled={busy || sent}>
         {busy ? "Sending your enquiry…" : sent ? "Enquiry received" : button}
         <Icon name={sent ? "check" : "northeast"} size={18} />
       </button>
@@ -134,14 +134,16 @@ export default function ContactForm({
         Your details are shared with the showroom team for this enquiry.
         Appointments and vehicle availability are confirmed separately.
       </p>
-      {feedback && (
-        <p
-          className={`p-form-feedback ${sent ? "is-success" : ""}`}
-          role={sent ? "status" : "alert"}
-        >
-          {feedback}
-        </p>
-      )}
+      <div aria-live="polite" aria-atomic="true">
+        {feedback && (
+          <p
+            className={`p-form-feedback ${sent ? "is-success" : ""}`}
+            role={sent ? "status" : "alert"}
+          >
+            {feedback}
+          </p>
+        )}
+      </div>
     </form>
   );
 }

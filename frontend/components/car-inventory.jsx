@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { matchesCarSearch } from "../lib/car-search";
 import Icon from "./icon";
 import VehicleImage from "./vehicle-image";
+
+const BODY_VALUES = ["Sedan", "SUV", "Hatchback", "Coupe", "MPV"];
+
 const defaults = {
   q: "",
   make: "all",
@@ -14,6 +18,192 @@ const defaults = {
   year: "all",
   sort: "newest",
 };
+
+function CarCardMedia({ car, active }) {
+  const videoRef = useRef(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const photos = useMemo(() => {
+    const items = (car.images || []).filter((item) => item?.url);
+    if (car.image && !items.some((item) => item.url === car.image)) {
+      items.unshift({ url: car.image, caption: "" });
+    }
+    return items;
+  }, [car.image, car.images]);
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(preference.matches);
+    update();
+    preference.addEventListener("change", update);
+    return () => preference.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!active) {
+      setPhotoIndex(0);
+      setVideoPlaying(false);
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+      return;
+    }
+
+    if (car.video && !videoFailed && !reducedMotion) {
+      video?.play().catch(() => {});
+      return () => {
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      };
+    }
+
+    if (photos.length < 2) return;
+    setPhotoIndex(1);
+    if (reducedMotion) return;
+    const timer = window.setInterval(
+      () => setPhotoIndex((index) => (index + 1) % photos.length),
+      1200,
+    );
+    return () => window.clearInterval(timer);
+  }, [active, car.video, photos, reducedMotion, videoFailed]);
+
+  const photo = photos[photoIndex] || photos[0];
+  return (
+    <div className="car-media-preview">
+      {photo ? (
+        <VehicleImage
+          key={photo.url}
+          sampleId={car.is_sample ? car.id : undefined}
+          src={photo.url}
+          alt={photo.caption || `${car.name} — photo ${photoIndex + 1}`}
+          loading="lazy"
+        />
+      ) : (
+        <span className="photo-placeholder">Photos coming soon</span>
+      )}
+      {car.video && !videoFailed && !reducedMotion && (
+        <video
+          ref={videoRef}
+          className={active && videoPlaying ? "is-active" : ""}
+          src={car.video}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={`${car.name} video preview`}
+          onPlaying={() => setVideoPlaying(true)}
+          onError={() => setVideoFailed(true)}
+        />
+      )}
+      {!car.video && photos.length > 1 && (
+        <span className="car-media-count" aria-hidden="true">
+          {photoIndex + 1} / {photos.length}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function CarCard({ car, saved, onToggleSaved }) {
+  const router = useRouter();
+  const [previewActive, setPreviewActive] = useState(false);
+  const detailHref = `/cars/${car.id}`;
+
+  function openCard(event) {
+    if (event.defaultPrevented || event.target.closest("a, button")) return;
+    router.push(detailHref);
+  }
+
+  return (
+    <article
+      className="car-card"
+      role="link"
+      tabIndex={0}
+      aria-label={`View ${car.name} details`}
+      onClick={openCard}
+      onKeyDown={(event) => {
+        if (
+          event.target === event.currentTarget &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
+          event.preventDefault();
+          router.push(detailHref);
+        }
+      }}
+      onMouseEnter={() => setPreviewActive(true)}
+      onMouseLeave={() => setPreviewActive(false)}
+      onFocusCapture={() => setPreviewActive(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setPreviewActive(false);
+        }
+      }}
+    >
+      <div className="car-image">
+        <CarCardMedia car={car} active={previewActive} />
+        <span className="car-badge">
+          {car.status !== "available" ? car.status : car.body}
+          {car.video && <Icon name="play" size={12} />}
+        </span>
+        <button
+          type="button"
+          className="save-car"
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggleSaved(car.id);
+          }}
+          aria-label={`${saved ? "Unsave" : "Save"} ${car.name}`}
+          aria-pressed={saved}
+        >
+          <Icon name="heart" size={19} filled={saved} />
+        </button>
+      </div>
+      <div className="car-content">
+        <div className="car-meta">
+          {car.year} · {car.variant}
+        </div>
+        <h3>{car.name}</h3>
+        <div className="car-specs">
+          <span>
+            <Icon name="gauge" size={14} />
+            {car.km} km
+          </span>
+          <span>
+            <Icon name="fuel" size={14} />
+            {car.fuel}
+          </span>
+          <span>
+            <Icon name="settings" size={14} />
+            {car.transmission}
+          </span>
+        </div>
+        <div className="car-bottom">
+          <div className="price">
+            ₹{car.price.toFixed(2)} lakh
+            <small>
+              {car.is_sample ? "Illustrative price" : car.condition}
+            </small>
+          </div>
+          <span className="car-detail-link" aria-hidden="true">
+            <Icon name="northeast" size={18} />
+          </span>
+        </div>
+        <a className="stock-book" href={`${detailHref}#test-drive`}>
+          {car.status === "available"
+            ? "View details & book a test drive"
+            : "View car details"}{" "}
+          <Icon name="arrow" size={17} />
+        </a>
+      </div>
+    </article>
+  );
+}
 
 export default function Inventory({
   cars = [],
@@ -50,7 +240,11 @@ export default function Inventory({
       Object.fromEntries(
         Object.entries(defaults).map(([key, value]) => [
           key,
-          query.get(key) || value,
+          key === "body"
+            ? BODY_VALUES.includes(query.get(key))
+              ? query.get(key)
+              : value
+            : query.get(key) || value,
         ]),
       ),
     );
@@ -97,10 +291,7 @@ export default function Inventory({
         (filters.transmission === "all" ||
           car.transmission === filters.transmission) &&
         (filters.year === "all" || car.year >= Number(filters.year)) &&
-        (category === "all" ||
-          (category === "saved"
-            ? saved.includes(car.id)
-            : car.body === category)),
+        (category === "all" || saved.includes(car.id)),
     )
     .sort((a, b) =>
       filters.sort === "price-low"
@@ -233,12 +424,7 @@ export default function Inventory({
                 ))}
               </select>
             </label>
-            {select(
-              "body",
-              "Body style",
-              [...new Set(cars.map((car) => car.body))],
-              "All body styles",
-            )}
+            {select("body", "Body style", BODY_VALUES, "All body styles")}
             {select(
               "fuel",
               "Fuel",
@@ -277,11 +463,10 @@ export default function Inventory({
         <div className="tabs" role="group" aria-label="Car category">
           {[
             ["all", "All cars"],
-            ["Sedan", "Sedans"],
-            ["SUV", "SUVs"],
             ["saved", `Saved ${saved.length}`],
           ].map(([value, label]) => (
             <button
+              type="button"
               key={value}
               className={category === value ? "selected" : ""}
               aria-pressed={category === value}
@@ -312,87 +497,12 @@ export default function Inventory({
       <div id="car-grid" className="car-grid" aria-live="polite">
         {filtered.length ? (
           filtered.map((car) => (
-            <article className="car-card" key={car.id}>
-              <div className="car-image">
-                <a href={`/cars/${car.id}`} aria-label={`View ${car.name}`}>
-                  {car.image ? (
-                    <VehicleImage
-                      sampleId={car.is_sample ? car.id : undefined}
-                      src={car.image}
-                      alt={
-                        car.is_sample
-                          ? `${car.name} — illustrative photo`
-                          : car.name
-                      }
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span className="photo-placeholder">
-                      Photos coming soon
-                    </span>
-                  )}
-                </a>
-                <span className="car-badge">
-                  {car.status !== "available" ? car.status : car.body}
-                  {car.video && <Icon name="play" size={12} />}
-                </span>
-                <button
-                  className="save-car"
-                  onClick={() => toggleSaved(car.id)}
-                  aria-label={`${saved.includes(car.id) ? "Unsave" : "Save"} ${car.name}`}
-                  aria-pressed={saved.includes(car.id)}
-                >
-                  <Icon
-                    name="heart"
-                    size={19}
-                    filled={saved.includes(car.id)}
-                  />
-                </button>
-              </div>
-              <div className="car-content">
-                <div className="car-meta">
-                  {car.year} · {car.variant}
-                </div>
-                <h3>
-                  <a href={`/cars/${car.id}`}>{car.name}</a>
-                </h3>
-                <div className="car-specs">
-                  <span>
-                    <Icon name="gauge" size={14} />
-                    {car.km} km
-                  </span>
-                  <span>
-                    <Icon name="fuel" size={14} />
-                    {car.fuel}
-                  </span>
-                  <span>
-                    <Icon name="settings" size={14} />
-                    {car.transmission}
-                  </span>
-                </div>
-                <div className="car-bottom">
-                  <div className="price">
-                    ₹{car.price.toFixed(2)} lakh
-                    <small>
-                      {car.is_sample ? "Illustrative price" : car.condition}
-                    </small>
-                  </div>
-                  <a
-                    className="car-detail-link"
-                    href={`/cars/${car.id}`}
-                    aria-label={`Details for ${car.name}`}
-                  >
-                    <Icon name="northeast" size={18} />
-                  </a>
-                </div>
-                <a className="stock-book" href={`/cars/${car.id}#test-drive`}>
-                  {car.status === "available"
-                    ? "View details & book a test drive"
-                    : "View car details"}{" "}
-                  <Icon name="arrow" size={17} />
-                </a>
-              </div>
-            </article>
+            <CarCard
+              key={car.id}
+              car={car}
+              saved={saved.includes(car.id)}
+              onToggleSaved={toggleSaved}
+            />
           ))
         ) : (
           <div className="empty">
@@ -408,7 +518,7 @@ export default function Inventory({
             </p>
             {!unavailable && (
               <button className="text-link" onClick={reset}>
-                View all cars <Icon name="northeast" size={18} />
+                Reset filters <Icon name="northeast" size={18} />
               </button>
             )}
           </div>

@@ -1,8 +1,27 @@
 from django.db.models import Q
+from django.core.files.storage import default_storage
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_GET
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Car
+
+
+@require_GET
+def site_media(request, path):
+    """Resolve a stable site-media URL to the private R2 object it represents."""
+    parts = path.replace('\\', '/').split('/')
+    if not path or any(part in ('', '.', '..') for part in parts):
+        raise Http404
+
+    key = f"site/{'/'.join(parts)}"
+    if not default_storage.exists(key):
+        raise Http404
+
+    response = HttpResponseRedirect(default_storage.url(key))
+    response['Cache-Control'] = 'private, max-age=300'
+    return response
 
 
 def car_data(car):

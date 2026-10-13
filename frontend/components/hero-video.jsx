@@ -64,7 +64,7 @@ export default function HeroVideo() {
         loop
         playsInline
         preload="auto"
-        poster="/assets/optimized/bmw-900-24d7056e377e.webp"
+        poster="/site-media/assets/optimized/bmw-900-24d7056e377e.webp"
         onLoadedData={() => setLoaded(true)}
         className={loaded ? "is-loaded" : ""}
         disablePictureInPicture
@@ -72,7 +72,7 @@ export default function HeroVideo() {
         tabIndex={-1}
         aria-label="Driving showroom film"
       >
-        <source src="/video/hero-demo.mp4" type="video/mp4" />
+        <source src="/site-media/video/hero-video.MP4" type="video/mp4" />
       </video>
     </div>
   );

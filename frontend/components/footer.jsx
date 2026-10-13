@@ -27,7 +27,7 @@ export default function Footer() {
             <h3>Make it yours</h3>
             <a href="/about">Our story</a>
             <a href="/visit">Plan a showroom visit</a>
-            <a href="/contact">Contact concierge</a>
+            <a href="/contact">Contact us</a>
             <a
               href="/visit#contact"
               data-contact-trigger="true"

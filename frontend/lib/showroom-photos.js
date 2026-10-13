@@ -1,5 +1,5 @@
 export const teamPhoto = {
-  src: "/assets/dealership-consultation.webp",
+  src: "/site-media/images/Confident Team in a Modern Showroom.png",
   alt: "The owner and staff of Manu’s Car World together at the showroom",
   title: "Our owner & team",
   caption: "The people behind your next drive.",
@@ -9,7 +9,7 @@ export const teamPhoto = {
 export const showroomPhotos = [
   {
     id: "display-floor",
-    src: "/assets/dealership-showroom.webp",
+    src: "/site-media/assets/dealership-showroom.webp",
     alt: "The Grand Display Floor at Manu’s Car World showcasing certified luxury vehicles",
     title: "The Grand Display Floor",
     category: "Main Gallery",
@@ -20,7 +20,7 @@ export const showroomPhotos = [
   },
   {
     id: "vip-lounge",
-    src: "/assets/showroom-lounge.jpg",
+    src: "/site-media/assets/showroom-lounge.jpg",
     alt: "VIP Client Lounge with Italian leather seating and barista coffee bar",
     title: "VIP Client Lounge",
     category: "Hospitality",
@@ -31,8 +31,8 @@ export const showroomPhotos = [
   },
   {
     id: "consultation-suite",
-    src: "/assets/dealership-consultation.webp",
-    alt: "Private consultation suite for transparent vehicle record and valuation discussions",
+    src: "/site-media/images/Modern Dealership Consultation.png",
+    alt: "A Manu's Car World advisor discussing vehicle options with a customer",
     title: "Private Consultation Suites",
     category: "Advisory",
     caption: "Quiet, sound-insulated private suites for reviewing vehicle history, transparent financing, and fair trade-in offers.",
@@ -42,8 +42,8 @@ export const showroomPhotos = [
   },
   {
     id: "inspection-studio",
-    src: "/assets/showroom-inspection.jpg",
-    alt: "On-site 150-point diagnostic inspection studio and detailing bay",
+    src: "/site-media/images/SNM09532.JPG",
+    alt: "Manu's Car World specialists assessing a vehicle in the showroom",
     title: "150-Point Diagnostics Studio",
     category: "Technical",
     caption: "State-of-the-art on-site technical inspection studio with hydraulic lift, paint-depth gauges, and full OBD diagnostics.",
@@ -53,7 +53,7 @@ export const showroomPhotos = [
   },
   {
     id: "delivery-suite",
-    src: "/assets/showroom-delivery.jpg",
+    src: "/site-media/assets/showroom-delivery.jpg",
     alt: "Ceremonial delivery and handover suite with softbox lighting",
     title: "Ceremonial Delivery Suite",
     category: "Handover",

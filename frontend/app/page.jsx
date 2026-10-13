@@ -1,10 +1,12 @@
 import PublicShell from "../components/public-shell";
 import HeroVideo from "../components/hero-video";
+import HeroContent from "../components/hero-content";
 import VehicleImage from "../components/vehicle-image";
 import Icon from "../components/icon";
 import SiteImage from "../components/site-image";
 import { ContactBand, FAQ } from "../components/public-sections";
 import { getStock } from "../lib/stock";
+import { SHOWROOM } from "../lib/contact-details";
 
 export const dynamic = "force-dynamic";
 export default async function HomePage() {
@@ -17,43 +19,7 @@ export default async function HomePage() {
       <main id="main-content">
         <section className="p-hero">
           <HeroVideo />
-          <div className="p-container p-hero-content">
-            <p className="p-eyebrow">
-              <span />
-              PRE-OWNED. RECONSIDERED.
-            </p>
-            <h1>
-              Great cars.
-              <br />
-              New possibilities.
-            </h1>
-            <p>
-              The car you’ve been thinking about.
-              <br />
-              The confidence to make it yours.
-            </p>
-            <div className="p-actions">
-              <a className="p-button" href="/cars">
-                Explore our collection
-                <Icon name="northeast" size={18} />
-              </a>
-              <a className="p-hero-link" href="/visit">
-                Experience the showroom
-                <Icon name="arrow" size={19} />
-              </a>
-            </div>
-          </div>
-          <div className="p-hero-bottom p-container">
-            <span>
-              MANU’S CAR WORLD
-              <span className="p-divider" />
-              BUY. SELL. EXCHANGE.
-            </span>
-            <a href="#collection">
-              Discover your next drive
-              <Icon name="down" size={15} />
-            </a>
-          </div>
+          <HeroContent />
         </section>
         <section className="p-container p-assurances" aria-label="Our approach">
           {[
@@ -263,13 +229,13 @@ export default async function HomePage() {
           </div>
           <div className="p-exchange-image">
             <SiteImage
-              name="visit"
-              alt="Manu’s Car World modern showroom display floor"
+              name="advice"
+              alt="Manu’s Car World team helping customers inspect a vehicle"
             />
             <span>
               <Icon name="pin" size={27} />
               <strong>
-                Visit our showroom.<small>Prestige Auto Mile.</small>
+                Visit our showroom.<small>{SHOWROOM.addressLines[0]}.</small>
               </strong>
             </span>
           </div>

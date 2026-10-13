@@ -1073,7 +1073,7 @@ select option {
   padding: 105px 5% 145px;
   background:
     linear-gradient(#050607dd, #050607dd),
-    url("/assets/dealership-showroom.webp") center 55% / cover;
+    url("/site-media/assets/dealership-showroom.webp") center 55% / cover;
 }
 .exchange {
   display: grid;

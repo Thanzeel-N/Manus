@@ -7,8 +7,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "images:optimize": "node scripts/optimize-images.mjs",
-    "prebuild": "npm run images:optimize",
     "preview": "npm run build && next start --hostname 0.0.0.0"
   },
   "dependencies": {
@@ -18,7 +16,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "prettier": "^3.9.7",
-    "sharp": "0.35.4"
+    "prettier": "^3.9.7"
   }
 }

@@ -34,6 +34,7 @@ export default function Header() {
           ["/cars", "Our collection"],
           ["/about", "Our story"],
           ["/visit", "Visit us"],
+          ["/contact", "Contact us"],
         ].map(([href, label]) => (
           <a
             key={href}

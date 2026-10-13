@@ -4,8 +4,10 @@ from django.contrib import admin
 from django.urls import include, path
 from workspace.views import dashboard
 from showroom import customer_auth
+from inventory import views as inventory_views
 
 urlpatterns = [
+    path('api/site-media/<path:path>', inventory_views.site_media, name='site-media'),
     path('api/customer/register/', customer_auth.register),
     path('api/customer/registration-code/', customer_auth.registration_code),
     path('api/customer/password/', customer_auth.password_login),

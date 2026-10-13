@@ -2,12 +2,14 @@
 
 import PublicShell from "../../components/public-shell";
 import Icon from "../../components/icon";
+import SiteImage from "../../components/site-image";
 import { ContactButton } from "../../components/contact-modal";
+import { SHOWROOM } from "../../lib/contact-details";
 
 export default function VisitPage() {
   return (
     <PublicShell>
-      <main id="main-content" className="p-visit-dark-page">
+      <main id="main-content" className="p-visit-page">
         {/* ====================================================================
             1. HERO SECTION: EXPERIENCE IT IN PERSON + SHOWROOM EXTERIOR PHOTO
             ==================================================================== */}
@@ -16,31 +18,42 @@ export default function VisitPage() {
           aria-labelledby="visit-hero-heading"
         >
           <div className="p-container">
+            <div className="p-breadcrumb">
+              <a href="/">Home</a>
+              <Icon name="chevron" size={12} />
+              <span>Visit us</span>
+            </div>
+
             <div className="p-visit-hero-grid">
               {/* Left Column: Title & Text */}
               <div className="p-visit-hero-copy">
-                <span className="p-visit-badge">VISIT US</span>
+                <p className="p-eyebrow">EXPERIENCE IT IN PERSON</p>
                 <h1 id="visit-hero-heading" className="p-visit-hero-title">
-                  Experience
-                  <br />
-                  It in Person
+                  Experience it in person
                 </h1>
-                <div className="p-visit-title-accent" aria-hidden="true" />
                 <p className="p-visit-hero-desc">
-                  Step into our showroom and explore a wide range of premium
-                  vehicles. Meet our team, get expert advice, and find the perfect
-                  car for your journey.
+                  Step into our showroom and explore our curated collection of
+                  certified vehicles. Meet our specialists, receive unhurried
+                  advice, and find the perfect car for your journey.
                 </p>
 
-                <div className="p-visit-hero-cta">
+                <div className="p-visit-hero-actions">
                   <ContactButton
-                    className="p-visit-red-btn"
+                    className="p-button"
                     title="Plan your showroom visit"
                     interest="Visiting the showroom"
                   >
                     Book a Showroom Visit
                     <Icon name="arrow" size={16} />
                   </ContactButton>
+
+                  <a
+                    href="#location"
+                    className="p-button p-button-ghost"
+                  >
+                    Showroom location
+                    <Icon name="northeast" size={16} />
+                  </a>
                 </div>
               </div>
 
@@ -48,72 +61,56 @@ export default function VisitPage() {
               <div className="p-visit-hero-media">
                 <div className="p-visit-photo-frame">
                   <img
-                    src="/images/story-showroom-exterior.jpg"
-                    alt="Leonidaz Motors luxury showroom exterior at dusk"
+                    src="/site-media/images/story-showroom-exterior.jpg"
+                    alt="Manu’s Car World showroom exterior"
                     className="p-visit-exterior-img"
                     width={1280}
                     height={720}
                     loading="eager"
                   />
                   <div className="p-visit-media-badge">
-                    <span>LEONIDAZ MOTORS</span>
+                    <span>MANU’S CAR WORLD</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 3-Column Info Strip Directly Below Hero */}
+            {/* 3-Column Logistics Strip Below Hero (Matches Home Page assurances: no cards, identical size) */}
             <div className="p-visit-info-strip" role="list" aria-label="Showroom Logistics">
               {/* Item 1: Our Location */}
               <div className="p-visit-info-col" role="listitem">
-                <div className="p-visit-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                <div className="p-visit-info-text">
+                <Icon name="pin" size={29} />
+                <div>
                   <h3>Our Location</h3>
                   <address>
-                    123 Main Road,
+                    {SHOWROOM.addressLines[0]}
                     <br />
-                    Calicut, Kerala 673001
+                    {SHOWROOM.addressLines[1]}
                   </address>
                 </div>
               </div>
 
               {/* Item 2: Showroom Hours */}
               <div className="p-visit-info-col" role="listitem">
-                <div className="p-visit-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12 6 12 12 16 14" />
-                  </svg>
-                </div>
-                <div className="p-visit-info-text">
+                <Icon name="clock" size={29} />
+                <div>
                   <h3>Showroom Hours</h3>
                   <p>
-                    Mon - Sat : 9:00 AM - 8:00 PM
+                    {SHOWROOM.hours.openDays}: {SHOWROOM.hours.openTime}
                     <br />
-                    Sunday : 10:00 AM - 6:00 PM
+                    {SHOWROOM.hours.closedDay}: {SHOWROOM.hours.closedText}
                   </p>
                 </div>
               </div>
 
               {/* Item 3: Contact Us */}
               <div className="p-visit-info-col" role="listitem">
-                <div className="p-visit-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                  </svg>
-                </div>
-                <div className="p-visit-info-text">
+                <Icon name="phone" size={29} />
+                <div>
                   <h3>Contact Us</h3>
                   <p>
-                    <a href="tel:+919876543210">+91 98765 43210</a>
-                    <br />
-                    <a href="mailto:info@leonidazmotors.com">
-                      info@leonidazmotors.com
+                    <a href={`tel:${SHOWROOM.phoneHref}`}>
+                      {SHOWROOM.phoneDisplay}
                     </a>
                   </p>
                 </div>
@@ -132,8 +129,8 @@ export default function VisitPage() {
           <div className="p-container">
             <div className="p-visit-panoramic-frame">
               <img
-                src="/images/story-cars-lineup.jpg"
-                alt="Panoramic view inside Leonidaz Motors luxury showroom floor"
+                src="/site-media/images/story-cars-lineup.jpg"
+                alt="Panoramic view inside Manu’s Car World showroom floor"
                 className="p-visit-panoramic-img"
                 width={1920}
                 height={960}
@@ -162,25 +159,25 @@ export default function VisitPage() {
             <div className="p-visit-map-grid">
               {/* Left Column: Come Meet Us Copy */}
               <div className="p-visit-map-copy">
-                <span className="p-visit-badge">EASY TO FIND</span>
+                <p className="p-eyebrow">LOCATION &amp; DIRECTIONS</p>
                 <h2 id="map-heading" className="p-visit-section-title">
                   Come Meet Us
                 </h2>
                 <p className="p-visit-map-desc">
-                  We are conveniently located in the heart of the city. Visit our
-                  showroom to experience our cars up close, take a test drive,
-                  and get personalized assistance from our team.
+                  Find us on the Valluvambram–Mongam Bypass. Visit the showroom
+                  to explore our cars up close, arrange a test drive, and get
+                  personal help from our team.
                 </p>
 
                 <div className="p-visit-map-actions">
                   <a
-                    href="https://maps.google.com/?q=Calicut+Kerala"
+                    href={SHOWROOM.directionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-visit-red-btn"
+                    className="p-button p-button-ghost"
                   >
                     Get Directions
-                    <Icon name="arrow" size={16} />
+                    <Icon name="northeast" size={16} />
                   </a>
                 </div>
               </div>
@@ -275,11 +272,11 @@ export default function VisitPage() {
                       y="210"
                       fill="#50667a"
                       fontSize="11"
-                      fontFamily="system-ui, sans-serif"
+                      fontFamily="'Inter Tight', Arial, sans-serif"
                       fontWeight="500"
                       letterSpacing="0.5"
                     >
-                      Calicut Beach
+                      Valluvambram
                     </text>
                     <circle cx="98" cy="207" r="2.5" fill="#50667a" />
 
@@ -288,9 +285,9 @@ export default function VisitPage() {
                       y="235"
                       fill="#5e5e6c"
                       fontSize="10"
-                      fontFamily="system-ui, sans-serif"
+                      fontFamily="'Inter Tight', Arial, sans-serif"
                     >
-                      Arayidathupalam
+                      Mongam Bypass
                     </text>
 
                     <text
@@ -298,17 +295,17 @@ export default function VisitPage() {
                       y="350"
                       fill="#5e5e6c"
                       fontSize="10"
-                      fontFamily="system-ui, sans-serif"
+                      fontFamily="'Inter Tight', Arial, sans-serif"
                     >
-                      Mini Bypass Rd
+                      Showroom Road
                     </text>
                   </svg>
 
-                  {/* Pulsing Red Showroom Pin Marker */}
+                  {/* Showroom Pin Marker */}
                   <div className="p-map-pin-anchor">
                     <div className="p-pin-pulse" aria-hidden="true" />
                     <div className="p-pin-marker">
-                      <svg viewBox="0 0 24 24" fill="#ee2b20" stroke="#ffffff" strokeWidth="1.5">
+                      <svg viewBox="0 0 24 24" fill="currentColor" stroke="#ffffff" strokeWidth="1.2">
                         <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
                         <circle cx="12" cy="10" r="3" fill="#ffffff" />
                       </svg>
@@ -318,12 +315,12 @@ export default function VisitPage() {
                     <div className="p-map-tooltip-card">
                       <div className="p-tooltip-badge">
                         <span className="p-tooltip-dot" />
-                        <strong>Leonidaz Motors</strong>
+                        <strong>Manu’s Car World</strong>
                       </div>
                       <p>
-                        123 Main Road, Calicut
+                        {SHOWROOM.addressLines[0]}
                         <br />
-                        Kerala 673001
+                        {SHOWROOM.addressLines[1]}
                       </p>
                     </div>
                   </div>
@@ -345,11 +342,11 @@ export default function VisitPage() {
               {/* Photo 1: Showroom Exterior Night */}
               <div className="p-gallery-card">
                 <img
-                  src="/images/story-showroom-exterior.jpg"
-                  alt="Showroom glass building exterior at night"
+                  src="/site-media/images/story-showroom-exterior.jpg"
+                  alt="Manu’s Car World showroom exterior"
                   width={600}
                   height={400}
-                  loading="lazy"
+                  loading="eager"
                 />
                 <div className="p-gallery-caption">
                   <span>Exterior Facade</span>
@@ -358,43 +355,37 @@ export default function VisitPage() {
 
               {/* Photo 2: Luxury Sports Cars on Showroom Floor */}
               <div className="p-gallery-card">
-                <img
-                  src="/images/story-cars-lineup.jpg"
-                  alt="Luxury sports cars inside showroom"
-                  width={600}
-                  height={400}
-                  loading="lazy"
+                <SiteImage
+                  name="visit"
+                  alt="A Manu's Car World advisor discussing vehicle options with a customer"
+                  sizes="(max-width: 700px) 100vw, 50vw"
                 />
                 <div className="p-gallery-caption">
-                  <span>Vehicle Gallery</span>
+                  <span>Personal Consultation</span>
                 </div>
               </div>
 
               {/* Photo 3: VIP Client Consultation Lounge */}
               <div className="p-gallery-card">
-                <img
-                  src="/assets/showroom-lounge.jpg"
-                  alt="VIP consultation lounge with barista and comfortable leather chairs"
-                  width={600}
-                  height={400}
-                  loading="lazy"
+                <SiteImage
+                  name="advice"
+                  alt="Manu's Car World team members reviewing car details in the showroom"
+                  sizes="(max-width: 700px) 100vw, 50vw"
                 />
                 <div className="p-gallery-caption">
-                  <span>VIP Lounge</span>
+                  <span>Personal Guidance</span>
                 </div>
               </div>
 
               {/* Photo 4: Performance Car Red Glowing OLED Taillight */}
               <div className="p-gallery-card">
-                <img
-                  src="/images/story-taillight.jpg"
-                  alt="Sports car red OLED taillight detail"
-                  width={600}
-                  height={400}
-                  loading="lazy"
+                <SiteImage
+                  name="assessment"
+                  alt="Manu's Car World specialists assessing a vehicle"
+                  sizes="(max-width: 700px) 100vw, 50vw"
                 />
                 <div className="p-gallery-caption">
-                  <span>Precision Detailing</span>
+                  <span>Vehicle Assessment</span>
                 </div>
               </div>
             </div>

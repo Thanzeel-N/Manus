@@ -6,7 +6,7 @@ export default function VehicleImage({ src, alt, sampleId, ...props }) {
   const element = useRef(null);
   const [failed, setFailed] = useState(false);
   const [fallbackFailed, setFallbackFailed] = useState(false);
-  const fallback = ["bmw", "mercedes", "audi"].includes(sampleId) ? `/assets/${sampleId}.jpg` : "";
+  const fallback = ["bmw", "mercedes", "audi"].includes(sampleId) ? `/site-media/assets/${sampleId}.jpg` : "";
   const image = failed || !src ? (!fallbackFailed && fallback) : src;
   useEffect(() => {
     if (element.current?.complete && !element.current.naturalWidth) {
