@@ -51,7 +51,7 @@ def car_data(car):
 
 @api_view(['GET'])
 def cars(request):
-    stock = Car.objects.exclude(status='draft').prefetch_related('images')
+    stock = Car.objects.exclude(status__in=['draft', 'sold']).prefetch_related('images')
     if request.GET.get('q'):
         stock = stock.filter(
             Q(name__icontains=request.GET['q'])
@@ -64,7 +64,7 @@ def cars(request):
 @api_view(['GET'])
 def car_detail(request, slug):
     car = get_object_or_404(
-        Car.objects.exclude(status='draft').prefetch_related('images'),
+        Car.objects.exclude(status__in=['draft', 'sold']).prefetch_related('images'),
         slug=slug,
     )
     return Response(car_data(car))

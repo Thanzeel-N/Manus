@@ -1,5 +1,5 @@
 export const teamPhoto = {
-  src: "/site-media/images/Confident Team in a Modern Showroom.png",
+  src: "/site-media/images/SNM09644.JPG",
   alt: "The owner and staff of Manu’s Car World together at the showroom",
   title: "Our owner & team",
   caption: "The people behind your next drive.",

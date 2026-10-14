@@ -24,7 +24,7 @@ Open http://127.0.0.1:8017/admin/ and sign in with the account created by `creat
 1. Add a car, specifications, description, price in lakh INR, and one feature per line.
 2. Use **Photos** to select up to 20 images at once (JPG, PNG, WebP; 10 MB each). Individual gallery rows support captions, removal and ordering. The lowest position is the cover image.
 3. Optionally upload a short walkaround under **Video** (MP4/WebM, up to 100 MB). No duration limit or transcoding is implemented; use a web-compatible, compressed clip.
-4. Set status to **available** to publish. Drafts are private. Reserved/sold cars remain visible but cannot be booked.
+4. Set status to **available** to publish. Reserved cars remain visible but cannot be booked. Draft and sold cars stay private to the workspace.
 5. Add slots under **Test drive slots**, or generate the next two weeks with:
 
 ```powershell
@@ -92,9 +92,9 @@ The browser check expects Next.js at localhost port 3003, a running backend with
 
 ## Production configuration
 
-Set `DJANGO_DEBUG=0`, a unique `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, and `CSRF_TRUSTED_ORIGINS`. Configure `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST` and optionally `POSTGRES_PORT` to use PostgreSQL. SQLite is used only for local development and current tests.
+Set `DJANGO_DEBUG=0`, a unique `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, and `CSRF_TRUSTED_ORIGINS`. Configure `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_HOST` and optionally `MYSQL_PORT` to use MySQL. SQLite is used only for local development and current tests.
 
-Deploy Django behind an HTTPS-capable application server and reverse proxy. Run migrations and `collectstatic`; serve static files and uploaded media via durable storage and a web server (Django only serves media directly with DEBUG enabled). The Next.js `/media/` rewrite assumes the Django origin can serve media. Enforce upload limits at the proxy and use a shared cache for throttling. Replace demo inventory and illustrative photos before launch; verify PostgreSQL and actual production storage in staging.
+Deploy Django behind an HTTPS-capable application server and reverse proxy. Run migrations and `collectstatic`; serve static files and uploaded media via durable storage and a web server (Django only serves media directly with DEBUG enabled). The Next.js `/media/` rewrite assumes the Django origin can serve media. Enforce upload limits at the proxy and use a shared cache for throttling. Replace demo inventory and illustrative photos before launch; verify MySQL and actual production storage in staging.
 
 Admin upload handling follows [Django’s admin documentation](https://docs.djangoproject.com/en/5.2/ref/contrib/admin/).
 
@@ -156,8 +156,8 @@ reset to `pending` only when the provider has confirmed no message was accepted.
 Demotion, deactivation or a changed phone cancels queued delivery to the old recipient/number. Alerts created without a phone
 remain dashboard-only; saving a phone affects future alerts. Set a retention policy for alert records appropriate to your business.
 
-Validation: `python manage.py test showroom workspace --noinput`; `npm.cmd run build` from the repository root.
-Configure HTTPS, PostgreSQL, shared throttling cache, SMTP and durable storage as described above before deployment.
+Validation: `python manage.py test --noinput`; `python manage.py verify_r2_media`; and `npm.cmd run build` from `frontend`.
+Configure HTTPS, MySQL, shared throttling cache, SMTP and durable storage as described above before deployment.
 HSTS for all subdomains and browser preloading remain disabled until the deployment domain and all its subdomains have been verified for HTTPS;
 the deployment check reports those two domain-specific warnings. The local development environment intentionally keeps DEBUG enabled.
 Browser coverage: from `frontend`, run `node scripts/verify-owner-alerts.mjs` against `SITE_URL` (default `http://localhost:3011`).

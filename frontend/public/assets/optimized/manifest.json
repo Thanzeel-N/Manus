@@ -13,6 +13,13 @@
     "bytes": 27212,
     "srcSet": "/assets/optimized/visit-480-4fb61b7e0f71.webp 480w, /assets/optimized/visit-800-5048d3c01e5b.webp 800w, /assets/optimized/visit-1200-f0b6a514cbcc.webp 1200w, /assets/optimized/visit-1536-dc84c187d60a.webp 1536w"
   },
+  "showroomExterior": {
+    "src": "/assets/optimized/showroom-exterior-960.webp",
+    "width": 960,
+    "height": 719,
+    "bytes": 144954,
+    "srcSet": "/assets/optimized/showroom-exterior-480.webp 480w, /assets/optimized/showroom-exterior-960.webp 960w, /assets/optimized/showroom-exterior-1456.webp 1456w"
+  },
   "team": {
     "src": "/assets/optimized/team-800-17fcb85bad4f.webp",
     "width": 800,

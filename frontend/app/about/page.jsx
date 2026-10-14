@@ -1,12 +1,11 @@
 import PublicShell from "../../components/public-shell";
 import Icon from "../../components/icon";
-import SiteImage from "../../components/site-image";
 import { ContactBand, Process } from "../../components/public-sections";
 
 export const metadata = {
   title: "Our story | Manu’s Car World",
   description:
-    "Meet the people behind Manu’s Car World and our personal approach to finding your next car.",
+    "Established in 1999, Manu’s Car World is a pre-owned car dealership in Valluvambram, Malappuram. Meet our team and discover our personal approach.",
 };
 
 export default function AboutPage() {
@@ -43,11 +42,12 @@ export default function AboutPage() {
           aria-label="Our showroom team"
         >
           <div className="p-story-photo-frame">
-            <SiteImage
-              name="team"
+            <img
+              src="/site-media/images/SNM09644.JPG"
               alt="The owner and staff of Manu’s Car World together at the showroom"
-              sizes="100vw"
-              priority
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
             />
             <div className="p-story-photo-caption">
               <span className="p-story-photo-tag">MANU’S CAR WORLD</span>
@@ -69,17 +69,34 @@ export default function AboutPage() {
               <br />A personal approach to people.
             </h2>
             <p>
-              A showroom is more than the cars on its floor. It’s the people who
-              welcome you, listen to what you need and take the time to talk
-              through your options. That’s the experience we want you to have at
-              Manu’s Car World.
+              Established in 1999, Manu’s Car World is a pre-owned car
+              dealership in Valluvambram, Malappuram. Our collection brings
+              together practical everyday cars and luxury vehicles for
+              customers from the local area and across the district.
             </p>
             <p>
-              Meet our owner and staff, tell us about your everyday drive, and
-              ask the questions that matter to you. From comparing cars and
-              arranging a test drive to discussing paperwork and handover, our
+              A showroom is more than the cars on its floor. Meet our owner and
+              staff, tell us about your everyday drive, and ask the questions
+              that matter to you. From comparing cars and arranging a test
+              drive to discussing finance routes, paperwork and handover, our
               team is here to help you understand the next step.
             </p>
+          </div>
+        </section>
+
+        <section className="p-about-facts-section" aria-label="About Manu's Car World">
+          <div className="p-container p-about-facts">
+            {[
+              ["Since 1999", "Serving Valluvambram and Malappuram"],
+              ["Pre-owned & luxury", "A varied collection of used vehicles"],
+              ["Buy, sell & finance", "Discuss available routes with our team"],
+              ["Mon–Sat · 8:00–8:00", "Sunday closed"],
+            ].map(([fact, detail]) => (
+              <article key={fact}>
+                <strong>{fact}</strong>
+                <span>{detail}</span>
+              </article>
+            ))}
           </div>
         </section>
 

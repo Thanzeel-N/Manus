@@ -96,10 +96,11 @@ The backend supports **Cloudflare R2** (S3-compatible object storage with zero e
    CLOUDFLARE_R2_CUSTOM_DOMAIN=pub-xxxxxxxxxxxxxxxx.r2.dev
    CLOUDFLARE_R2_QUERYSTRING_AUTH=0
    ```
-3. Test your R2 connectivity and verify public media URLs:
+3. Upload the public site media, then verify every production image reference:
    ```powershell
    cd backend
-   python manage.py test_r2
+   python manage.py sync_site_media_to_r2
+   python manage.py verify_r2_media
    ```
 
 *Note: If R2 credentials are omitted, the backend automatically defaults to local `media/` folder storage.*

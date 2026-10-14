@@ -6,6 +6,7 @@ export default function SiteImage({
   alt,
   sizes = "100vw",
   priority = false,
+  className,
 }) {
   const image = images[name];
   const src = `/site-media${image.src}`;
@@ -24,6 +25,7 @@ export default function SiteImage({
       width={image.width}
       height={image.height}
       alt={alt}
+      className={className}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"

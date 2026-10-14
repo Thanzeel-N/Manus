@@ -4,6 +4,7 @@ import HeroVideo from "../components/hero-video";
 import HeroContent from "../components/hero-content";
 import Icon from "../components/icon";
 import SiteImage from "../components/site-image";
+import { HomeCarGrid } from "../components/car-inventory";
 import { ContactBand, FAQ } from "../components/public-sections";
 import { getStock } from "../lib/stock";
 import { SHOWROOM } from "../lib/contact-details";
@@ -59,13 +60,24 @@ const CAR_BRANDS = [
 export const metadata = {
   title: "Manu's Car World — Premium Certified Pre-Owned Cars",
   description:
-    "Explore certified pre-owned luxury cars at Manu's Car World. BMW, Mercedes-Benz, Audi and more. 150-point inspection. 6-month warranty. Kerala's trusted pre-owned luxury dealership.",
+    "Explore certified pre-owned luxury cars at Manu's Car World. BMW, Mercedes-Benz, Audi and more, with detailed inspections and vehicle-specific support from our Valluvambram team.",
 };
 
 export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const { cars } = await getStock();
   const availableCars = cars.filter((car) => car.status === "available");
+  const featuredCars = [...availableCars]
+    .sort((a, b) => Number(Boolean(b.is_featured)) - Number(Boolean(a.is_featured)))
+    .slice(0, 3);
+  const bodyCategories = ["SUV", "Sedan", "Hatchback", "Coupe", "MPV"].map(
+    (name) => ({
+      name,
+      count: availableCars.filter(
+        (car) => String(car.body).toLowerCase() === name.toLowerCase(),
+      ).length,
+    }),
+  );
   return (
     <PublicShell>
       <main id="main-content">
@@ -81,7 +93,7 @@ export default async function HomePage() {
           {[
             [availableCars.length || "Live", "Cars Available Today"],
             ["150-Point", "Certified Inspection"],
-            ["4.4 ★", "Public Customer Rating"],
+            ["4.5 ★", "Public Customer Rating"],
             ["In-house", "RC Transfer Assistance"],
           ].map(([stat, label], index) => (
             <div key={label} className="p-metric-item">
@@ -90,6 +102,59 @@ export default async function HomePage() {
               <span>{label}</span>
             </div>
           ))}
+        </section>
+
+        <section className="p-home-trust-story" aria-labelledby="home-about-heading">
+          <div className="p-container p-home-trust-shell">
+            <div className="p-home-trust-copy">
+              <p className="p-eyebrow">MANU&apos;S CAR WORLD · SINCE 1999</p>
+              <h2 id="home-about-heading">
+                Built on trust.
+                <br />
+                Driven by people.
+              </h2>
+              <p className="p-home-trust-lead">
+                A local pre-owned car destination in Valluvambram, helping
+                customers across Malappuram choose with clarity and confidence.
+              </p>
+              <p>
+                Explore practical and luxury vehicles, understand the available
+                records, and discuss finance, exchange, paperwork and handover
+                with one team from beginning to end.
+              </p>
+              <a className="p-text-link" href="/about">
+                Discover our story
+                <Icon name="northeast" size={18} />
+              </a>
+            </div>
+
+            <div className="p-home-trust-visual">
+              <img
+                src="/site-media/images/SNM09466.JPG"
+                alt="The owner and staff of Manu's Car World together at the showroom"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="p-home-trust-quote">
+                <Icon name="users" size={24} />
+                <p>A car should feel right before it becomes yours.</p>
+              </div>
+            </div>
+
+            <div className="p-home-trust-facts" aria-label="Business highlights">
+              {[
+                ["01", "1999", "Established in Valluvambram"],
+                ["02", "4.5 / 5", "Public customer rating"],
+                ["03", "One team", "From shortlist to handover"],
+              ].map(([number, fact, detail]) => (
+                <article key={number}>
+                  <span>{number}</span>
+                  <strong>{fact}</strong>
+                  <small>{detail}</small>
+                </article>
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="p-container p-assurances" aria-label="Our approach">
@@ -118,6 +183,59 @@ export default async function HomePage() {
               </div>
             </div>
           ))}
+        </section>
+
+        <section
+          className="p-container p-section p-home-collection"
+          aria-labelledby="home-collection-heading"
+        >
+          <div className="p-section-heading">
+            <div>
+              <p className="p-eyebrow">FIND YOUR KIND OF DRIVE</p>
+              <h2 id="home-collection-heading">
+                Start with the shape.
+                <br />
+                Discover the right car.
+              </h2>
+            </div>
+            <div>
+              <p>
+                Browse by body style, then explore a handpicked selection from
+                the cars available now.
+              </p>
+              <a className="p-text-link" href="/cars">
+                View the complete collection
+                <Icon name="northeast" size={18} />
+              </a>
+            </div>
+          </div>
+
+          <nav className="p-category-row" aria-label="Browse by body style">
+            {bodyCategories.map(({ name, count }, index) => (
+              <a
+                key={name}
+                className="p-category-link"
+                href={`/cars?body=${encodeURIComponent(name)}`}
+              >
+                <span className="p-category-index">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <strong>{name}</strong>
+                <small>{count ? `${count} available` : "Explore"}</small>
+                <Icon name="arrow" size={17} />
+              </a>
+            ))}
+          </nav>
+
+          {featuredCars.length ? (
+            <HomeCarGrid cars={featuredCars} />
+          ) : (
+            <div className="p-empty">
+              <Icon name="car" size={32} />
+              <h3>Fresh arrivals are on the way.</h3>
+              <p>Explore the collection or contact our team for current stock.</p>
+            </div>
+          )}
         </section>
 
         <section
@@ -156,8 +274,8 @@ export default async function HomePage() {
                 },
                 {
                   icon: "check",
-                  title: "6-Month / 10,000 km Warranty",
-                  desc: "Peace of mind covering critical mechanical components post-purchase.",
+                  title: "Vehicle-specific Warranty",
+                  desc: "Ask which cover, duration and kilometre limit apply to your chosen car.",
                 },
                 {
                   icon: "exchange",
@@ -185,118 +303,6 @@ export default async function HomePage() {
                     <p>{desc}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="p-story-section">
-          <div className="p-container p-split">
-            <div className="p-editorial-image">
-              <SiteImage
-                name="visit"
-                alt="A spacious modern dealership showroom"
-              />
-              <span className="p-image-caption">
-                A SPACE TO EXPLORE. ROOM TO DECIDE.
-              </span>
-            </div>
-            <div className="p-editorial-copy">
-              <p className="p-eyebrow">MORE THAN A CAR DEALERSHIP</p>
-              <h2>
-                The right car.
-                <br />
-                The right way.
-              </h2>
-              <p>
-                A car is a personal choice. It should feel right in the driver's
-                seat, on your daily commute, and in your plans for what comes
-                next.
-              </p>
-              <p>
-                At Manu's Car World, we make space for that decision. Explore
-                the details, ask your questions and get to know your next car
-                before you make it yours.
-              </p>
-              <a className="p-text-link" href="/about">
-                Get to know Manu's
-                <Icon name="northeast" size={18} />
-              </a>
-              <div className="p-editorial-signature">
-                <span>YOUR NEXT CHAPTER</span>
-                <strong>Starts with a better conversation.</strong>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CUSTOMER REVIEWS */}
-        <section className="p-proof-section" aria-labelledby="reviews-heading">
-          <div className="p-container p-section p-reviews-section">
-            <div className="p-reviews-header">
-              <div>
-                <p className="p-eyebrow">CUSTOMER CONFIDENCE</p>
-                <h2 id="reviews-heading">
-                  A better way
-                  <br />
-                  to buy your next car.
-                </h2>
-              </div>
-              <div className="p-reviews-rating-block">
-                <div className="p-overall-rating">
-                  <span className="p-rating-number">4.4</span>
-                  <div>
-                    <div className="p-stars" aria-label="4.4 out of 5 stars">
-                      <span aria-hidden="true">★★★★☆</span>
-                    </div>
-                    <span className="p-rating-count">
-                      4.4 from 53 public ratings
-                    </span>
-                  </div>
-                </div>
-                <a
-                  href="https://www.justdial.com/Malappuram/MANUS-CAR-WORLD-Near-Urban-Bank-Valluvambram/9999PX483-X483-240120121329-Z4F4_BZDET"
-                  className="p-text-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Read the public rating on Justdial"
-                >
-                  View public rating
-                  <Icon name="northeast" size={16} />
-                </a>
-              </div>
-            </div>
-            <div className="p-reviews-grid">
-              {[
-                {
-                  name: "Transparent guidance",
-                  text: "Review the car, its available records, and the paperwork with a dedicated advisor before deciding.",
-                  icon: "document",
-                },
-                {
-                  name: "Unhurried experience",
-                  text: "Shortlist vehicles online, arrange a visit, and take the time you need to compare them in person.",
-                  icon: "car",
-                },
-                {
-                  name: "End-to-end support",
-                  text: "From valuation and finance discussions to handover and ownership transfer, our team stays involved.",
-                  icon: "users",
-                },
-              ].map(({ name, text, icon }, index) => (
-                <article key={name} className="p-review-card">
-                  <div className="p-review-card-top" aria-hidden="true">
-                    <span>0{index + 1}</span>
-                    <Icon name={icon} size={20} />
-                  </div>
-                  <p className="p-review-text">{text}</p>
-                  <div className="p-review-author">
-                    <div>
-                      <strong>{name}</strong>
-                      <span>What to expect at Manu&apos;s Car World</span>
-                    </div>
-                  </div>
-                </article>
               ))}
             </div>
           </div>
@@ -366,64 +372,137 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="p-container p-section p-exchange-feature">
-          <div>
-            <p className="p-eyebrow">EXPERIENCE IT IN PERSON</p>
-            <h2>
-              A showroom crafted
-              <br />
-              for passionate drivers.
-            </h2>
-            <p>
-              Step inside our 12,000 sq.ft climate-controlled showroom. Explore
-              our handpicked certified pre-owned collection, inspect our
-              diagnostic facilities, and enjoy an unhurried consultation.
-            </p>
-            <div className="p-actions">
-              <a href="/visit" className="p-button">
-                Plan a showroom visit
-                <Icon name="northeast" size={18} />
-              </a>
-            </div>
-            <span className="p-subtle-note">
-              Climate-controlled bays. Curated test-drive circuit.
-            </span>
+        <section className="p-section p-exchange-feature">
+          <div className="p-exchange-image" aria-hidden="true">
+            <SiteImage name="visit" alt="" sizes="100vw" />
           </div>
-          <div className="p-exchange-image">
-            <SiteImage
-              name="advice"
-              alt="Manu's Car World team helping customers inspect a vehicle"
-            />
-            <span>
-              <Icon name="pin" size={27} />
-              <strong>
-                Visit our showroom.<small>{SHOWROOM.addressLines[0]}.</small>
-              </strong>
-            </span>
+          <div className="p-container p-exchange-content">
+            <div>
+              <p className="p-eyebrow">EXPERIENCE IT IN PERSON</p>
+              <h2>
+                A showroom crafted
+                <br />
+                for passionate drivers.
+              </h2>
+              <p>
+                Step inside our 12,000 sq.ft climate-controlled showroom.
+                Explore our handpicked certified pre-owned collection, inspect
+                our diagnostic facilities, and enjoy an unhurried consultation.
+              </p>
+              <div className="p-actions">
+                <a href="/visit" className="p-button">
+                  Plan a showroom visit
+                  <Icon name="northeast" size={18} />
+                </a>
+              </div>
+              <span className="p-subtle-note">
+                Climate-controlled bays. Curated test-drive circuit.
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* CUSTOMER REVIEWS */}
+        <section className="p-proof-section" aria-labelledby="reviews-heading">
+          <div className="p-container p-section p-reviews-section">
+            <div className="p-reviews-header">
+              <div>
+                <p className="p-eyebrow">CUSTOMER CONFIDENCE</p>
+                <h2 id="reviews-heading">
+                  A better way
+                  <br />
+                  to buy your next car.
+                </h2>
+              </div>
+              <div className="p-reviews-rating-block">
+                <div className="p-overall-rating">
+                  <span className="p-rating-number">4.5</span>
+                  <div>
+                    <div className="p-stars" aria-label="4.5 out of 5 stars">
+                      <span aria-hidden="true">★★★★☆</span>
+                    </div>
+                    <span className="p-rating-count">
+                      4.5 from 55 Justdial ratings
+                    </span>
+                  </div>
+                </div>
+                <a
+                  href="https://www.justdial.com/Malappuram/MANUS-CAR-WORLD-Near-Urban-Bank-Valluvambram/9999PX483-X483-240120121329-Z4F4_BZDET"
+                  className="p-text-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Read the public rating on Justdial"
+                >
+                  Read reviews on Justdial
+                  <Icon name="northeast" size={16} />
+                </a>
+              </div>
+            </div>
+            <div className="p-reviews-grid">
+              {[
+                {
+                  name: "techiedoc",
+                  text: "Mr Manu is a trustworthy man in this business. We were offered a better price than other car shops in the district.",
+                  source: "Google review",
+                  detail: "Local Guide · 599 reviews · 5,835 photos",
+                },
+                {
+                  name: "Haridas Boneyetex",
+                  text: "One of the best second-hand car dealers in Malappuram.",
+                  source: "Google review",
+                  detail: "3 reviews · 1 photo",
+                },
+                {
+                  name: "Mohammed Faisal",
+                  text: "MANUS CAR WORLD offers top-grade vehicle products that exceed expectations.",
+                  source: "Justdial review",
+                  detail: "5.0 rating · 19 February 2024",
+                },
+              ].map(({ name, text, source, detail }) => (
+                <article key={name} className="p-review-card">
+                  <div className="p-review-card-top">
+                    <span>{source}</span>
+                    <span
+                      className="p-review-stars"
+                      aria-label="5 out of 5 stars"
+                    >
+                      <span aria-hidden="true">★★★★★</span>
+                    </span>
+                  </div>
+                  <p className="p-review-text">{text}</p>
+                  <div className="p-review-author">
+                    <div>
+                      <strong>{name}</strong>
+                      <span>{detail}</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
         <FAQ
           items={[
             [
-              "How do I book a test drive?",
-              "Open a vehicle from our collection, choose an available date and time, and submit your request. Our team will confirm the appointment before your visit.",
+              "Does Manu's Car World provide car accessories?",
+              "Accessory availability can vary by vehicle and requirement. Contact our showroom team with the accessory you need, and we will confirm whether we can help.",
             ],
             [
-              "Can I arrange a personalized showroom visit?",
-              "Yes. Request an appointment through our visit page or contact our concierge. Our team will prepare the vehicles on your shortlist and ensure a specialist is dedicated to your visit.",
+              "How can I contact Manu's Car World?",
+              "Call, WhatsApp or send an enquiry through our contact page. The showroom is open Monday to Saturday from 8:00 AM to 8:00 PM and closed on Sunday.",
             ],
             [
-              "Can I review the vehicle's history?",
-              "Ask our team for available service, ownership and registration records for the car you're considering. Review the documents and inspect the car on our hoist before making your decision.",
+              "Do you provide a warranty on pre-owned cars?",
+              "Warranty eligibility and coverage can depend on the vehicle. Eligible certified cars may include the cover described on this site; please confirm the exact duration, kilometre limit, covered components and terms before purchase.",
             ],
             [
-              "Do you offer any warranty on pre-owned cars?",
-              "Yes. Every certified vehicle at Manu's Car World comes with a 6-month / 10,000 km warranty covering critical mechanical components. Ask our team for full details.",
+              "Do I need new insurance when buying a pre-owned car?",
+              "A separate new policy is not usually required when the car's existing insurance can be transferred. The policy and ownership details must be updated with the insurer; our team can explain the paperwork for the vehicle you choose.",
             ],
             [
-              "Can I sell or exchange my current car?",
-              "Absolutely. Use our instant valuation tool on the Exchange page or speak to our team directly. We provide fair, transparent market-rate offers with no obligation.",
+              "Which documents are needed to purchase a pre-owned car?",
+              "The process normally includes the vehicle's registration certificate, insurance documents and ownership-transfer forms. Our team will confirm the complete document checklist for your purchase and help coordinate the transfer.",
             ],
           ]}
         />

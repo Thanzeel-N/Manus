@@ -60,13 +60,12 @@ export default function VisitPage() {
               {/* Right Column: Showroom Exterior Architecture Photo */}
               <div className="p-visit-hero-media">
                 <div className="p-visit-photo-frame">
-                  <img
-                    src="/site-media/images/story-showroom-exterior.jpg"
+                  <SiteImage
+                    name="showroomExterior"
                     alt="Manu’s Car World showroom exterior"
                     className="p-visit-exterior-img"
-                    width={1280}
-                    height={720}
-                    loading="eager"
+                    sizes="(max-width: 900px) 100vw, 56vw"
+                    priority
                   />
                   <div className="p-visit-media-badge">
                     <span>MANU’S CAR WORLD</span>
@@ -341,12 +340,10 @@ export default function VisitPage() {
             <div className="p-visit-gallery-grid">
               {/* Photo 1: Showroom Exterior Night */}
               <div className="p-gallery-card">
-                <img
-                  src="/site-media/images/story-showroom-exterior.jpg"
+                <SiteImage
+                  name="showroomExterior"
                   alt="Manu’s Car World showroom exterior"
-                  width={600}
-                  height={400}
-                  loading="eager"
+                  sizes="(max-width: 700px) 100vw, 50vw"
                 />
                 <div className="p-gallery-caption">
                   <span>Exterior Facade</span>

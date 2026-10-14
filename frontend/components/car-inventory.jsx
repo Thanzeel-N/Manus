@@ -213,6 +213,40 @@ function CarCard({ car, saved, onToggleSaved }) {
   );
 }
 
+export function HomeCarGrid({ cars }) {
+  const [saved, setSaved] = useState([]);
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("manus-saved") || "[]");
+      if (Array.isArray(stored)) setSaved(stored);
+    } catch {}
+  }, []);
+
+  function toggleSaved(id) {
+    const next = saved.includes(id)
+      ? saved.filter((value) => value !== id)
+      : [...saved, id];
+    setSaved(next);
+    try {
+      localStorage.setItem("manus-saved", JSON.stringify(next));
+    } catch {}
+  }
+
+  return (
+    <div className="car-grid p-home-car-grid">
+      {cars.map((car) => (
+        <CarCard
+          key={car.id}
+          car={car}
+          saved={saved.includes(car.id)}
+          onToggleSaved={toggleSaved}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Inventory({
   cars = [],
   preview = false,

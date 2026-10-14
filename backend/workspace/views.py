@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
+from django.db.models.deletion import ProtectedError
 from django.db.models import Count, Q, Sum
 from django.http import HttpResponseForbidden, JsonResponse
 from django.middleware.csrf import get_token
@@ -192,13 +193,13 @@ COLLECTIONS = {
 
 
 @never_cache
-@api_view(['GET', 'POST', 'PATCH'])
+@api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 @permission_classes([IsAdminUser])
 def records(request, section, pk=None):
     if section not in COLLECTIONS:
         return Response({'detail': 'Not found.'}, status=404)
     model, serializer, search = COLLECTIONS[section]
-    action = {'GET': 'view', 'POST': 'add', 'PATCH': 'change'}[request.method]
+    action = {'GET': 'view', 'POST': 'add', 'PATCH': 'change', 'DELETE': 'delete'}[request.method]
     if not allowed(request.user, action, model):
         return Response({'detail': 'You do not have permission for this action.'}, status=403)
     query = model.objects.all()
@@ -236,6 +237,17 @@ def records(request, section, pk=None):
         return Response({'detail': 'Creation is not available here.'}, status=405)
     if request.method == 'PATCH' and not pk:
         return Response({'detail': 'A record ID is required.'}, status=400)
+    if request.method == 'DELETE':
+        if model is not Car or not pk:
+            return Response({'detail': 'Only cars can be deleted here.'}, status=405)
+        try:
+            with transaction.atomic():
+                get_object_or_404(Car.objects.select_for_update(), pk=pk).delete()
+        except ProtectedError:
+            return Response({
+                'detail': 'This car has test-drive booking history and cannot be deleted. Mark it as sold instead.'
+            }, status=409)
+        return Response(status=204)
     try:
         with transaction.atomic():
             item = get_object_or_404(model.objects.select_for_update(), pk=pk) if pk else None

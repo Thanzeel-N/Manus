@@ -102,3 +102,42 @@ class SiteMediaTests(TestCase):
         response = self.client.get('/api/site-media/images/../secret.jpg')
 
         self.assertEqual(response.status_code, 404)
+
+
+class PublicInventoryTests(TestCase):
+    def make_car(self, slug, status):
+        return Car.objects.create(
+            slug=slug,
+            brand='Test',
+            name=f'{status.title()} Car',
+            variant='Base',
+            year=2024,
+            mileage=1000,
+            price=10,
+            fuel='Petrol',
+            transmission='Automatic',
+            body='Sedan',
+            condition='Used',
+            status=status,
+        )
+
+    def test_sold_and_draft_cars_are_hidden_from_public_catalog(self):
+        self.make_car('available-car', 'available')
+        self.make_car('reserved-car', 'reserved')
+        self.make_car('sold-car', 'sold')
+        self.make_car('draft-car', 'draft')
+
+        response = self.client.get('/api/cars/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            {car['id'] for car in response.json()},
+            {'available-car', 'reserved-car'},
+        )
+
+    def test_sold_car_detail_is_not_public(self):
+        self.make_car('sold-car', 'sold')
+
+        response = self.client.get('/api/cars/sold-car/')
+
+        self.assertEqual(response.status_code, 404)
