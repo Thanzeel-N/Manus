@@ -193,7 +193,11 @@ export function ContactModalProvider({ children }) {
     const date = fields.get("date") || null;
     const slot = fields.get("time_slot") || preferredSlot;
     const rawMessage = fields.get("message") || "";
-    const message = slot ? `[Preferred Slot: ${slot}] ${rawMessage}`.trim() : rawMessage;
+    const context = [
+      selectedCar ? `[Vehicle: ${selectedCar}]` : "",
+      slot ? `[Preferred Slot: ${slot}]` : "",
+    ].filter(Boolean).join(" ");
+    const message = `${context} ${rawMessage}`.trim();
 
     try {
       const result = await submitEnquiry({ name, phone, email, interest, date, message });
@@ -326,6 +330,7 @@ export function ContactModalProvider({ children }) {
                   <option value="Book a test drive">Book a test drive</option>
                   <option value="Buying a car">Buying a car</option>
                   <option value="Help me choose">Help me choose</option>
+                  <option value="Selling or exchanging my car">Selling or exchanging my car</option>
                   <option value="Changing a test-drive request">Changing a test-drive request</option>
                 </select>
               </label>

@@ -57,6 +57,8 @@ export default function HeroVideo() {
 
   return (
     <div className="p-hero-media" aria-hidden="true">
+      {/* Dark placeholder shown until video is ready — prevents car-image poster flash */}
+      <div className={`p-hero-video-placeholder${loaded ? " is-hidden" : ""}`} />
       <video
         ref={video}
         autoPlay
@@ -64,7 +66,6 @@ export default function HeroVideo() {
         loop
         playsInline
         preload="auto"
-        poster="/site-media/assets/optimized/bmw-900-24d7056e377e.webp"
         onLoadedData={() => setLoaded(true)}
         className={loaded ? "is-loaded" : ""}
         disablePictureInPicture

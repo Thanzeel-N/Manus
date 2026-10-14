@@ -19,6 +19,14 @@ const defaults = {
   sort: "newest",
 };
 
+function matchesBudget(price, budget) {
+  if (budget === "all") return true;
+  if (budget === "25-50") return price >= 25 && price <= 50;
+  if (budget === "50-plus") return price > 50;
+  const ceiling = Number(budget);
+  return Number.isFinite(ceiling) ? price < ceiling : true;
+}
+
 function CarCardMedia({ car, active }) {
   const videoRef = useRef(null);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -285,7 +293,7 @@ export default function Inventory({
       (car) =>
         matchesCarSearch(car, filters.q) &&
         (filters.make === "all" || car.brand === filters.make) &&
-        (filters.budget === "all" || car.price < Number(filters.budget)) &&
+        matchesBudget(car.price, filters.budget) &&
         (filters.body === "all" || car.body === filters.body) &&
         (filters.fuel === "all" || car.fuel === filters.fuel) &&
         (filters.transmission === "all" ||
@@ -417,11 +425,9 @@ export default function Inventory({
                 onChange={(event) => update("budget", event.target.value)}
               >
                 <option value="all">Any budget</option>
-                {[10, 20, 30, 40, 50, 100].map((value) => (
-                  <option value={value} key={value}>
-                    Under ₹{value} lakh
-                  </option>
-                ))}
+                <option value="25">Under ₹25 lakh</option>
+                <option value="25-50">₹25–₹50 lakh</option>
+                <option value="50-plus">Above ₹50 lakh</option>
               </select>
             </label>
             {select("body", "Body style", BODY_VALUES, "All body styles")}
