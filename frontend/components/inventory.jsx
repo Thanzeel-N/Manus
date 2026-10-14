@@ -3,6 +3,7 @@
 import SiteImage from "./site-image";
 import { useEffect, useState } from "react";
 import { EnquiryButton } from "./enquiry";
+import { siteMedia } from "../lib/site-media";
 
 export const cars = [
   {
@@ -15,7 +16,7 @@ export const cars = [
     fuel: "Diesel",
     body: "Sedan",
     price: 32.5,
-    image: "/site-media/assets/bmw.jpg",
+    image: siteMedia("assets/bmw.jpg"),
   },
   {
     id: "mercedes",
@@ -27,7 +28,7 @@ export const cars = [
     fuel: "Diesel",
     body: "Sedan",
     price: 29.9,
-    image: "/site-media/assets/mercedes.jpg",
+    image: siteMedia("assets/mercedes.jpg"),
   },
   {
     id: "audi",
@@ -39,7 +40,7 @@ export const cars = [
     fuel: "Petrol",
     body: "SUV",
     price: 46.5,
-    image: "/site-media/assets/audi.jpg",
+    image: siteMedia("assets/audi.jpg"),
   },
 ];
 

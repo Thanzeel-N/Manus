@@ -2,12 +2,14 @@ import PublicShell from "../components/public-shell";
 import Image from "next/image";
 import HeroVideo from "../components/hero-video";
 import HeroContent from "../components/hero-content";
+import GuaranteeCar from "../components/guarantee-car";
 import Icon from "../components/icon";
 import SiteImage from "../components/site-image";
 import { HomeCarGrid } from "../components/car-inventory";
 import { ContactBand, FAQ } from "../components/public-sections";
 import { getStock } from "../lib/stock";
 import { SHOWROOM } from "../lib/contact-details";
+import { siteMedia } from "../lib/site-media";
 import {
   SiAudi,
   SiBmw,
@@ -63,7 +65,7 @@ export const metadata = {
     "Explore certified pre-owned luxury cars at Manu's Car World. BMW, Mercedes-Benz, Audi and more, with detailed inspections and vehicle-specific support from our Valluvambram team.",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 export default async function HomePage() {
   const { cars } = await getStock();
   const availableCars = cars.filter((car) => car.status === "available");
@@ -130,7 +132,7 @@ export default async function HomePage() {
 
             <div className="p-home-trust-visual">
               <img
-                src="/site-media/images/SNM09466.JPG"
+                src={siteMedia("images/SNM09466.JPG")}
                 alt="The owner and staff of Manu's Car World together at the showroom"
                 loading="lazy"
                 decoding="async"
@@ -242,6 +244,7 @@ export default async function HomePage() {
           className="p-guarantee-section"
           aria-labelledby="guarantee-heading"
         >
+          <GuaranteeCar />
           <div className="p-container p-guarantee-inner">
             <div className="p-guarantee-copy">
               <p className="p-eyebrow">THE MANU'S GUARANTEE</p>

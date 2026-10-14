@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
 import Icon from "./icon";
 import { submitEnquiry } from "../lib/enquiries";
+import { siteMedia } from "../lib/site-media";
 
 const ContactModalContext = createContext(null);
 
@@ -258,7 +259,7 @@ export function ContactModalProvider({ children }) {
           {/* Left Column: Car visual */}
           <div className="p-modal-media-col">
             <img
-              src="/site-media/assets/modal-contact-car.jpg"
+              src={siteMedia("assets/modal-contact-car.jpg")}
               alt="Manu’s Car World Luxury Vehicle"
               className="p-modal-media-img"
               loading="eager"

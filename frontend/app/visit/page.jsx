@@ -5,6 +5,7 @@ import Icon from "../../components/icon";
 import SiteImage from "../../components/site-image";
 import { ContactButton } from "../../components/contact-modal";
 import { SHOWROOM } from "../../lib/contact-details";
+import { siteMedia } from "../../lib/site-media";
 
 export default function VisitPage() {
   return (
@@ -128,7 +129,7 @@ export default function VisitPage() {
           <div className="p-container">
             <div className="p-visit-panoramic-frame">
               <img
-                src="/site-media/images/story-cars-lineup.jpg"
+                src={siteMedia("images/story-cars-lineup.jpg")}
                 alt="Panoramic view inside Manu’s Car World showroom floor"
                 className="p-visit-panoramic-img"
                 width={1920}

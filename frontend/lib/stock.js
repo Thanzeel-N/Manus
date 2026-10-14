@@ -1,3 +1,5 @@
+import { siteMedia } from "./site-media";
+
 export const demoCars = [
   {
     id: "bmw",
@@ -34,8 +36,8 @@ export const demoCars = [
   },
 ].map((car) => ({
   ...car,
-  image: `/site-media/assets/${car.id}.jpg`,
-  images: [{ url: `/site-media/assets/${car.id}.jpg`, caption: "Illustrative photo" }],
+  image: siteMedia(`assets/${car.id}.jpg`),
+  images: [{ url: siteMedia(`assets/${car.id}.jpg`), caption: "Illustrative photo" }],
   transmission: "Automatic",
   condition: "Used",
   status: "available",
@@ -50,7 +52,7 @@ export async function getStock() {
   if (!process.env.DJANGO_API_URL) return { cars: demoCars, preview: true };
   try {
     const response = await fetch(`${process.env.DJANGO_API_URL}/api/cars/`, {
-      cache: "no-store",
+      next: { revalidate: 60, tags: ["inventory"] },
       signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) throw new Error("Stock unavailable");

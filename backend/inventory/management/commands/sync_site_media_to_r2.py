@@ -44,7 +44,13 @@ class Command(BaseCommand):
             content_type = mimetypes.guess_type(path.name)[0] or 'application/octet-stream'
             self.stdout.write(f'Uploading {key} ... ', ending='')
             with path.open('rb') as source:
-                client.put_object(Bucket=storage.bucket_name, Key=key, Body=source, ContentType=content_type)
+                client.put_object(
+                    Bucket=storage.bucket_name,
+                    Key=key,
+                    Body=source,
+                    ContentType=content_type,
+                    CacheControl='public, max-age=86400, stale-while-revalidate=604800',
+                )
             client.head_object(Bucket=storage.bucket_name, Key=key)
             uploaded += 1
             self.stdout.write(self.style.SUCCESS('OK'))

@@ -86,8 +86,7 @@ class MediaCleanupTests(TestCase):
 
 class SiteMediaTests(TestCase):
     @patch('inventory.views.default_storage.url', return_value='https://signed.example/site/photo.jpg')
-    @patch('inventory.views.default_storage.exists', return_value=True)
-    def test_site_media_redirects_to_private_storage_url(self, exists, url):
+    def test_site_media_redirects_to_storage_url(self, url):
         response = self.client.get('/api/site-media/images/photo.jpg')
 
         self.assertRedirects(
@@ -95,8 +94,11 @@ class SiteMediaTests(TestCase):
             'https://signed.example/site/photo.jpg',
             fetch_redirect_response=False,
         )
-        exists.assert_called_once_with('site/images/photo.jpg')
         url.assert_called_once_with('site/images/photo.jpg')
+        self.assertEqual(
+            response['Cache-Control'],
+            'public, max-age=3600, stale-while-revalidate=86400',
+        )
 
     def test_site_media_rejects_parent_path_segments(self):
         response = self.client.get('/api/site-media/images/../secret.jpg')

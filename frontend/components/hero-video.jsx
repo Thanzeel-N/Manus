@@ -1,9 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import images from "../public/assets/optimized/manifest.json";
+import { siteMedia } from "../lib/site-media";
 
 export default function HeroVideo() {
   const video = useRef(null);
   const [loaded, setLoaded] = useState(false);
+  const poster = siteMedia(images.hero.src);
 
   useEffect(() => {
     const element = video.current;
@@ -58,7 +61,13 @@ export default function HeroVideo() {
   return (
     <div className="p-hero-media" aria-hidden="true">
       {/* Dark placeholder shown until video is ready — prevents car-image poster flash */}
-      <div className={`p-hero-video-placeholder${loaded ? " is-hidden" : ""}`} />
+      <img
+        src={poster}
+        alt=""
+        className={`p-hero-video-placeholder${loaded ? " is-hidden" : ""}`}
+        fetchPriority="high"
+        decoding="async"
+      />
       <video
         ref={video}
         autoPlay
@@ -66,6 +75,7 @@ export default function HeroVideo() {
         loop
         playsInline
         preload="auto"
+        poster={poster}
         onLoadedData={() => setLoaded(true)}
         className={loaded ? "is-loaded" : ""}
         disablePictureInPicture
@@ -73,7 +83,7 @@ export default function HeroVideo() {
         tabIndex={-1}
         aria-label="Driving showroom film"
       >
-        <source src="/site-media/video/hero-video.MP4" type="video/mp4" />
+        <source src={siteMedia("video/hero-video.MP4")} type="video/mp4" />
       </video>
     </div>
   );

@@ -5,6 +5,7 @@ import BrandLogo from "./brand-logo";
 import ThemeToggle from "./theme-toggle";
 import Icon from "./icon";
 import { useCustomerSession } from "./customer-session";
+import { siteMedia } from "../lib/site-media";
 
 export default function UnifiedLogin({ fromWorkspace = false, createAccount = false }) {
   const { session, error: sessionError } = useCustomerSession();
@@ -206,7 +207,7 @@ export default function UnifiedLogin({ fromWorkspace = false, createAccount = fa
         </div>
         <div className="ws-login-photo">
           <img
-            src="/site-media/assets/optimized/bmw-900-24d7056e377e.webp"
+            src={siteMedia("assets/optimized/bmw-900-24d7056e377e.webp")}
             alt="BMW from the showroom collection"
           />
           <span>

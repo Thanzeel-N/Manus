@@ -1,4 +1,5 @@
 import images from "../public/assets/optimized/manifest.json";
+import { siteMedia } from "../lib/site-media";
 
 // Pre-generated sizes avoid image processing on the first forwarded request.
 export default function SiteImage({
@@ -9,12 +10,12 @@ export default function SiteImage({
   className,
 }) {
   const image = images[name];
-  const src = `/site-media${image.src}`;
+  const src = siteMedia(image.src);
   const srcSet = image.srcSet
     .split(",")
     .map((candidate) => {
       const [url, width] = candidate.trim().split(/\s+/);
-      return `/site-media${url} ${width}`;
+      return `${siteMedia(url)} ${width}`;
     })
     .join(", ");
   return (

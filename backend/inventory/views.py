@@ -16,11 +16,8 @@ def site_media(request, path):
         raise Http404
 
     key = f"site/{'/'.join(parts)}"
-    if not default_storage.exists(key):
-        raise Http404
-
     response = HttpResponseRedirect(default_storage.url(key))
-    response['Cache-Control'] = 'private, max-age=300'
+    response['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400'
     return response
 
 

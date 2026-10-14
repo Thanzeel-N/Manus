@@ -96,6 +96,13 @@ The backend supports **Cloudflare R2** (S3-compatible object storage with zero e
    CLOUDFLARE_R2_CUSTOM_DOMAIN=pub-xxxxxxxxxxxxxxxx.r2.dev
    CLOUDFLARE_R2_QUERYSTRING_AUTH=0
    ```
+   Configure the frontend build to use that public bucket directly. The `/site`
+   suffix matches the object keys created by the sync command:
+   ```ini
+   NEXT_PUBLIC_SITE_MEDIA_URL=https://pub-xxxxxxxxxxxxxxxx.r2.dev/site
+   ```
+   Set this variable before running `next build`. In local development it may be
+   omitted; the frontend will continue to use the Django `/site-media/` fallback.
 3. Upload the public site media, then verify every production image reference:
    ```powershell
    cd backend

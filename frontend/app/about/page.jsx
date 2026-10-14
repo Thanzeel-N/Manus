@@ -1,6 +1,7 @@
 import PublicShell from "../../components/public-shell";
 import Icon from "../../components/icon";
 import { ContactBand, Process } from "../../components/public-sections";
+import { siteMedia } from "../../lib/site-media";
 
 export const metadata = {
   title: "Our story | Manu’s Car World",
@@ -43,7 +44,7 @@ export default function AboutPage() {
         >
           <div className="p-story-photo-frame">
             <img
-              src="/site-media/images/SNM09644.JPG"
+              src={siteMedia("images/SNM09644.JPG")}
               alt="The owner and staff of Manu’s Car World together at the showroom"
               loading="eager"
               fetchPriority="high"
