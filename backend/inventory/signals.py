@@ -4,7 +4,7 @@ from django.db import transaction
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 
-from .models import Car, CarImage
+from .models import Car, CarImage, DeliveryPhoto
 
 
 logger = logging.getLogger(__name__)
@@ -23,6 +23,7 @@ def _delete_after_commit(field_file):
         # remove the object while another database record still references it.
         if (
             CarImage.objects.filter(image=name).exists()
+            or DeliveryPhoto.objects.filter(image=name).exists()
             or Car.objects.filter(video=name).exists()
         ):
             return
@@ -67,4 +68,14 @@ def delete_replaced_car_image(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=CarImage)
 def delete_car_image(sender, instance, **kwargs):
+    _delete_after_commit(instance.image)
+
+
+@receiver(pre_save, sender=DeliveryPhoto)
+def delete_replaced_delivery_photo(sender, instance, **kwargs):
+    _delete_replaced_file(sender, instance, 'image')
+
+
+@receiver(post_delete, sender=DeliveryPhoto)
+def delete_delivery_photo(sender, instance, **kwargs):
     _delete_after_commit(instance.image)

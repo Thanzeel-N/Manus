@@ -1,11 +1,16 @@
 """Session-authenticated API and dashboard views for the showroom's React workspace."""
 import json
+from io import BytesIO
+from pathlib import Path
+
+from PIL import Image, ImageOps, UnidentifiedImageError
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.password_validation import validate_password
 from django.core.cache import cache
+from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
@@ -23,7 +28,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from inventory.models import Car, CarImage
+from inventory.models import Car, CarImage, DeliveryPhoto, image_size
 from bookings.models import Booking, TestDriveSlot
 from enquiries.models import Enquiry
 from .models import StaffProfile, Alert
@@ -93,6 +98,13 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarImage
         fields = ['id', 'image', 'caption', 'position']
+
+
+class DeliveryPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryPhoto
+        fields = ['id', 'image', 'caption', 'width', 'height', 'created_at']
+        read_only_fields = ['id', 'width', 'height', 'created_at']
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -290,6 +302,53 @@ def photos(request, pk, photo_id=None):
         for index, photo in enumerate(prepared):
             photo.save(car=car, position=offset + index)
     return Response(PhotoSerializer(car.images.all(), many=True).data, status=201)
+
+
+def _delivery_webp(file):
+    image_size(file)
+    try:
+        image = ImageOps.exif_transpose(Image.open(file))
+        image.thumbnail((2400, 2400), Image.Resampling.LANCZOS)
+        mode = 'RGBA' if image.mode in ('RGBA', 'LA') or 'transparency' in image.info else 'RGB'
+        image = image.convert(mode)
+        output = BytesIO()
+        image.save(output, format='WEBP', quality=82, method=6)
+    except (UnidentifiedImageError, OSError, ValueError) as error:
+        raise serializers.ValidationError({'photos': 'Upload valid JPG, PNG or WebP images.'}) from error
+    stem = Path(file.name).stem[:80] or 'delivery'
+    return ContentFile(output.getvalue(), name=f'{stem}.webp')
+
+
+@never_cache
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAdminUser])
+def delivery_photos(request, photo_id=None):
+    if request.method == 'DELETE':
+        if not photo_id:
+            return Response({'detail': 'A photo ID is required.'}, status=400)
+        get_object_or_404(DeliveryPhoto, pk=photo_id).delete()
+        return Response(status=204)
+
+    if request.method == 'POST':
+        files = request.FILES.getlist('photos')
+        if not 1 <= len(files) <= 12:
+            return Response({'detail': 'Select between 1 and 12 delivery photos.'}, status=400)
+        prepared = [_delivery_webp(file) for file in files]
+        with transaction.atomic():
+            list(DeliveryPhoto.objects.select_for_update().values_list('pk', flat=True))
+            for image in prepared:
+                photo = DeliveryPhotoSerializer(data={'image': image})
+                photo.is_valid(raise_exception=True)
+                photo.save()
+            for stale in DeliveryPhoto.objects.all()[12:]:
+                stale.delete()
+
+    photos = DeliveryPhoto.objects.all()[:12]
+    return Response({
+        'results': DeliveryPhotoSerializer(photos, many=True, context={'request': request}).data,
+        'count': len(photos),
+        'limit': 12,
+    }, status=201 if request.method == 'POST' else 200)
 
 
 STAFF_ACCESS = {

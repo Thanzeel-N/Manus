@@ -38,6 +38,9 @@
 [data-theme="dark"] .workspace-app :is(.ws-breadcrumb, .ws-private, .ws-signout, .ws-icon-button, .ws-overline, .ws-stat-card > div, .ws-stat-card > small, .ws-panel-title p, .ws-empty p, .ws-table th, .ws-table td, .ws-table td small, .ws-field, .ws-field small, .ws-pagination, .ws-pagination button, .ws-footer, .ws-activity-copy small, .ws-stock-total > span, .ws-stock-legend button, .ws-date-tile small, .ws-role, .ws-live, .ws-checkbox, .ws-form-note, .ws-editor-footer > p, .ws-detail-list dt, .ws-customer-card > div > span, .ws-customer-message p, .ws-slot-summary p, .ws-access-note p) { color: #b1b1bd; }
 [data-theme="dark"] .workspace-app :is(.ws-stat-icon, .ws-empty > span, .ws-stock-total > button, .ws-date-tile, .ws-count, .ws-car-placeholder, .ws-slot-icon, .ws-customer-card, .ws-customer-message, .ws-slot-summary, .ws-access-note, .ws-photo-grid > div, input[type=file]::file-selector-button) { background: #2b2b32; border-color: #3d3d47; color: #bfc0cb; }
 [data-theme="dark"] .workspace-app .ws-stock-bar { background: #303036; }
+[data-theme="dark"] .workspace-app .ws-delivery-upload { border-color: var(--ws-line); }
+[data-theme="dark"] .workspace-app .ws-delivery-library article,
+[data-theme="dark"] .workspace-app .ws-delivery-preview img { background: #2b2b32; }
 [data-theme="dark"] .workspace-app .ws-highlight { background: #352020; border-color: #6c302b; }
 [data-theme="dark"] .workspace-app :is(.ws-highlight .ws-stat-icon, .ws-avatar, .ws-customer-card .ws-avatar, .ws-login-symbol) { background: #492722; border-color: #6c302b; color: #ff968b; }
 [data-theme="dark"] .workspace-app .ws-mini-stats > button.selected { background: #352020; border-color: #d94035; }
@@ -54,4 +57,200 @@
 @media(max-width:650px) {
   .workspace-app .ws-top-actions { gap: 8px; }
   .workspace-app .ws-topbar { gap: 10px; }
+  .workspace-app .ws-sidebar nav a { font-size: 9px; border-radius: 9px; }
+}
+
+/* Mobile workspace: full-screen overlay drawer opened from the top-bar avatar. */
+@media(max-width:650px) {
+  .workspace-app { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  .workspace-app .ws-sidebar {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 0;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    z-index: 82;
+  }
+  .workspace-app .ws-sidebar > .ws-brand,
+  .workspace-app .ws-sidebar > .ws-workspace-name,
+  .workspace-app .ws-sidebar > .ws-nav-label,
+  .workspace-app .ws-sidebar > .ws-sidebar-bottom { display: none; }
+  .workspace-app .ws-sidebar nav {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 82;
+    width: min(86vw, 330px);
+    height: 100dvh;
+    margin: 0;
+    padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: #151518;
+    border: 0;
+    border-left: 1px solid #3b3b40;
+    box-shadow: -22px 0 60px #0008;
+    transform: translate3d(105%,0,0);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform .22s ease-out, visibility 0s linear .22s;
+  }
+  .workspace-app .ws-sidebar.menu-open nav {
+    transform: translate3d(0,0,0);
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+  .workspace-app .ws-sidebar nav a {
+    position: relative;
+    flex: 0 0 auto;
+    min-width: 0;
+    min-height: 48px;
+    padding: 11px 13px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 13px;
+    overflow: visible;
+    color: #d0d0d5;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: left;
+    border-radius: 7px;
+    white-space: normal;
+  }
+  .workspace-app .ws-sidebar nav a > svg { width: 19px; height: 19px; }
+  .workspace-app .ws-sidebar nav a.is-mobile-primary { display: none; }
+  .workspace-app .ws-tab-label { display: block; }
+  .workspace-app .ws-tab-label-mobile { display: none; }
+  .workspace-app .ws-sidebar nav a > b { position: static; margin-left: auto; }
+  .workspace-app .ws-mobile-menu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 4px 4px 16px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid #34343a;
+  }
+  .workspace-app .ws-mobile-menu-head small { color: #92929c; font-size: 7px; letter-spacing: 1.5px; }
+  .workspace-app .ws-mobile-menu-head strong { display: block; margin-top: 5px; color: #fff; font-size: 18px; }
+  .workspace-app .ws-mobile-menu-head button { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: #29292e; color: #fff; }
+  .workspace-app .ws-mobile-menu-tools {
+    display: grid;
+    grid-template-columns: 44px 1fr 1fr;
+    gap: 7px;
+    margin-top: auto;
+    padding-top: 13px;
+    border-top: 1px solid #34343a;
+  }
+  .workspace-app .ws-mobile-menu-tools > button,
+  .workspace-app .ws-mobile-menu-tools > .theme-toggle {
+    min-width: 0;
+    width: auto;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 8px;
+    border-radius: 7px;
+    background: #29292e;
+    color: #eeeef2;
+    font-size: 9px;
+  }
+  .workspace-app .ws-mobile-account {
+    margin-top: 8px;
+    padding: 13px 10px 2px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border-top: 1px solid #34343a;
+    color: #fff;
+  }
+  .workspace-app .ws-mobile-account > span { flex: 1; min-width: 0; text-align: left; }
+  .workspace-app .ws-mobile-account strong { display: block; font-size: 12px; }
+  .workspace-app .ws-mobile-account small { margin-top: 3px; color: #a8a8b1; font-size: 9px; }
+  .workspace-app .ws-mobile-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 81;
+    display: block;
+    width: 100vw;
+    height: 100dvh;
+    background: #08080bb8;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease-out, visibility 0s linear .2s;
+  }
+  .workspace-app .ws-mobile-menu-backdrop.is-visible { opacity: 1; visibility: visible; pointer-events: auto; transition-delay: 0s; }
+  .workspace-app .ws-topbar { padding: 0 14px 0 17px; }
+  .workspace-app .ws-top-actions { display: none; }
+  .workspace-app .ws-mobile-menu-trigger {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 50%;
+    background: #492722;
+    color: #ff968b;
+    flex: 0 0 38px;
+  }
+  .workspace-app .ws-mobile-menu-trigger .ws-avatar { width: 36px; height: 36px; }
+  .workspace-app .ws-mobile-bottom-nav {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 60;
+    height: calc(64px + env(safe-area-inset-bottom));
+    padding: 6px 7px calc(6px + env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 4px;
+    background: #151518f7;
+    border-top: 1px solid #37373c;
+    box-shadow: 0 -8px 28px #0005;
+    backdrop-filter: blur(14px);
+  }
+  .workspace-app .ws-mobile-bottom-nav a {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 5px 2px;
+    border-radius: 8px;
+    color: #bdbdc5;
+    font-size: 8px;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .workspace-app .ws-mobile-bottom-nav a > svg { width: 18px; height: 18px; }
+  .workspace-app .ws-mobile-bottom-nav a.active { background: var(--brand-action); color: #fff; }
+  .workspace-app .ws-mobile-bottom-nav a > b {
+    position: absolute;
+    top: 3px;
+    left: calc(50% + 8px);
+    min-width: 16px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--brand-action);
+    font-size: 8px;
+    line-height: 16px;
+    text-align: center;
+  }
+  :root[data-theme="light"] .workspace-app .ws-sidebar nav a { color: #d0d0d5; }
+  :root[data-theme="light"] .workspace-app .ws-sidebar nav a:hover { background: #29292e; color: #fff; }
+  :root[data-theme="light"] .workspace-app .ws-sidebar nav a.active { background: var(--brand-action); color: #fff; }
 }

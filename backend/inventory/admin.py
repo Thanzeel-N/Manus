@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import Car, CarImage, image_size
+from .models import Car, CarImage, DeliveryPhoto, image_size
 
 
 class MultipleImageInput(forms.ClearableFileInput):
@@ -52,3 +52,9 @@ class CarAdmin(admin.ModelAdmin):
         offset = form.instance.images.count()
         for index, file in enumerate(form.cleaned_data.get('photos', [])):
             CarImage.objects.create(car=form.instance, image=file, position=offset + index)
+
+
+@admin.register(DeliveryPhoto)
+class DeliveryPhotoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'caption', 'width', 'height', 'created_at']
+    ordering = ['-created_at']

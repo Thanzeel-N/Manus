@@ -5,9 +5,12 @@ import HeroContent from "../components/hero-content";
 import GuaranteeCar from "../components/guarantee-car";
 import Icon from "../components/icon";
 import SiteImage from "../components/site-image";
+import DeliveryGallery from "../components/delivery-gallery";
+import TestimonialsCarousel from "../components/testimonials-carousel";
 import { HomeCarGrid } from "../components/car-inventory";
 import { ContactBand, FAQ } from "../components/public-sections";
 import { getStock } from "../lib/stock";
+import { getDeliveryPhotos } from "../lib/delivery-photos";
 import { SHOWROOM } from "../lib/contact-details";
 import {
   SiAudi,
@@ -58,6 +61,27 @@ const CAR_BRANDS = [
   { name: "Maruti Suzuki", query: "Maruti Suzuki", Logo: SiSuzuki, feature: "Swift", popular: "Swift · Brezza · Baleno" },
 ];
 
+const REVIEWS = [
+  {
+    name: "techiedoc",
+    text: "Mr Manu is a trustworthy man in this business. We were offered a better price than other car shops in the district.",
+    source: "Google review",
+    detail: "Local Guide · 599 reviews · 5,835 photos",
+  },
+  {
+    name: "Haridas Boneyetex",
+    text: "One of the best second-hand car dealers in Malappuram.",
+    source: "Google review",
+    detail: "3 reviews · 1 photo",
+  },
+  {
+    name: "Mohammed Faisal",
+    text: "MANUS CAR WORLD offers top-grade vehicle products that exceed expectations.",
+    source: "Justdial review",
+    detail: "5.0 rating · 19 February 2024",
+  },
+];
+
 export const metadata = {
   title: "Manu's Car World — Premium Certified Pre-Owned Cars",
   description:
@@ -66,7 +90,10 @@ export const metadata = {
 
 export const revalidate = 60;
 export default async function HomePage() {
-  const { cars } = await getStock();
+  const [{ cars }, deliveryPhotos] = await Promise.all([
+    getStock(),
+    getDeliveryPhotos(),
+  ]);
   const availableCars = cars.filter((car) => car.status === "available");
   const featuredCars = [...availableCars]
     .sort((a, b) => Number(Boolean(b.is_featured)) - Number(Boolean(a.is_featured)))
@@ -403,6 +430,8 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <DeliveryGallery photos={deliveryPhotos} />
+
         {/* CUSTOMER REVIEWS */}
         <section className="p-proof-section" aria-labelledby="reviews-heading">
           <div className="p-container p-section p-reviews-section">
@@ -439,47 +468,7 @@ export default async function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="p-reviews-grid">
-              {[
-                {
-                  name: "techiedoc",
-                  text: "Mr Manu is a trustworthy man in this business. We were offered a better price than other car shops in the district.",
-                  source: "Google review",
-                  detail: "Local Guide · 599 reviews · 5,835 photos",
-                },
-                {
-                  name: "Haridas Boneyetex",
-                  text: "One of the best second-hand car dealers in Malappuram.",
-                  source: "Google review",
-                  detail: "3 reviews · 1 photo",
-                },
-                {
-                  name: "Mohammed Faisal",
-                  text: "MANUS CAR WORLD offers top-grade vehicle products that exceed expectations.",
-                  source: "Justdial review",
-                  detail: "5.0 rating · 19 February 2024",
-                },
-              ].map(({ name, text, source, detail }) => (
-                <article key={name} className="p-review-card">
-                  <div className="p-review-card-top">
-                    <span>{source}</span>
-                    <span
-                      className="p-review-stars"
-                      aria-label="5 out of 5 stars"
-                    >
-                      <span aria-hidden="true">★★★★★</span>
-                    </span>
-                  </div>
-                  <p className="p-review-text">{text}</p>
-                  <div className="p-review-author">
-                    <div>
-                      <strong>{name}</strong>
-                      <span>{detail}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <TestimonialsCarousel reviews={REVIEWS} />
           </div>
         </section>
 

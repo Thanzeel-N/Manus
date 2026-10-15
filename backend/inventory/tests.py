@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from .models import Car, CarImage
+from .models import Car, CarImage, DeliveryPhoto
 
 
 class MediaCleanupTests(TestCase):
@@ -158,3 +158,15 @@ class PublicInventoryTests(TestCase):
         response = self.client.get('/api/cars/sold-car/')
 
         self.assertEqual(response.status_code, 404)
+
+    def test_delivery_gallery_returns_newest_photos_with_dimensions(self):
+        DeliveryPhoto.objects.create(image='deliveries/first.webp', width=1600, height=900)
+        newest = DeliveryPhoto.objects.create(image='deliveries/newest.webp', width=900, height=1600)
+
+        response = self.client.get('/api/cars/deliveries/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()[0]['id'], newest.pk)
+        self.assertEqual(response.json()[0]['width'], 900)
+        self.assertEqual(response.json()[0]['height'], 1600)
+        self.assertIn('max-age=60', response['Cache-Control'])

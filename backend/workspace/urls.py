@@ -11,6 +11,8 @@ urlpatterns = [
     path('staff/<int:pk>/', views.staff, name='workspace-staff-detail'),
     path('inventory/<int:pk>/photos/', views.photos, name='workspace-photos'),
     path('inventory/<int:pk>/photos/<int:photo_id>/', views.photos, name='workspace-photo-detail'),
+    path('deliveries/', views.delivery_photos, name='workspace-delivery-photos'),
+    path('deliveries/<int:photo_id>/', views.delivery_photos, name='workspace-delivery-photo-detail'),
     path('<str:section>/', views.records, name='workspace-records'),
     path('<str:section>/<int:pk>/', views.records, name='workspace-record-detail'),
 ]

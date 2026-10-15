@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Car
+from .models import Car, DeliveryPhoto
 
 
 @require_GET
@@ -61,6 +61,23 @@ def cars(request):
             | Q(variant__icontains=request.GET['q'])
         )
     return Response([car_data(car) for car in stock])
+
+
+@api_view(['GET'])
+def deliveries(request):
+    photos = DeliveryPhoto.objects.all()[:12]
+    response = Response([
+        {
+            'id': photo.pk,
+            'url': request.build_absolute_uri(photo.image.url),
+            'caption': photo.caption,
+            'width': photo.width,
+            'height': photo.height,
+        }
+        for photo in photos
+    ])
+    response['Cache-Control'] = 'public, max-age=60, stale-while-revalidate=300'
+    return response
 
 
 @api_view(['GET'])

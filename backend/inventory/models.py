@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
+from uuid import uuid4
 
 
 def image_size(file):
@@ -11,6 +12,10 @@ def image_size(file):
 def video_size(file):
     if file.size > 100 * 1024 * 1024:
         raise ValidationError('Video must be 100 MB or smaller.')
+
+
+def delivery_photo_path(instance, filename):
+    return f'deliveries/{uuid4().hex}.webp'
 
 
 class Car(models.Model):
@@ -51,3 +56,24 @@ class CarImage(models.Model):
         app_label = 'showroom'
         db_table = 'showroom_carimage'
         ordering = ['position', 'id']
+
+
+class DeliveryPhoto(models.Model):
+    image = models.ImageField(
+        upload_to=delivery_photo_path,
+        width_field='width',
+        height_field='height',
+        validators=[image_size, FileExtensionValidator(['webp'])],
+    )
+    width = models.PositiveIntegerField(default=0, editable=False)
+    height = models.PositiveIntegerField(default=0, editable=False)
+    caption = models.CharField(max_length=180, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'showroom'
+        db_table = 'showroom_deliveryphoto'
+        ordering = ['-created_at', '-id']
+
+    def __str__(self):
+        return self.caption or f'Delivery photo {self.pk or "new"}'

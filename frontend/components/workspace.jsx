@@ -7,19 +7,22 @@ import UnifiedLogin from "./unified-login";
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const tabs = [
-  { id: 'overview', label: 'Overview', icon: 'grid' },
-  { id: 'inventory', label: 'Car inventory', icon: 'car', model: 'car' },
-  { id: 'enquiries', label: 'Contact enquiries', icon: 'mail', model: 'enquiry' },
-  { id: 'test-drives', label: 'Test drives', icon: 'wheel', model: 'booking' },
-  { id: 'slots', label: 'Availability', icon: 'calendar', model: 'testdriveslot' },
-  { id: 'notifications', label: 'Alerts', icon: 'mail', admin: true },
-  { id: 'staff', label: 'Staff & access', icon: 'users', admin: true },
+  { id: 'overview', label: 'Overview', mobileLabel: 'Home', icon: 'grid' },
+  { id: 'inventory', label: 'Car inventory', mobileLabel: 'Cars', icon: 'car', model: 'car' },
+  { id: 'deliveries', label: 'Delivery photos', mobileLabel: 'Deliveries', icon: 'image' },
+  { id: 'enquiries', label: 'Contact enquiries', mobileLabel: 'Enquiries', icon: 'mail', model: 'enquiry' },
+  { id: 'test-drives', label: 'Test drives', mobileLabel: 'Test drives', icon: 'wheel', model: 'booking' },
+  { id: 'slots', label: 'Availability', mobileLabel: 'Slots', icon: 'calendar', model: 'testdriveslot' },
+  { id: 'notifications', label: 'Alerts', mobileLabel: 'Alerts', icon: 'mail', admin: true },
+  { id: 'staff', label: 'Staff & access', mobileLabel: 'Staff', icon: 'users', admin: true },
   { id: 'account', label: 'My account', icon: 'settings' },
 ];
+const mobilePrimaryTabs = ['overview', 'inventory', 'enquiries', 'test-drives'];
 const statuses = { inventory: ['available', 'reserved', 'sold', 'draft'], enquiries: ['new', 'contacted', 'closed'], 'test-drives': ['pending', 'confirmed', 'cancelled'], slots: ['open', 'blocked'] };
 const descriptions = {
   overview: 'A little clarity for your busy day. Here’s what’s happening at the showroom.',
   inventory: 'Your collection, beautifully organised. Keep every listing up to date.',
+  deliveries: 'Share recent handover moments on the home page. The newest 12 photos stay live.',
   enquiries: 'Turn a first hello into a great customer experience.',
   'test-drives': 'The next step towards their next car. Manage every appointment here.',
   slots: 'Make room for the next visit. All appointment times are in IST.',
@@ -41,6 +44,7 @@ function Icon({ name, size = 20 }) {
   const paths = {
     grid: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',
     car: 'm5 7 2-3h10l2 3 2 3v8H3v-8l2-3ZM4 10h16M7 14h1m8 0h1M6 18v3m12-3v3',
+    image: 'M3 5h18v14H3zM7 14l3-3 3 3 2-2 4 4M8 9h.01',
     mail: 'M3 5h18v14H3z m0 1 9 7 9-7',
     wheel: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM3 11h7m4 0h7m-9 3v7',
     calendar: 'M3 5h18v16H3zM7 3v4m10-4v4M3 10h18m-14 5h3m4 0h3',
@@ -80,6 +84,7 @@ export default function Workspace() {
   const [loading, setLoading] = useState(false), [error, setError] = useState('');
   const [query, setQuery] = useState(''), [status, setStatus] = useState(''), [page, setPage] = useState(1);
   const [revision, setRevision] = useState(0), [modal, setModal] = useState(null), [notice, setNotice] = useState(''), [loggingOut, setLoggingOut] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const request = useCallback(async (path, options = {}) => {
     const { params, ...fetchOptions } = options;
     const headers = { ...(options.body && !(options.body instanceof FormData) ? { 'Content-Type': 'application/json' } : {}), ...(options.method && options.method !== 'GET' ? { 'X-CSRFToken': csrf.current } : {}) };
@@ -121,8 +126,20 @@ export default function Workspace() {
     return () => { clearTimeout(timer); controller.abort(); };
   }, [user, section, query, status, page, revision, request]);
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 6500); return () => clearTimeout(timer); }, [notice]);
-  function navigate(next) { if (next !== section) { setData(null); setLoading(true); } setSection(next); setQuery(''); setStatus(''); setPage(1); setError(''); setModal(null); window.history.pushState({}, '', `/dashboard${next === 'overview' ? '' : `?section=${next}`}`); }
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = event => { if (event.key === 'Escape') setMobileMenuOpen(false); };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener('keydown', closeOnEscape); };
+  }, [mobileMenuOpen]);
+  function navigate(next) { setMobileMenuOpen(false); if (next !== section) { setData(null); setLoading(true); } setSection(next); setQuery(''); setStatus(''); setPage(1); setError(''); setModal(null); window.history.pushState({}, '', `/dashboard${next === 'overview' ? '' : `?section=${next}`}`); }
   function saved(message = 'Changes saved successfully.') { setModal(null); setNotice(message); setRevision(x => x + 1); }
+  async function refreshDashboard() {
+    try { const session = await request('session'); setUser(session.user); setRevision(x => x + 1); setMobileMenuOpen(false); }
+    catch (refreshError) { setError(refreshError.message); }
+  }
   async function signOut() {
     setLoggingOut(true);
     try { await request('session', { method: 'POST', body: JSON.stringify({ action: 'logout' }) }); setUser(null); setModal(null); setNotice(''); }
@@ -138,12 +155,14 @@ export default function Workspace() {
   let rows = Array.isArray(data) ? data : data?.results || [];
   if (section === 'staff') rows = rows.filter(person => `${person.username} ${person.first_name} ${person.last_name} ${person.email}`.toLowerCase().includes(query.toLowerCase()) && (!status || String(person.is_active) === status));
   return <div className="workspace-app">
-    <aside className="ws-sidebar"><Brand/><div className="ws-workspace-name"><span className="ws-dot"/> Showroom workspace <Icon name="lock" size={13}/></div><p className="ws-nav-label">MANAGE YOUR SHOWROOM</p><nav aria-label="Workspace navigation">{visibleTabs.filter(tab => tab.id !== 'account').map(tab => <a href={`/dashboard?section=${tab.id}`} key={tab.id} className={section === tab.id ? 'active' : ''} aria-current={section === tab.id ? 'page' : undefined} onClick={event => { if (!event.metaKey && !event.ctrlKey) { event.preventDefault(); navigate(tab.id); } }}><Icon name={tab.icon}/><span>{tab.label}</span>{tab.id === 'enquiries' && !!overview?.enquiries?.new && <b>{overview.enquiries.new}</b>}</a>)}</nav><div className="ws-sidebar-bottom"><div className="ws-tip"><span className="ws-tip-star">✳</span><strong>A great drive starts here.</strong><p>A fresh listing. A quick follow-up.<br/>Small things make a difference.</p><a href="/" target="_blank" rel="noreferrer">View your website <Icon name="external" size={15}/></a></div><button aria-label="My account" className={section === 'account' ? 'ws-account-link active' : 'ws-account-link'} onClick={() => navigate('account')}><Avatar name={user.name}/><span><strong>{user.name}</strong><small>{user.is_admin ? 'Administrator' : 'Staff member'}</small></span><Icon name="settings" size={17}/></button></div></aside>
-    <div className="ws-content"><header className="ws-topbar"><span className="ws-breadcrumb">Workspace <span>/</span> <strong>{current.label}</strong></span><div className="ws-top-actions"><ThemeToggle/><span className="ws-private"><Icon name="lock" size={13}/> Private workspace</span><button className="ws-icon-button" aria-label="Refresh dashboard" onClick={async () => { try { const session = await request("session"); setUser(session.user); setRevision(x => x + 1); } catch (error) { setError(error.message); } }}><Icon name="refresh" size={18}/></button><button className="ws-signout" onClick={signOut} disabled={loggingOut}><Icon name="logout" size={17}/>{loggingOut ? 'Signing out…' : 'Sign out'}</button></div></header>
+    <aside className={`ws-sidebar${mobileMenuOpen ? ' menu-open' : ''}`}><Brand/><div className="ws-workspace-name"><span className="ws-dot"/> Showroom workspace <Icon name="lock" size={13}/></div><p className="ws-nav-label">MANAGE YOUR SHOWROOM</p><nav id="ws-mobile-menu" aria-label="Workspace navigation"><div className="ws-mobile-menu-head"><div><small>SHOWROOM WORKSPACE</small><strong>More tools</strong></div><button type="button" aria-label="Close navigation" onClick={() => setMobileMenuOpen(false)}><Icon name="close" size={20}/></button></div>{visibleTabs.filter(tab => tab.id !== 'account').map(tab => <a href={`/dashboard?section=${tab.id}`} key={tab.id} className={`${section === tab.id ? 'active' : ''}${mobilePrimaryTabs.includes(tab.id) ? ' is-mobile-primary' : ''}`} aria-current={section === tab.id ? 'page' : undefined} onClick={event => { if (!event.metaKey && !event.ctrlKey) { event.preventDefault(); navigate(tab.id); } }}><Icon name={tab.icon}/><span className="ws-tab-label">{tab.label}</span><span className="ws-tab-label-mobile">{tab.mobileLabel || tab.label}</span>{tab.id === 'enquiries' && !!overview?.enquiries?.new && <b>{overview.enquiries.new}</b>}</a>)}<div className="ws-mobile-menu-tools"><ThemeToggle/><button type="button" onClick={refreshDashboard}><Icon name="refresh" size={18}/><span>Refresh dashboard</span></button><button type="button" onClick={signOut} disabled={loggingOut}><Icon name="logout" size={18}/><span>{loggingOut ? 'Signing out…' : 'Sign out'}</span></button></div><button type="button" className="ws-mobile-account" onClick={() => navigate('account')}><Avatar name={user.name}/><span><strong>My account</strong><small>{user.is_admin ? 'Administrator' : 'Staff member'}</small></span><Icon name="settings" size={17}/></button></nav><div className="ws-sidebar-bottom"><div className="ws-tip"><span className="ws-tip-star">✳</span><strong>A great drive starts here.</strong><p>A fresh listing. A quick follow-up.<br/>Small things make a difference.</p><a href="/" target="_blank" rel="noreferrer">View your website <Icon name="external" size={15}/></a></div><button type="button" aria-label="My account" className={section === 'account' ? 'ws-account-link active' : 'ws-account-link'} onClick={() => navigate('account')}><Avatar name={user.name}/><span><strong>{user.name}</strong><small>{user.is_admin ? 'Administrator' : 'Staff member'}</small></span><Icon name="settings" size={17}/></button></div></aside>
+    <button type="button" className={`ws-mobile-menu-backdrop${mobileMenuOpen ? ' is-visible' : ''}`} aria-label="Close navigation" tabIndex={mobileMenuOpen ? 0 : -1} onClick={() => setMobileMenuOpen(false)}/>
+    <nav className="ws-mobile-bottom-nav" aria-label="Primary workspace navigation">{visibleTabs.filter(tab => mobilePrimaryTabs.includes(tab.id)).map(tab => <a href={`/dashboard?section=${tab.id}`} key={tab.id} className={section === tab.id ? 'active' : ''} aria-current={section === tab.id ? 'page' : undefined} onClick={event => { event.preventDefault(); navigate(tab.id); }}><Icon name={tab.icon}/><span>{tab.mobileLabel || tab.label}</span>{tab.id === 'enquiries' && !!overview?.enquiries?.new && <b>{overview.enquiries.new}</b>}</a>)}</nav>
+    <div className="ws-content"><header className="ws-topbar"><span className="ws-breadcrumb">Workspace <span>/</span> <strong>{current.label}</strong></span><div className="ws-top-actions"><ThemeToggle/><span className="ws-private"><Icon name="lock" size={13}/> Private workspace</span><button className="ws-icon-button" aria-label="Refresh dashboard" onClick={refreshDashboard}><Icon name="refresh" size={18}/></button><button className="ws-signout" onClick={signOut} disabled={loggingOut}><Icon name="logout" size={17}/>{loggingOut ? 'Signing out…' : 'Sign out'}</button></div><button type="button" className="ws-mobile-menu-trigger" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileMenuOpen} aria-controls="ws-mobile-menu" onClick={() => setMobileMenuOpen(open => !open)}><Avatar name={user.name}/></button></header>
     <main className="ws-main"><div className="ws-heading"><div><p className="ws-overline">{section === 'overview' ? 'YOUR DAILY OVERVIEW' : 'MANU’S CAR WORLD / WORKSPACE'}</p><h1>{section === 'overview' ? `Welcome back, ${user.name.split(' ')[0]}.` : current.label}<span>{section === 'overview' ? '✳' : ''}</span></h1><p>{descriptions[section]}</p></div>{add && <button className="ws-button" onClick={() => setModal({ type: section === 'staff' ? 'staff' : section === 'slots' ? 'slots' : 'inventory', item: null })}><Icon name="plus" size={17}/>{add}</button>}</div>
     {notice && <div className="ws-toast" role="status"><Icon name="check" size={18}/>{notice}<button aria-label="Dismiss notification" onClick={() => setNotice('')}><Icon name="close" size={16}/></button></div>}
     {error && <div className="ws-error" role="alert">{error}<button onClick={() => setRevision(x => x + 1)}>Try again</button></div>}
-    {!accessible ? <Empty icon="lock" title="This section is restricted">Ask your administrator to grant the permissions you need.</Empty> : section === 'overview' ? <Overview data={overview} navigate={navigate} user={user} open={setModal}/> : section === 'notifications' ? <Alerts request={request}/> : section === 'account' ? <Account user={user} request={request} onSaved={saved}/> : <>
+    {!accessible ? <Empty icon="lock" title="This section is restricted">Ask your administrator to grant the permissions you need.</Empty> : section === 'overview' ? <Overview data={overview} navigate={navigate} user={user} open={setModal}/> : section === 'notifications' ? <Alerts request={request}/> : section === 'account' ? <Account user={user} request={request} onSaved={saved}/> : section === 'deliveries' ? <DeliveryManager data={data} loading={loading} request={request} setData={setData} notify={setNotice}/> : <>
       {section === 'inventory' && overview?.inventory && <div className="ws-mini-stats">{statuses.inventory.map(value => <button key={value} onClick={() => { setStatus(status === value ? '' : value); setPage(1); }} className={status === value ? 'selected' : ''}><span className={`ws-small-dot ws-${value}`}/>{titleCase(value)}<strong>{overview.inventory[value] || 0}</strong></button>)}<button onClick={() => { setStatus(status === 'featured' ? '' : 'featured'); setPage(1); }} className={status === 'featured' ? 'selected ws-stat-featured' : 'ws-stat-featured'}><span className="ws-small-dot ws-featured"/>★ Featured on Home<strong>{overview.inventory.featured || 0}</strong></button></div>}
       <section className="ws-panel ws-register"><div className="ws-panel-title"><div><h2>{section === 'inventory' ? 'Your collection' : section === 'enquiries' ? 'Customer inbox' : section === 'test-drives' ? 'Booking register' : section === 'slots' ? 'Upcoming availability' : 'Your team'} <span className="ws-count">{data ? (data.count ?? rows.length) : '…'}</span></h2><p>{section === 'slots' ? 'One-hour appointments · 10:00 AM – 5:00 PM IST' : section === 'staff' ? 'Staff can manage daily operations. Only administrators manage accounts.' : 'Live records, always connected to your showroom.'}</p></div><span className="ws-live"><span/> Live</span></div>
       <div className="ws-filters"><label className="ws-search"><Icon name="search" size={18}/><input aria-label={`Search ${current.label.toLowerCase()}`} value={query} onChange={event => { setQuery(event.target.value); setPage(1); }} placeholder={section === 'inventory' ? 'Search by car, brand or variant…' : section === 'slots' ? 'Search by car name…' : 'Search name, email or phone…'}/></label><select aria-label="Filter by status" value={status} onChange={event => { setStatus(event.target.value); setPage(1); }}><option value="">All statuses</option>{section === 'staff' ? <><option value="true">Active</option><option value="false">Inactive</option></> : section === 'inventory' ? <><option value="featured">★ Featured on Home</option>{statuses.inventory.map(value => <option value={value} key={value}>{titleCase(value)}</option>)}</> : statuses[section]?.map(value => <option value={value} key={value}>{titleCase(value)}</option>)}</select>{(query || status) && <button className="ws-text-button" onClick={() => { setQuery(''); setStatus(''); setPage(1); }}>Reset</button>}</div>
@@ -170,6 +189,70 @@ function Overview({ data, navigate, user, open }) {
   </div>
   <div className="ws-overview-grid ws-lower-grid">{data.enquiries && <section className="ws-panel"><div className="ws-panel-title"><div><h2>Latest conversations</h2><p>A first hello. A new possibility.</p></div><button className="ws-text-button" onClick={() => navigate('enquiries')}>View all <Icon name="arrow" size={15}/></button></div>{!data.recent_enquiries.length ? <Empty icon="mail" title="Your inbox is ready">Website enquiries will arrive here automatically.</Empty> : data.recent_enquiries.map(item => <button className="ws-enquiry-row" key={item.id} onClick={() => open({ type: 'enquiries', item })}><Avatar name={item.name}/><span className="ws-activity-copy"><strong>{item.name}</strong><small>{item.interest}</small></span><Badge value={item.status}/><Icon name="external" size={16}/></button>)}</section>}
   <section className="ws-quick-card"><span className="ws-quick-star">✳</span><p className="ws-overline">MAKE A LITTLE PROGRESS</p><h2>Ready for the <br/>next great drive?</h2><p>Keep the collection fresh and make every customer feel looked after.</p><div>{can(user, 'add', 'car') && <button onClick={() => open({ type: 'inventory', item: null })}><Icon name="plus" size={16}/> Add a new car <Icon name="arrow" size={16}/></button>}{can(user, 'add', 'testdriveslot') && <button onClick={() => open({ type: 'slots', item: null })}><Icon name="calendar" size={16}/> Schedule availability <Icon name="arrow" size={16}/></button>}<a href="/" target="_blank" rel="noreferrer"><Icon name="external" size={16}/> Visit your public website <Icon name="arrow" size={16}/></a></div></section></div></>;
+}
+
+function DeliveryManager({ data, loading, request, setData, notify }) {
+  const [files, setFiles] = useState([]), [previews, setPreviews] = useState([]);
+  const [busy, setBusy] = useState(false), [error, setError] = useState('');
+  const input = useRef(null);
+  const photos = data?.results || [];
+
+  useEffect(() => {
+    const urls = files.map(file => URL.createObjectURL(file));
+    setPreviews(urls);
+    return () => urls.forEach(URL.revokeObjectURL);
+  }, [files]);
+
+  function choose(event) {
+    const selected = [...event.target.files];
+    if (selected.length > 12) {
+      setError('Choose no more than 12 photos at one time.');
+      event.target.value = '';
+      setFiles([]);
+      return;
+    }
+    setError('');
+    setFiles(selected);
+  }
+
+  async function upload(event) {
+    event.preventDefault();
+    if (!files.length) return;
+    setBusy(true); setError('');
+    const body = new FormData();
+    files.forEach(file => body.append('photos', file));
+    try {
+      const result = await request('deliveries', { method: 'POST', body });
+      setData(result); setFiles([]); if (input.current) input.current.value = '';
+      notify(`${result.count} delivery photo${result.count === 1 ? '' : 's'} now live on the home page.`);
+    } catch (uploadError) { setError(uploadError.message); }
+    finally { setBusy(false); }
+  }
+
+  async function remove(photo) {
+    if (!window.confirm('Remove this delivery photo from the home page?')) return;
+    setBusy(true); setError('');
+    try {
+      await request(`deliveries/${photo.id}`, { method: 'DELETE' });
+      setData(current => ({ ...current, results: current.results.filter(item => item.id !== photo.id), count: current.count - 1 }));
+      notify('Delivery photo removed from the home page.');
+    } catch (removeError) { setError(removeError.message); }
+    finally { setBusy(false); }
+  }
+
+  if (loading || !data) return <div className="ws-loading"><span className="ws-spinner"/>Loading delivery photos…</div>;
+  return <section className="ws-panel ws-delivery-manager">
+    <div className="ws-panel-title"><div><h2>Homepage delivery gallery <span className="ws-count">{photos.length} / 12</span></h2><p>Hidden automatically when empty. New uploads replace the oldest photos after the gallery reaches 12. Use Remove on any photo to delete only that image.</p></div><span className="ws-live"><span/> Live</span></div>
+    {error && <div className="ws-error" role="alert">{error}</div>}
+    <form className="ws-delivery-upload" onSubmit={upload}>
+      <Field label="Add delivery photos" hint="Select multiple JPG, PNG or WebP images. They are converted to WebP automatically. Maximum 12 live photos.">
+        <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={choose}/>
+      </Field>
+      {!!previews.length && <div className="ws-delivery-preview">{previews.map((url, index) => <img key={url} src={url} alt={`Selected delivery photo ${index + 1}`}/>)}</div>}
+      <button className="ws-button" disabled={busy || !files.length}>{busy ? 'Uploading…' : `Publish ${files.length || ''} photo${files.length === 1 ? '' : 's'}`}<Icon name="arrow" size={17}/></button>
+    </form>
+    {!photos.length ? <Empty icon="image" title="No delivery photos are live">Upload photos above to activate the delivery section on the home page.</Empty> : <div className="ws-delivery-library">{photos.map((photo, index) => <article key={photo.id} className={photo.height > photo.width ? 'is-portrait' : 'is-landscape'}><img src={photo.image} alt={`Delivery photo ${index + 1}`}/><span>{index === 0 ? 'Newest' : `#${index + 1}`}</span><button type="button" aria-label={`Remove only delivery photo ${index + 1}`} disabled={busy} onClick={() => remove(photo)}><Icon name="close" size={13}/><span>Remove</span></button></article>)}</div>}
+  </section>;
 }
 
 function RecordTable({ section, rows, canEdit, open }) {
