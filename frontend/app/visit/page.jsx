@@ -5,7 +5,6 @@ import Icon from "../../components/icon";
 import SiteImage from "../../components/site-image";
 import { ContactButton } from "../../components/contact-modal";
 import { SHOWROOM } from "../../lib/contact-details";
-import { siteMedia } from "../../lib/site-media";
 
 export default function VisitPage() {
   return (
@@ -63,7 +62,7 @@ export default function VisitPage() {
                 <div className="p-visit-photo-frame">
                   <SiteImage
                     name="showroomExterior"
-                    alt="Manu’s Car World showroom exterior"
+                    alt="Manu's Car World showroom exterior"
                     className="p-visit-exterior-img"
                     sizes="(max-width: 900px) 100vw, 56vw"
                     priority
@@ -128,13 +127,11 @@ export default function VisitPage() {
         >
           <div className="p-container">
             <div className="p-visit-panoramic-frame">
-              <img
-                src={siteMedia("images/story-cars-lineup.jpg")}
-                alt="Panoramic view inside Manu’s Car World showroom floor"
+              <SiteImage
+                name="manusShowroom"
+                alt="Manu's Car World showroom exterior and vehicle display at night"
                 className="p-visit-panoramic-img"
-                width={1920}
-                height={960}
-                loading="lazy"
+                sizes="(max-width: 900px) 100vw, 90vw"
               />
               <div className="p-visit-panoramic-overlay" aria-hidden="true" />
               <div className="p-visit-panoramic-badge">
@@ -342,12 +339,12 @@ export default function VisitPage() {
               {/* Photo 1: Showroom Exterior Night */}
               <div className="p-gallery-card">
                 <SiteImage
-                  name="showroomExterior"
-                  alt="Manu’s Car World showroom exterior"
+                  name="manusShowroom"
+                  alt="Manu's Car World showroom exterior at night"
                   sizes="(max-width: 700px) 100vw, 50vw"
                 />
                 <div className="p-gallery-caption">
-                  <span>Exterior Facade</span>
+                  <span>Night Exterior</span>
                 </div>
               </div>
 

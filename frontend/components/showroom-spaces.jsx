@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Icon from "./icon";
+import SiteImage from "./site-image";
 import { showroomPhotos } from "../lib/showroom-photos";
 import { useContactModal } from "./contact-modal";
 
@@ -42,12 +43,11 @@ export default function ShowroomSpaces() {
         className="p-active-space-card"
       >
         <div className="p-active-space-media">
-          <img
-            src={activeSpace.src}
+          <SiteImage
+            name={activeSpace.imageName}
             alt={activeSpace.alt}
-            width={1600}
-            height={900}
-            loading="eager"
+            sizes="(max-width: 900px) 100vw, 70vw"
+            priority
             className="p-active-space-img"
           />
           <div className="p-active-space-badge">

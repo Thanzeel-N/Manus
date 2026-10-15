@@ -42,6 +42,13 @@ class Command(BaseCommand):
         uploaded = 0
         for path, key in files:
             content_type = mimetypes.guess_type(path.name)[0] or 'application/octet-stream'
+            is_versioned = key.startswith('site/assets/optimized/') and '-' in path.stem
+            if is_versioned:
+                cache_control = 'public, max-age=31536000, immutable'
+            elif path.suffix.lower() in {'.mp4', '.webm'}:
+                cache_control = 'public, max-age=2592000, stale-while-revalidate=604800'
+            else:
+                cache_control = 'public, max-age=604800, stale-while-revalidate=86400'
             self.stdout.write(f'Uploading {key} ... ', ending='')
             with path.open('rb') as source:
                 client.put_object(
@@ -49,7 +56,7 @@ class Command(BaseCommand):
                     Key=key,
                     Body=source,
                     ContentType=content_type,
-                    CacheControl='public, max-age=86400, stale-while-revalidate=604800',
+                    CacheControl=cache_control,
                 )
             client.head_object(Bucket=storage.bucket_name, Key=key)
             uploaded += 1

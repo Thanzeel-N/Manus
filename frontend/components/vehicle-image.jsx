@@ -8,7 +8,7 @@ export default function VehicleImage({ src, alt, sampleId, ...props }) {
   const [failed, setFailed] = useState(false);
   const [fallbackFailed, setFallbackFailed] = useState(false);
   const fallback = ["bmw", "mercedes", "audi"].includes(sampleId)
-    ? siteMedia(`assets/${sampleId}.jpg`)
+    ? siteMedia(`assets/${sampleId}.webp`)
     : "";
   const image = failed || !src ? (!fallbackFailed && fallback) : src;
   useEffect(() => {

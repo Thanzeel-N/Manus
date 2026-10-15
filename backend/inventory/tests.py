@@ -105,6 +105,21 @@ class SiteMediaTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    @patch('inventory.views.default_storage.url', return_value='https://signed.example/site/assets/optimized/team.webp')
+    def test_versioned_site_media_redirect_is_immutable(self, _url):
+        response = self.client.get('/api/site-media/assets/optimized/team-1600-abc123.webp')
+
+        self.assertEqual(response['Cache-Control'], 'public, max-age=31536000, immutable')
+
+    @patch('inventory.views.default_storage.url', return_value='https://signed.example/site/video/hero.mp4')
+    def test_video_redirect_has_long_cache_lifetime(self, _url):
+        response = self.client.get('/api/site-media/video/hero.mp4')
+
+        self.assertEqual(
+            response['Cache-Control'],
+            'public, max-age=86400, stale-while-revalidate=604800',
+        )
+
 
 class PublicInventoryTests(TestCase):
     def make_car(self, slug, status):

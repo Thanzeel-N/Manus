@@ -1,7 +1,5 @@
-import { siteMedia } from "./site-media";
-
 export const teamPhoto = {
-  src: siteMedia("images/SNM09644.JPG"),
+  imageName: "team",
   alt: "The owner and staff of Manu’s Car World together at the showroom",
   title: "Our owner & team",
   caption: "The people behind your next drive.",
@@ -11,7 +9,7 @@ export const teamPhoto = {
 export const showroomPhotos = [
   {
     id: "display-floor",
-    src: siteMedia("assets/dealership-showroom.webp"),
+    imageName: "displayFloor",
     alt: "The Grand Display Floor at Manu’s Car World showcasing certified luxury vehicles",
     title: "The Grand Display Floor",
     category: "Main Gallery",
@@ -22,7 +20,7 @@ export const showroomPhotos = [
   },
   {
     id: "vip-lounge",
-    src: siteMedia("assets/showroom-lounge.jpg"),
+    imageName: "lounge",
     alt: "VIP Client Lounge with Italian leather seating and barista coffee bar",
     title: "VIP Client Lounge",
     category: "Hospitality",
@@ -33,7 +31,7 @@ export const showroomPhotos = [
   },
   {
     id: "consultation-suite",
-    src: siteMedia("images/Modern Dealership Consultation.png"),
+    imageName: "consultation",
     alt: "A Manu's Car World advisor discussing vehicle options with a customer",
     title: "Private Consultation Suites",
     category: "Advisory",
@@ -44,7 +42,7 @@ export const showroomPhotos = [
   },
   {
     id: "inspection-studio",
-    src: siteMedia("images/SNM09532.JPG"),
+    imageName: "inspection",
     alt: "Manu's Car World specialists assessing a vehicle in the showroom",
     title: "150-Point Diagnostics Studio",
     category: "Technical",
@@ -55,7 +53,7 @@ export const showroomPhotos = [
   },
   {
     id: "delivery-suite",
-    src: siteMedia("assets/showroom-delivery.jpg"),
+    imageName: "delivery",
     alt: "Ceremonial delivery and handover suite with softbox lighting",
     title: "Ceremonial Delivery Suite",
     category: "Handover",

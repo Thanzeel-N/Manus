@@ -9,7 +9,6 @@ import { HomeCarGrid } from "../components/car-inventory";
 import { ContactBand, FAQ } from "../components/public-sections";
 import { getStock } from "../lib/stock";
 import { SHOWROOM } from "../lib/contact-details";
-import { siteMedia } from "../lib/site-media";
 import {
   SiAudi,
   SiBmw,
@@ -131,11 +130,10 @@ export default async function HomePage() {
             </div>
 
             <div className="p-home-trust-visual">
-              <img
-                src={siteMedia("images/SNM09466.JPG")}
+              <SiteImage
+                name="homeTeam"
                 alt="The owner and staff of Manu's Car World together at the showroom"
-                loading="lazy"
-                decoding="async"
+                sizes="(max-width: 900px) 100vw, 50vw"
               />
               <div className="p-home-trust-quote">
                 <Icon name="users" size={24} />

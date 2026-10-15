@@ -36,8 +36,8 @@ export const demoCars = [
   },
 ].map((car) => ({
   ...car,
-  image: siteMedia(`assets/${car.id}.jpg`),
-  images: [{ url: siteMedia(`assets/${car.id}.jpg`), caption: "Illustrative photo" }],
+  image: siteMedia(`assets/${car.id}.webp`),
+  images: [{ url: siteMedia(`assets/${car.id}.webp`), caption: "Illustrative photo" }],
   transmission: "Automatic",
   condition: "Used",
   status: "available",

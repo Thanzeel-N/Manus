@@ -1,7 +1,7 @@
 import PublicShell from "../../components/public-shell";
 import Icon from "../../components/icon";
+import SiteImage from "../../components/site-image";
 import { ContactBand, Process } from "../../components/public-sections";
-import { siteMedia } from "../../lib/site-media";
 
 export const metadata = {
   title: "Our story | Manu’s Car World",
@@ -43,12 +43,11 @@ export default function AboutPage() {
           aria-label="Our showroom team"
         >
           <div className="p-story-photo-frame">
-            <img
-              src={siteMedia("images/SNM09644.JPG")}
+            <SiteImage
+              name="team"
               alt="The owner and staff of Manu’s Car World together at the showroom"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
+              sizes="100vw"
+              priority
             />
             <div className="p-story-photo-caption">
               <span className="p-story-photo-tag">MANU’S CAR WORLD</span>

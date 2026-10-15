@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "preview": "npm run build && next start --hostname 0.0.0.0"
+    "preview": "npm run build && next start --hostname 0.0.0.0",
+    "convert:images": "node scripts/convert-public-images.mjs",
+    "optimize:site": "node scripts/optimize-site-images.mjs"
   },
   "dependencies": {
     "next": "^16.3.5",

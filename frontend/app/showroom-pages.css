@@ -96,8 +96,9 @@
 .public-site .p-story-photo-frame {
   position: relative;
   width: 100%;
-  height: clamp(500px, 75vh, 840px);
+  aspect-ratio: 16 / 9;
   overflow: hidden;
+  background: #08080a;
 }
 
 .public-site .p-story-photo-frame img {
@@ -221,10 +222,6 @@
 }
 
 @media (max-width: 900px) {
-  .public-site .p-story-photo-frame {
-    height: clamp(420px, 62vh, 600px);
-  }
-
   .public-site .p-showroom-photo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -252,7 +249,6 @@
   }
 
   .public-site .p-story-photo-frame {
-    height: auto;
     aspect-ratio: 16 / 9;
   }
 

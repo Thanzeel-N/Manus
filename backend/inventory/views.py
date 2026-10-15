@@ -17,7 +17,12 @@ def site_media(request, path):
 
     key = f"site/{'/'.join(parts)}"
     response = HttpResponseRedirect(default_storage.url(key))
-    response['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400'
+    if path.startswith('assets/optimized/'):
+        response['Cache-Control'] = 'public, max-age=31536000, immutable'
+    elif path.lower().endswith(('.mp4', '.webm')):
+        response['Cache-Control'] = 'public, max-age=86400, stale-while-revalidate=604800'
+    else:
+        response['Cache-Control'] = 'public, max-age=3600, stale-while-revalidate=86400'
     return response
 
 

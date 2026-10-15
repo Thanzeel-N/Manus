@@ -5033,3 +5033,51 @@
     padding: 0;
   }
 }
+
+/* Keep the cinematic hero usable on phones held in landscape. */
+@media (max-width: 900px) and (max-height: 520px) and (orientation: landscape) {
+  .public-site .p-hero {
+    min-height: 430px;
+    height: 430px;
+    padding: 28px 0 34px;
+    align-items: flex-start;
+  }
+
+  .public-site .p-hero-content {
+    padding: 0;
+  }
+
+  .public-site .p-hero h1 {
+    max-width: 620px;
+    font-size: clamp(38px, 7vw, 52px);
+    line-height: 0.98;
+  }
+
+  .public-site .p-hero .p-eyebrow {
+    margin-bottom: 12px;
+  }
+
+  .public-site .p-hero-content > p:not(.p-eyebrow) {
+    margin: 14px 0 18px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .public-site .p-hero .p-actions {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .public-site .p-hero .p-button {
+    min-height: 44px;
+    padding: 12px 18px;
+  }
+
+  .public-site .p-hero-bottom {
+    display: none;
+  }
+
+  .public-site .p-hero-media video {
+    object-position: center 55%;
+  }
+}
