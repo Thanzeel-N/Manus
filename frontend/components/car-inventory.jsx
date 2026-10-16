@@ -76,7 +76,7 @@ function CarCardMedia({ car, active }) {
     if (reducedMotion) return;
     const timer = window.setInterval(
       () => setPhotoIndex((index) => (index + 1) % photos.length),
-      1200,
+      2200,
     );
     return () => window.clearInterval(timer);
   }, [active, car.video, photos, reducedMotion, videoFailed]);
