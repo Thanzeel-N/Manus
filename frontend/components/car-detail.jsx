@@ -127,7 +127,7 @@ export default function CarDetail({ car, preview }) {
           </div>
         </div>
         <div className="detail-columns">
-          <div>
+          <div className="detail-media">
             <div className="gallery-main">
               {car.images.length ? (
                 <VehicleImage

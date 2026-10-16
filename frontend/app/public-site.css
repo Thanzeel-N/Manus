@@ -2122,7 +2122,15 @@
   gap: 40px;
   align-items: start;
 }
+.public-site .detail-columns > * {
+  min-width: 0;
+}
 .public-site .gallery-main {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   aspect-ratio: 1.45;
   height: auto;
   border-radius: 2px;
@@ -2130,10 +2138,18 @@
   overflow: hidden;
 }
 .public-site .gallery-main img {
+  position: absolute;
+  inset: 0;
+  display: block;
   height: 100%;
   width: 100%;
   object-fit: contain;
   object-position: center;
+}
+.public-site .gallery-main > .p-photo-unavailable {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
 }
 .public-site .gallery-thumbs {
   display: flex;
@@ -2849,6 +2865,24 @@
   .public-site .detail-columns {
     grid-template-columns: 1fr;
   }
+  .public-site .detail-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .public-site .detail-heading > div,
+  .public-site .detail-media,
+  .public-site .booking-panel {
+    width: 100%;
+    min-width: 0;
+  }
+  .public-site .detail-heading h1 {
+    overflow-wrap: anywhere;
+  }
+  .public-site .detail-price {
+    text-align: left;
+    white-space: normal;
+  }
   .public-site .booking-panel {
     position: static;
   }
@@ -3545,13 +3579,12 @@
     gap: 6px;
   }
   .public-site .detail-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     padding-bottom: 29px;
   }
   .public-site .detail-heading h1 {
-    font-size: 40px;
+    font-size: clamp(32px, 10vw, 40px);
+    line-height: 1.05;
   }
   .public-site .detail-heading .eyebrow {
     font-size: 8px;
@@ -3561,43 +3594,99 @@
     margin-top: 13px;
   }
   .public-site .detail-price {
-    text-align: left;
-    font-size: 29px;
+    font-size: 25px;
   }
   .public-site .detail-price small {
     max-width: 100%;
     font-size: 10px;
   }
   .public-site .detail-columns {
-    gap: 25px;
+    gap: 32px;
   }
   .public-site .p-detail-back {
     font-size: 10px;
     margin-bottom: 26px;
   }
+  .public-site .gallery-main {
+    aspect-ratio: 4 / 3;
+  }
+  .public-site .gallery-main > span {
+    right: 10px;
+    bottom: 10px;
+    padding: 5px 9px;
+    font-size: 9px;
+  }
+  .public-site .gallery-thumbs {
+    gap: 8px;
+    padding: 10px 0 4px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+  .public-site .gallery-thumbs button {
+    width: 76px;
+    height: 54px;
+    scroll-snap-align: start;
+  }
+  .public-site .detail-block {
+    margin-top: 32px;
+    padding-top: 28px;
+  }
+  .public-site .detail-block h2 {
+    font-size: 30px;
+    overflow-wrap: anywhere;
+  }
+  .public-site .detail-block > p {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  .public-site .detail-block video {
+    height: auto;
+    max-height: none;
+  }
   .public-site .spec-grid {
     grid-template-columns: repeat(2, 1fr);
+    margin: 20px 0;
   }
   .public-site .spec-grid > div {
-    padding: 17px;
+    min-width: 0;
+    padding: 14px;
   }
   .public-site .spec-grid dd {
-    font-size: 13px;
+    overflow-wrap: anywhere;
+    font-size: 12px;
   }
   .public-site .feature-list {
     grid-template-columns: 1fr;
+    padding-left: 16px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
   }
   .public-site .car-description p {
     font-size: 13px;
   }
   .public-site .booking-panel {
-    padding: 23px;
+    padding: 20px;
+    overflow: hidden;
   }
   .public-site .booking-panel h2 {
-    font-size: 31px;
+    font-size: 29px;
   }
   .public-site .booking-panel > p {
     font-size: 12px;
+  }
+  .public-site .booking-form,
+  .public-site .booking-form fieldset,
+  .public-site .booking-form > label {
+    min-width: 0;
+  }
+  .public-site .time-slots label {
+    min-height: 40px;
+    padding: 8px;
+  }
+  .public-site .p-booking-login .p-button,
+  .public-site .booking-panel .button {
+    width: 100%;
+    min-width: 0;
   }
   .public-site .p-empty {
     padding: 30px 22px;
