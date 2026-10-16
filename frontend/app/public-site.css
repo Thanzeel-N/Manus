@@ -2132,7 +2132,8 @@
 .public-site .gallery-main img {
   height: 100%;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 .public-site .gallery-thumbs {
   display: flex;
@@ -2156,7 +2157,8 @@
 .public-site .gallery-thumbs img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 .public-site .car-video {
   width: 100%;
