@@ -86,7 +86,25 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ['id', 'slug', 'brand', 'name', 'variant', 'year', 'mileage', 'price', 'fuel',
-                  'transmission', 'body', 'condition', 'status', 'description', 'features', 'video', 'is_sample', 'images']
+                  'transmission', 'body', 'condition', 'status', 'description', 'features', 'video',
+                  'is_sample', 'is_featured', 'images']
+
+    def validate(self, attrs):
+        featured = attrs.get('is_featured', self.instance.is_featured if self.instance else False)
+        if featured:
+            status = attrs.get('status', self.instance.status if self.instance else None)
+            if status != 'available':
+                raise serializers.ValidationError({
+                    'is_featured': 'Only available cars can be featured on the home page.'
+                })
+            selected = Car.objects.filter(is_featured=True, status='available')
+            if self.instance:
+                selected = selected.exclude(pk=self.instance.pk)
+            if selected.count() >= 3:
+                raise serializers.ValidationError({
+                    'is_featured': 'Only three cars can be featured. Remove Featured from another car first.'
+                })
+        return attrs
 
 
 class EnquirySerializer(serializers.ModelSerializer):
@@ -142,9 +160,14 @@ def overview(request):
     data = {}
     if allowed(user, 'view', Car):
         data['inventory'] = {x['status']: x['total'] for x in Car.objects.values('status').annotate(total=Count('id'))}
+        data['inventory']['featured'] = min(
+            Car.objects.filter(is_featured=True, status='available').count(), 3
+        )
         if is_admin(user) or user.is_superuser:
             data['stock_value'] = Car.objects.filter(status='available').aggregate(total=Sum('price'))['total'] or 0
-        data['cars'] = CarSerializer(Car.objects.prefetch_related('images')[:4], many=True).data
+        data['featured_cars'] = CarSerializer(
+            Car.objects.filter(is_featured=True, status='available').prefetch_related('images')[:3], many=True
+        ).data
     if allowed(user, 'view', Enquiry):
         data['enquiries'] = {x['status']: x['total'] for x in Enquiry.objects.values('status').annotate(total=Count('id'))}
         data['recent_enquiries'] = EnquirySerializer(Enquiry.objects.all()[:4], many=True).data
@@ -188,7 +211,7 @@ def records(request, section, pk=None):
         query = query.filter(lookup)
         status = request.GET.get('status')
         if status and model is not TestDriveSlot:
-            query = query.filter(status=status)
+            query = query.filter(is_featured=True, status='available') if model is Car and status == 'featured' else query.filter(status=status)
         elif model is TestDriveSlot:
             if status in ['open', 'blocked']:
                 query = query.filter(blocked=status == 'blocked')

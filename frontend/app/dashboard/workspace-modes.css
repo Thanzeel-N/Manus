@@ -38,6 +38,14 @@
 [data-theme="dark"] .workspace-app :is(.ws-breadcrumb, .ws-private, .ws-signout, .ws-icon-button, .ws-overline, .ws-stat-card > div, .ws-stat-card > small, .ws-panel-title p, .ws-empty p, .ws-table th, .ws-table td, .ws-table td small, .ws-field, .ws-field small, .ws-pagination, .ws-pagination button, .ws-footer, .ws-activity-copy small, .ws-stock-total > span, .ws-stock-legend button, .ws-date-tile small, .ws-role, .ws-live, .ws-checkbox, .ws-form-note, .ws-editor-footer > p, .ws-detail-list dt, .ws-customer-card > div > span, .ws-customer-message p, .ws-slot-summary p, .ws-access-note p) { color: #b1b1bd; }
 [data-theme="dark"] .workspace-app :is(.ws-stat-icon, .ws-empty > span, .ws-stock-total > button, .ws-date-tile, .ws-count, .ws-car-placeholder, .ws-slot-icon, .ws-customer-card, .ws-customer-message, .ws-slot-summary, .ws-access-note, .ws-photo-grid > div, input[type=file]::file-selector-button) { background: #2b2b32; border-color: #3d3d47; color: #bfc0cb; }
 [data-theme="dark"] .workspace-app .ws-stock-bar { background: #303036; }
+[data-theme="dark"] .workspace-app :is(.ws-featured-preview, .ws-featured-car, .ws-stock-legend .ws-featured-legend) { border-color: var(--ws-line); }
+[data-theme="dark"] .workspace-app .ws-featured-preview-title strong,
+[data-theme="dark"] .workspace-app .ws-featured-car > span:nth-child(2) > strong,
+[data-theme="dark"] .workspace-app .ws-featured-car > strong { color: #e4e4ea; }
+[data-theme="dark"] .workspace-app :is(.ws-featured-preview-title small, .ws-featured-car small, .ws-featured-empty) { color: #a7a7b2; }
+[data-theme="dark"] .workspace-app .ws-featured-option { background: #332d20; border-color: #6b5830; }
+[data-theme="dark"] .workspace-app .ws-featured-option strong { color: #efd18c; }
+[data-theme="dark"] .workspace-app .ws-featured-option small { color: #c9b37d; }
 [data-theme="dark"] .workspace-app .ws-delivery-upload { border-color: var(--ws-line); }
 [data-theme="dark"] .workspace-app .ws-delivery-library article,
 [data-theme="dark"] .workspace-app .ws-delivery-preview img { background: #2b2b32; }

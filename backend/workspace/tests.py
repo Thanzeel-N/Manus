@@ -12,6 +12,65 @@ from bookings.models import Booking, TestDriveSlot
 from inventory.models import Car, DeliveryPhoto
 
 
+class FeaturedCarWorkspaceTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_superuser('featured-owner', 'featured@example.com', 'password')
+        self.client.force_login(self.user)
+
+    def make_car(self, index, featured=False):
+        return Car.objects.create(
+            slug=f'featured-car-{index}',
+            brand='Test',
+            name=f'Featured Car {index}',
+            variant='Premium',
+            year=2025,
+            mileage=index * 100,
+            price=20 + index,
+            fuel='Petrol',
+            transmission='Automatic',
+            body='Sedan',
+            condition='Used',
+            status='available',
+            is_featured=featured,
+        )
+
+    def test_overview_returns_only_three_featured_car_details(self):
+        for index in range(4):
+            self.make_car(index, featured=True)
+
+        response = self.client.get('/api/workspace/overview/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['inventory']['featured'], 3)
+        self.assertEqual(len(response.json()['featured_cars']), 3)
+        self.assertTrue(all(car['is_featured'] for car in response.json()['featured_cars']))
+
+    def test_featured_filter_returns_featured_cars(self):
+        featured = self.make_car(1, featured=True)
+        self.make_car(2, featured=False)
+
+        response = self.client.get('/api/workspace/inventory/?status=featured')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['results'][0]['id'], featured.pk)
+
+    def test_fourth_featured_car_is_rejected(self):
+        for index in range(3):
+            self.make_car(index, featured=True)
+        fourth = self.make_car(4, featured=False)
+
+        response = self.client.patch(
+            f'/api/workspace/inventory/{fourth.pk}/',
+            data={'is_featured': True},
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Car.objects.get(pk=fourth.pk).is_featured)
+        self.assertIn('Only three cars', str(response.json()))
+
+
 class InventoryDeleteTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_superuser('owner', 'owner@example.com', 'password')

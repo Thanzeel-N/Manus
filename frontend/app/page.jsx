@@ -95,9 +95,7 @@ export default async function HomePage() {
     getDeliveryPhotos(),
   ]);
   const availableCars = cars.filter((car) => car.status === "available");
-  const featuredCars = [...availableCars]
-    .sort((a, b) => Number(Boolean(b.is_featured)) - Number(Boolean(a.is_featured)))
-    .slice(0, 3);
+  const featuredCars = availableCars.filter((car) => car.is_featured).slice(0, 3);
   const bodyCategories = ["SUV", "Sedan", "Hatchback", "Coupe", "MPV"].map(
     (name) => ({
       name,
